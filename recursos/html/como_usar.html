@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cómo usar este repositorio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>Cómo usar este repositorio</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html" aria-current="page">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué es este repositorio</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Clonar</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>Traer un tema nuevo</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Estudiar una rama</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Normas</a></li><li class="sub"><a href="#s5-1" data-nav data-target="s5-1">Tu propia rama</a></li><li class="sub"><a href="#s5-2" data-nav data-target="s5-2">Recibir una corrección</a></li><li class="sub"><a href="#s5-3" data-nav data-target="s5-3">Cambios sin guardar</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Si algo falla</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Primeros pasos</p>
+      <h1>Cómo usar este repositorio</h1>
+      <p class="lede">Un único proyecto para todo el módulo, con un tema en cada rama. Aquí tienes cómo clonarlo, traer cada tema nuevo y estudiarlo sin meterte en líos con Git.</p>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué es este repositorio</h2></div>
+
+      <p>En este módulo trabajas siempre con <strong>un único proyecto</strong>. Cada <strong>rama</strong> es un tema: al cambiar de rama, el proyecto cambia al código de ese tema, con sus explicaciones en sus apuntes HTML y en los comentarios <code>TODO</code> del código. La rama <code>main</code> es la base del proyecto.</p>
+      <p>Las ramas se publican a medida que avanzamos. Cuando se publica una nueva, solo tienes que traerla a tu copia.</p>
+      <figure>
+<svg viewBox="0 0 720 150" role="img" aria-label="Flujo de trabajo: clonar una vez; cada tema nuevo, git fetch y git switch; estudiar el tema y volver a empezar con el siguiente.">
+  <defs><marker id="mf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="40" width="150" height="70" rx="14" fill="#17211C"/><text x="75" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">1. Clonar</text><text x="75" y="92" text-anchor="middle" font-size="12.5" fill="#C9D3CD">una sola vez</text>
+  <rect x="190" y="40" width="150" height="70" rx="14" fill="#0E8A4B"/><text x="265" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">git fetch</text><text x="265" y="92" text-anchor="middle" font-size="12.5" fill="#E2F4EA">trae los temas nuevos</text>
+  <rect x="380" y="40" width="150" height="70" rx="14" fill="#3AA36B"/><text x="455" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">git switch</text><text x="455" y="92" text-anchor="middle" font-size="12.5" fill="#E2F4EA">cambia al tema</text>
+  <rect x="570" y="40" width="150" height="70" rx="14" fill="#6D3FD8"/><text x="645" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Estudiar</text><text x="645" y="92" text-anchor="middle" font-size="12.5" fill="#F1ECFD">apuntes + TODO</text>
+  <g stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#mf)">
+    <line x1="152" y1="75" x2="186" y2="75"/><line x1="342" y1="75" x2="376" y2="75"/><line x1="532" y1="75" x2="566" y2="75"/>
+    <path d="M645 112 V134 H265 V114"/>
+  </g>
+  <text x="455" y="130" text-anchor="middle" font-size="12.5" fill="#56655D">con cada tema nuevo</text>
+</svg>
+<figcaption>Clonas una vez; después, con cada tema nuevo, lo traes y cambias a su rama.</figcaption>
+</figure>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Clonar el repositorio</h2></div>
+
+      <p>Solo se hace una vez, al principio del curso.</p>
+      <ol class="steps">
+        <li>En la pantalla de bienvenida de Android Studio pulsa <strong>Clone Repository</strong> (con un proyecto abierto: <em>File → New → Project from Version Control</em>).</li>
+        <li>Pega la dirección del repositorio y elige la carpeta donde guardarlo.</li>
+        <li>Espera a que Gradle termine de sincronizar. La primera vez descarga lo necesario y tarda unos minutos. Si te pide instalar una plataforma del SDK, acepta.</li>
+      </ol>
+      <p>Desde la terminal sería:</p>
+      <code class="cmd">git clone &lt;dirección del repositorio&gt;</code>
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>Traer un tema nuevo</h2></div>
+
+      <p>Cuando se publique una rama nueva:</p>
+      <code class="cmd">git fetch</code>
+      <code class="cmd">git switch UD_2_1_Button</code>
+      <div class="tiles">
+        <div class="tile"><b>git fetch</b><span>Descarga la lista de ramas nuevas y sus cambios, sin tocar tus ficheros.</span></div>
+        <div class="tile"><b>git switch &lt;rama&gt;</b><span>Cambia tu proyecto a esa rama.</span></div>
+        <div class="tile soft"><b>git branch -a</b><span>Muestra todas las ramas: las tuyas y las del repositorio.</span></div>
+      </div>
+      <div class="box conocer"><span class="box-label">Desde los menús de Android Studio</span><p>Menú <strong>Git → Fetch</strong>. Después, en el selector de ramas de la barra principal (arriba a la izquierda, junto al nombre del proyecto), busca la rama en <em>Remote</em> y elige <strong>Checkout</strong>.</p></div>
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>Estudiar una rama</h2></div>
+
+      <ol class="steps">
+        <li>Abre el <strong>README.md</strong> de la rama: es el índice con el enlace a sus apuntes.</li>
+        <li>Abre los <strong>apuntes HTML</strong> del tema en el navegador: botón derecho sobre el fichero → <em>Open In → Browser</em>.</li>
+        <li>Recorre los <strong>comentarios TODO</strong> del código con la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): un clic en uno te lleva a su línea.</li>
+        <li><strong>Ejecuta</strong> la aplicación y prueba lo que explican los apuntes.</li>
+      </ol>
+      <p>La <a href="guia_android_studio.html">guía de Android Studio</a> explica las partes del entorno y del proyecto, y está disponible en todas las ramas.</p>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Normas para no tener problemas</h2></div>
+
+      <div class="box consejo"><span class="box-label">No modifiques las ramas del profesor</span><p>Si una rama se corrige, la recibirás con <code>git pull</code>. Si has cambiado sus ficheros, se producirán conflictos.</p></div>
+      <h3 id="s5-1"><span class="sn">5.1</span>Para experimentar, tu propia rama</h3>
+      <p>Crea una rama tuya a partir del tema. En ella puedes cambiar lo que quieras y hacer tus commits:</p>
+      <code class="cmd">git switch -c mio/UD_2_1_Button</code>
+      <h3 id="s5-2"><span class="sn">5.2</span>Recibir una corrección</h3>
+      <code class="cmd">git switch UD_2_1_Button</code>
+      <code class="cmd">git pull</code>
+      <h3 id="s5-3"><span class="sn">5.3</span>Si Git se niega porque tienes cambios sin guardar</h3>
+      <div class="tiles">
+        <div class="tile"><b>git stash</b><span>Aparta tus cambios para recuperarlos después con <code>git stash pop</code>.</span></div>
+        <div class="tile warn"><b>git restore .</b><span>Descarta tus cambios. No tiene vuelta atrás.</span></div>
+      </div>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Si algo falla</h2></div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Problema</th><th>Solución</th></tr></thead>
+        <tbody>
+          <tr><td><em>Gradle sync failed</em></td><td><em>File → Sync Project with Gradle Files</em>. Si persiste, lee el primer error de la ventana <em>Build</em>.</td></tr>
+          <tr><td>Falta una plataforma del SDK</td><td>Acepta instalarla en el aviso, o instálala en <em>Tools → SDK Manager</em>.</td></tr>
+          <tr><td>Error sobre la versión de Java</td><td><em>Settings → Build, Execution, Deployment → Build Tools → Gradle → Gradle JDK</em>: elige el JDK que trae Android Studio (<em>jbr</em>).</td></tr>
+          <tr><td>El emulador no arranca o va muy lento</td><td>Activa la virtualización (Intel VT-x o AMD-V) en la BIOS.</td></tr>
+          <tr><td>Ficheros que aparecen modificados sin haberlos tocado</td><td>Pregunta antes de hacer nada y no hagas commit de ellos.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+  </main>
+</div>
+<script src="js/pmdm.js"></script>
+</body>
+</html>
