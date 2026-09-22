@@ -52,12 +52,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         // Todo 5. Recordad que esto es solo un ejemplo y que al ponerlo en el método onCreate solo se va a
         //  precargar al inicio de la aplicación. Ustedes deberéis cargarlo en el método que creáis
         //  oportuno según las necesidades de vuestra aplicación.
         loadPreferences();
-
     }
 
 

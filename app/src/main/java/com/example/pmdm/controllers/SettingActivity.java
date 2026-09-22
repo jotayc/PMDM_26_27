@@ -41,7 +41,7 @@ public class SettingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:  //Todo 3.3. Este sería el acceso al recurso del botón volver
-                onBackPressed();     //Todo 3.4 Este sería el método que tiene Android para volver hacia la ventana anterior.
+                getOnBackPressedDispatcher().onBackPressed();     //Todo 3.4 Este sería el método que tiene Android para volver hacia la ventana anterior.
                 return true;
         }
 
