@@ -99,14 +99,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         Button btn = (Button) view;
 
-        switch (btn.getId()){
-            case R.id.btn_show:
-                this.btn_show.setText("Un saludo");
-                break;
-            case R.id.btnHide:
-                this.btn_show.setText("Adios");
-                break;
-
+        if (btn.getId() == R.id.btn_show) {
+            this.btn_show.setText("Un saludo");
+        } else if (btn.getId() == R.id.btnHide) {
+            this.btn_show.setText("Adios");
         }
     }
 }
