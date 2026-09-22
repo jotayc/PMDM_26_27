@@ -207,3 +207,6 @@ fabric.properties
 
 ### Configuración personal de Android Studio (cada uno tiene la suya) ###
 .idea/
+
+### Scripts personales del profesor ###
+explore.ps1
