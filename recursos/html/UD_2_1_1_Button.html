@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.1.1 · Button</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.1.1 · Button</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD_2_1_1_Button.html" aria-current="page">UD 2.1.1 · Button</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Las dos formas</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">La actividad como listener</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">Qué botón se ha pulsado</a></li><li class="sub"><a href="#s2-4" data-nav data-target="s2-4">Un solo listener</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 2</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 3</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 4</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 5</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 6</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>El layout</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_1_1_Button</p>
+      <h1>Button: dos formas de atender un clic</h1>
+      <p class="lede">Dos botones y un texto. La misma pantalla se puede programar de dos maneras: con una clase anónima para cada botón o haciendo que la actividad atienda todos los clics en un único método.</p>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v6a6 6 0 0 0 6 6h6M18 15l-3-3M18 15l-3 3M6 21v-3"/></svg><b>Dos formas de atender un clic</b><span>Una clase anónima por botón, o la actividad atendiendo a todos los botones.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg><b>Implementar una interfaz</b><span>Qué significa <code>implements View.OnClickListener</code> y por qué obliga a escribir <code>onClick()</code>.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9v6M11 9h2a3 3 0 0 1 0 6h-2z"/></svg><b>Distinguir botones</b><span>Saber qué botón se ha pulsado comparando su id con <code>getId()</code>.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M11 8l2-1v10"/></svg><b>Un solo listener por botón</b><span>Por qué las dos formas no pueden estar activas a la vez.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h6"/></svg><b>Dos botones en el layout</b><span>Colocar un botón alineado con otro con <code>ConstraintLayout</code>.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5a2 2 0 0 1 4 0v5"/><path d="M13 10a2 2 0 0 1 4 0v3a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-3l-1.5-2.5a1.8 1.8 0 0 1 3-2L9 13"/></svg><b>Pulsación larga</b><span>Un listener distinto para mantener el dedo sobre el botón.</span></div></div>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>Las dos formas</h3>
+      <p>Para que un botón responda al clic hay que darle un objeto que implemente la interfaz <code>View.OnClickListener</code>. Ese objeto puede ser de dos tipos:</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="Forma 1: cada botón tiene su propio objeto listener, una clase anónima con su onClick. Forma 2: los dos botones usan como listener la propia actividad, que con un único onClick distingue el botón por su id.">
+  <defs><marker id="v1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><defs><marker id="v2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6D3FD8"/></marker></defs>
+  <text x="0" y="18" font-size="14" font-weight="700" fill="#17211C">Forma 1: un listener por botón</text>
+  <text x="392" y="18" font-size="14" font-weight="700" fill="#17211C">Forma 2: la actividad atiende a todos</text>
+  <line x1="372" y1="0" x2="372" y2="250" stroke="#DCE6E0" stroke-width="2" stroke-dasharray="5 5"/>
+  <g font-size="13" font-weight="700" text-anchor="middle" font-family="'JetBrains Mono', Consolas, monospace">
+    <rect x="0" y="50" width="120" height="44" rx="10" fill="#0E8A4B"/><text x="60" y="77" fill="#fff">btn_show</text>
+    <rect x="0" y="150" width="120" height="44" rx="10" fill="#0E8A4B"/><text x="60" y="177" fill="#fff">btn_hide</text>
+    <rect x="392" y="50" width="120" height="44" rx="10" fill="#0E8A4B"/><text x="452" y="77" fill="#fff">btn_show</text>
+    <rect x="392" y="150" width="120" height="44" rx="10" fill="#0E8A4B"/><text x="452" y="177" fill="#fff">btn_hide</text>
+  </g>
+  <rect x="160" y="44" width="190" height="56" rx="10" fill="#F1ECFD"/>
+  <text x="174" y="66" font-size="12.5" font-weight="700" fill="#4A2A99">clase anónima 1</text><text x="174" y="86" font-size="12" fill="#4A2A99" font-family="'JetBrains Mono', Consolas, monospace">onClick() → "Un saludo"</text>
+  <rect x="160" y="144" width="190" height="56" rx="10" fill="#F1ECFD"/>
+  <text x="174" y="166" font-size="12.5" font-weight="700" fill="#4A2A99">clase anónima 2</text><text x="174" y="186" font-size="12" fill="#4A2A99" font-family="'JetBrains Mono', Consolas, monospace">onClick() → "Adios"</text>
+  <rect x="548" y="60" width="172" height="124" rx="12" fill="#6D3FD8"/>
+  <text x="562" y="84" font-size="13" font-weight="700" fill="#fff">MainActivity</text>
+  <text x="562" y="102" font-size="11" fill="#F1ECFD" font-family="'JetBrains Mono', Consolas, monospace">implements</text>
+  <text x="562" y="117" font-size="11" fill="#F1ECFD" font-family="'JetBrains Mono', Consolas, monospace">View.OnClickListener</text>
+  <text x="562" y="142" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onClick(view) {</text>
+  <text x="574" y="158" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">if (id == …) …</text>
+  <text x="562" y="174" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">}</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#v1)"><line x1="122" y1="72" x2="156" y2="72"/><line x1="122" y1="172" x2="156" y2="172"/></g>
+  <g stroke="#6D3FD8" stroke-width="2.2" fill="none" marker-end="url(#v2)"><path d="M514 72 C530 72 530 100 544 100"/><path d="M514 172 C530 172 530 144 544 144"/></g>
+  <text x="530" y="236" font-size="12" fill="#56655D" text-anchor="middle" font-family="'JetBrains Mono', Consolas, monospace">setOnClickListener(this)</text>
+</svg>
+<figcaption>En la forma 1 hay un objeto listener por botón, cada uno con su propio <code>onClick()</code>. En la forma 2 el listener de los dos botones es la actividad (<code>this</code>), y su único <code>onClick()</code> mira el id para saber qué botón se ha pulsado.</figcaption>
+</figure>
+      <div class="table-wrap"><table>
+        <thead><tr><th></th><th>Forma 1: clase anónima</th><th>Forma 2: la actividad</th></tr></thead>
+        <tbody>
+          <tr><td><b>Dónde va el código</b></td><td>Junto a cada botón, en <code>onCreate()</code></td><td>En un único método <code>onClick()</code> de la actividad</td></tr>
+          <tr><td><b>Qué se pasa al botón</b></td><td><code>new View.OnClickListener() { … }</code></td><td><code>this</code></td></tr>
+          <tr><td><b>Cuándo conviene</b></td><td>Pocos botones, cada uno con una acción distinta</td><td>Muchos botones, o acciones parecidas que conviene tener juntas</td></tr>
+        </tbody>
+      </table></div>
+      <h3 id="s2-2"><span class="sn">2.2</span>La actividad como listener</h3>
+      <p>Al escribir <code>implements View.OnClickListener</code> en la cabecera de la clase, la actividad se compromete a tener el método <code>public void onClick(View view)</code>: si falta, el código no compila. A partir de ahí la actividad <em>es</em> un listener, y por eso se le puede pasar a los botones con <code>setOnClickListener(this)</code>.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    // ...
+
+    //Implementación del método onClick de la interfaz OnClickListener (forma 2)
+    @Override
+    public void onClick(View view) {
+        Button btn = (Button) view;
+
+        if (btn.getId() == R.id.btn_show) {
+            this.btn_show.setText(&quot;Un saludo&quot;);
+        } else if (btn.getId() == R.id.btnHide) {
+            this.btn_show.setText(&quot;Adios&quot;);
+        }
+    }
+}</code></pre></div>
+      <p><code>@Override</code> indica que el método viene de la interfaz: es una <strong>implementación</strong> (sobrescritura), no una sobrecarga.</p>
+      <h3 id="s2-3"><span class="sn">2.3</span>Qué botón se ha pulsado</h3>
+      <p>El parámetro <code>view</code> es la vista que se ha pulsado. Su método <code>getId()</code> devuelve su id, que se compara con las constantes de <code>R.id</code>. <code>getId()</code> existe en cualquier <code>View</code>, así que el <em>cast</em> a <code>Button</code> no es necesario: bastaría con <code>view.getId()</code>.</p>
+      <div class="box conocer"><span class="box-label">¿Por qué if / else if y no un switch?</span><p>Un <code>case</code> de <code>switch</code> necesita una constante, y en los proyectos Android actuales los ids de <code>R</code> ya no lo son. Este <code>switch</code> no compila:</p><div class="code"><div class="code-bar">No compila</div>
+<pre><code class="lang-java">switch (view.getId()) {
+    case R.id.btn_show:   // error: constant expression required
+        ...
+}</code></pre></div><p>Por eso se compara con <code>if</code> / <code>else if</code>.</p></div>
+      <h3 id="s2-4"><span class="sn">2.4</span>Un botón, un solo listener</h3>
+      <p>Un botón guarda <strong>un único</strong> listener de clic. Si llamas dos veces a <code>setOnClickListener()</code>, el segundo sustituye al primero:</p>
+      <figure>
+<svg viewBox="0 0 720 150" role="img" aria-label="Un botón guarda un solo listener de clic: si se llama dos veces a setOnClickListener, el segundo listener sustituye al primero.">
+  <defs><marker id="v3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="50" width="130" height="50" rx="10" fill="#0E8A4B"/><text x="65" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">btn_show</text>
+  <g font-size="12.5" font-family="'JetBrains Mono', Consolas, monospace" fill="#17211C">
+    <text x="170" y="40">1. setOnClickListener(this)</text>
+    <text x="170" y="118">2. setOnClickListener(new …)</text>
+  </g>
+  <line x1="132" y1="66" x2="432" y2="46" stroke="#C9D3CD" stroke-width="2" marker-end="url(#v3)"/>
+  <line x1="132" y1="84" x2="432" y2="112" stroke="#56655D" stroke-width="2" marker-end="url(#v3)"/>
+  <rect x="436" y="26" width="284" height="36" rx="10" fill="#EEF1EF" stroke="#C9D3CD" stroke-dasharray="5 4"/>
+  <text x="450" y="49" font-size="12.5" fill="#8A9690">la actividad (forma 2): se pierde</text>
+  <line x1="450" y1="44" x2="660" y2="44" stroke="#C2185B" stroke-width="1.5"/>
+  <rect x="436" y="94" width="284" height="36" rx="10" fill="#F1ECFD"/>
+  <text x="450" y="117" font-size="12.5" font-weight="700" fill="#4A2A99">clase anónima (forma 1): es la que queda</text>
+</svg>
+<figcaption>Cada llamada a <code>setOnClickListener()</code> sustituye al listener anterior: el botón solo recuerda el último.</figcaption>
+</figure>
+      <p>Por eso, en el código, la forma 1 está comentada: si se activara, como va después de la forma 2, sería la que quedaría.</p>
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>) y sigue los comentarios del 1 al 6.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1</span>onCreate(): el punto de partida</h3>
+      <p>Primer método que Android llama al crear la actividad. Aquí se prepara todo lo que la pantalla necesita.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ...
+}</code></pre></div>
+      <h3 id="s3-2"><span class="sn">TODO 2</span>Declarar los objetos</h3>
+      <p>Tres atributos: los dos botones y el <code>TextView</code>. Se declaran fuera de los métodos para usarlos desde <code>onCreate()</code> y desde <code>onClick()</code>.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private Button btn_show;
+private Button btn_hide;
+private TextView txt_view;</code></pre></div>
+      <h3 id="s3-3"><span class="sn">TODO 3</span>Conectar el layout con la actividad</h3>
+      <p><code>setContentView()</code> carga el layout y crea sus vistas. Va antes de buscar ninguna vista.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">setContentView(R.layout.activity_main);</code></pre></div>
+      <h3 id="s3-4"><span class="sn">TODO 4</span>Inicializar los objetos</h3>
+      <p><code>findViewById()</code> busca cada vista por su id. Fíjate en que el id del segundo botón es <code>btnHide</code> y el atributo Java se llama <code>btn_hide</code>: no tienen por qué coincidir, pero hacerlos iguales evita confusiones.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">this.btn_show = (Button) findViewById(R.id.btn_show);
+this.btn_hide = (Button) findViewById(R.id.btnHide);
+this.txt_view = (TextView) findViewById(R.id.txt_view);</code></pre></div>
+      <h3 id="s3-5"><span class="sn">TODO 5</span>Las dos formas de atender el clic</h3>
+      <p>La forma 2 está activa: los dos botones reciben <code>this</code>. Debajo está la forma 1 comentada, que haría lo mismo con una clase anónima por botón. La pulsación larga usa una clase anónima.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">// Forma 2 (activa)
+this.btn_show.setOnClickListener(this);
+this.btn_hide.setOnClickListener(this);
+
+// Forma 1 (comentada en el código)
+// this.btn_show.setOnClickListener(new View.OnClickListener() {
+//     @Override
+//     public void onClick(View view) {
+//         btn_show.setText(&quot;Un saludo&quot;);
+//     }
+// });
+// ... y lo mismo para btn_hide con &quot;Adios&quot;
+
+// Pulsación larga: clase anónima
+this.btn_show.setOnLongClickListener(new View.OnLongClickListener() {
+    @Override
+    public boolean onLongClick(View view) {
+        txt_view.setText(&quot;Esto es una pulsación larga&quot;);
+        return true;
+    }
+});</code></pre></div>
+      <h3 id="s3-6"><span class="sn">TODO 6</span>Los métodos del ciclo de vida</h3>
+      <p>Android los llama automáticamente en cada cambio de estado. Aquí están vacíos: solo llaman a <code>super</code>.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+protected void onStart() {
+    super.onStart();
+}
+// ... onResume(), onPause(), onStop(), onDestroy()</code></pre></div>
+<figure class="tall">
+<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 672 592" font-family="Roboto, 'Segoe UI', Arial, sans-serif"><title>Ciclo de vida de una actividad: onCreate, onStart y onResume llevan al estado Activa; onPause lleva a Pausada; onStop a Parada; onDestroy la destruye. Desde Pausada, onResume vuelve a Activa. Desde Parada, onRestart y onStart la vuelven a mostrar. Si el proceso se elimina estando parada, al volver se empieza por onCreate.</title><rect x="0" y="0" width="672" height="592" rx="14" fill="#FFFFFF"/><g transform="translate(16 16)">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker>
+          </defs>
+          <g stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#ar)">
+            <line x1="320" y1="44" x2="320" y2="70"/>
+            <line x1="320" y1="102" x2="320" y2="118"/>
+            <line x1="320" y1="150" x2="320" y2="166"/>
+            <line x1="320" y1="198" x2="320" y2="214"/>
+            <line x1="320" y1="262" x2="320" y2="278"/>
+            <line x1="320" y1="310" x2="320" y2="326"/>
+            <line x1="320" y1="374" x2="320" y2="390"/>
+            <line x1="320" y1="422" x2="320" y2="438"/>
+            <line x1="320" y1="486" x2="320" y2="502"/>
+            <!-- Pausada -> onResume -->
+            <path d="M412 350 H470 V182 H396"/>
+            <!-- Parada -> onRestart -> onStart -->
+            <path d="M412 462 H560 V300"/>
+            <path d="M560 268 V134 H396"/>
+            <!-- Parada -> proceso eliminado -> onCreate -->
+            <path d="M228 462 H130 V420"/>
+            <path d="M130 388 V86 H244"/>
+          </g>
+
+          <rect x="236" y="12" width="168" height="32" rx="16" fill="#EEF1EF"/>
+          <text x="320" y="33" text-anchor="middle" font-size="14" fill="#17211C">Se abre la actividad</text>
+
+          <g font-family="'JetBrains Mono', Consolas, 'Courier New', monospace" font-size="14" text-anchor="middle" fill="#0A5C33">
+            <rect x="244" y="70" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="91">onCreate()</text>
+            <rect x="244" y="118" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="139">onStart()</text>
+            <rect x="244" y="166" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="187">onResume()</text>
+            <rect x="244" y="278" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="299">onPause()</text>
+            <rect x="244" y="390" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="411">onStop()</text>
+            <rect x="244" y="502" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="523">onDestroy()</text>
+            <rect x="484" y="268" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="560" y="289">onRestart()</text>
+          </g>
+
+          <rect x="228" y="214" width="184" height="48" rx="14" fill="#0E8A4B"/>
+          <text x="320" y="244" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">ACTIVA</text>
+          <rect x="228" y="326" width="184" height="48" rx="14" fill="#3AA36B"/>
+          <text x="320" y="356" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">PAUSADA</text>
+          <rect x="228" y="438" width="184" height="48" rx="14" fill="#6FBF92"/>
+          <text x="320" y="468" text-anchor="middle" font-size="16" font-weight="700" fill="#0A3D22">PARADA</text>
+
+          <rect x="40" y="388" width="180" height="32" rx="16" fill="#FCE7EF"/>
+          <text x="130" y="409" text-anchor="middle" font-size="13" fill="#8E1243">Proceso eliminado</text>
+
+          <g font-size="12.5" fill="#56655D">
+            <text x="478" y="232">vuelve el foco</text>
+            <text x="568" y="376">vuelve a</text>
+            <text x="568" y="392">mostrarse</text>
+            <text x="138" y="250">el usuario</text>
+            <text x="138" y="266">vuelve</text>
+            <text x="138" y="480">falta memoria</text>
+          </g>
+          <text x="320" y="556" text-anchor="middle" font-size="13" fill="#56655D">Destruida</text>
+        </g></svg>
+<figcaption>Estados de la actividad y métodos que llama Android en cada cambio.</figcaption>
+</figure>
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>El layout</h2></div>
+
+      <p>Un <code>TextView</code> en el centro y dos botones debajo, uno junto al otro (se omiten <code>layout_width</code> y <code>layout_height</code>, que valen <code>wrap_content</code>):</p>
+      <div class="code"><div class="code-bar">res/layout/activity_main.xml</div>
+<pre><code class="lang-xml">&lt;Button
+    android:id=&quot;@+id/btn_show&quot;
+    android:text=&quot;Saludar&quot;
+    app:layout_constraintStart_toStartOf=&quot;parent&quot;
+    app:layout_constraintEnd_toEndOf=&quot;parent&quot;
+    app:layout_constraintHorizontal_bias=&quot;0.215&quot;
+    app:layout_constraintTop_toBottomOf=&quot;@+id/txt_view&quot;
+    app:layout_constraintBottom_toBottomOf=&quot;parent&quot;
+    app:layout_constraintVertical_bias=&quot;0.503&quot; /&gt;
+
+&lt;Button
+    android:id=&quot;@+id/btnHide&quot;
+    android:text=&quot;Despedir&quot;
+    android:layout_marginEnd=&quot;51dp&quot;
+    app:layout_constraintEnd_toEndOf=&quot;parent&quot;
+    app:layout_constraintTop_toTopOf=&quot;@+id/btn_show&quot;
+    app:layout_constraintBottom_toBottomOf=&quot;@+id/btn_show&quot; /&gt;</code></pre></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Atributo</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">constraintHorizontal_bias="0.215"</td><td>El botón «Saludar» está anclado a los dos lados, pero se coloca más cerca de la izquierda (0 = izquierda, 1 = derecha).</td></tr>
+          <tr><td class="mono">constraintTop_toTopOf / Bottom_toBottomOf="@+id/btn_show"</td><td>El botón «Despedir» se alinea verticalmente con «Saludar».</td></tr>
+          <tr><td class="mono">layout_marginEnd="51dp"</td><td>Deja 51 dp de separación con el borde derecho.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="box conocer"><span class="box-label">dp</span><p>Los tamaños en Android se dan en <strong>dp</strong> (píxeles independientes de la densidad): 51 dp ocupan lo mismo a la vista en una pantalla de baja resolución que en una de alta.</p></div>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+
+      <ol class="steps">
+        <li>Ejecuta la aplicación: verás «Hello World!» y los botones «Saludar» y «Despedir».</li>
+        <li>Pulsa «Saludar»: el propio botón pasa a llamarse «Un saludo».</li>
+        <li>Pulsa «Despedir»: el botón «Saludar» pasa a llamarse «Adios». Desde un listener se puede cambiar cualquier vista, no solo la pulsada.</li>
+        <li>Mantén pulsado «Saludar»: cambia el texto central.</li>
+        <li>Comenta la forma 2, descomenta la forma 1 y vuelve a ejecutar: todo funciona igual.</li>
+      </ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr><td><code>setOnClickListener(this)</code> se marca en rojo</td><td>Falta <code>implements View.OnClickListener</code> en la cabecera: la actividad no es un listener.</td></tr>
+          <tr><td>La clase se marca en rojo tras añadir <code>implements</code></td><td>Falta el método <code>public void onClick(View view)</code>. <kbd>Alt</kbd>+<kbd>Intro</kbd> → <em>Implement methods</em> lo crea.</td></tr>
+          <tr><td>Un botón no hace nada</td><td>No se ha llamado a <code>setOnClickListener(this)</code> para ese botón, o su id no aparece en ningún <code>if</code> de <code>onClick()</code>.</td></tr>
+          <tr><td><em>Constant expression required</em></td><td>Se ha usado un <code>switch</code> con <code>case R.id…</code> (apartado 2.3).</td></tr>
+          <tr><td>Tras activar la forma 1, el <code>onClick()</code> de la actividad deja de ejecutarse</td><td>La forma 1 sustituye a la 2: cada botón guarda un solo listener (apartado 2.4).</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+
+      <p>Hazlo en tu propia rama: <code>git switch -c mio/UD_2_1_1_Button</code>.</p>
+      <ol class="steps">
+        <li>Haz que los dos botones cambien el texto central (<code>txt_view</code>) en lugar del botón «Saludar».</li>
+        <li>Añade un tercer botón «Limpiar» atendido por el mismo <code>onClick()</code>, que deje el texto central vacío.</li>
+        <li>Quita el <em>cast</em> <code>(Button) view</code> y usa directamente <code>view.getId()</code>.</li>
+        <li>Reescribe la forma 1 con lambdas.</li>
+        <li>Pasa todos los textos a <code>strings.xml</code>.</li>
+      </ol>
+    </section>
+  </main>
+</div>
+<script src="js/pmdm.js"></script>
+</body>
+</html>

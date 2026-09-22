@@ -1,52 +1,33 @@
-# PMDM · Curso 2026-27
+# UD 2.1.1 · Button: dos formas de atender un clic
 
-**Programación Multimedia y Dispositivos Móviles · 2º DAM**
+Dos formas de atender el clic de un botón: una clase anónima por botón, o la
+actividad implementando `View.OnClickListener` con un único `onClick()` que
+distingue los botones por su id.
 
-Este repositorio es el proyecto Android de todo el módulo. Cada **rama** es un
-tema, con sus apuntes en HTML y las explicaciones en los comentarios `TODO` del
-código. Esta rama, `main`, es la base del proyecto.
+## 📘 Apuntes del tema
 
-![Android Studio](recursos/img/ventana_android_studio.svg)
+[`recursos/html/UD_2_1_1_Button.html`](recursos/html/UD_2_1_1_Button.html)
 
-## 1. Clonar el proyecto
+Ábrelo en el navegador desde tu copia del proyecto: en Android Studio, botón
+derecho sobre el fichero → *Open In → Browser* (en GitHub solo se ve su código).
 
-Solo se hace una vez, al principio del curso:
+## Dónde está en el código
 
-1. Copia la dirección de este repositorio: botón verde **Code** de esta página → pestaña *HTTPS*.
-2. En la pantalla de bienvenida de Android Studio pulsa **Clone Repository**
-   (con un proyecto abierto: *File → New → Project from Version Control*),
-   pega la dirección y elige una carpeta.
-3. Espera a que termine la sincronización de Gradle. Si te pide instalar una
-   plataforma del SDK, acepta.
-
-## 2. Abrir los apuntes
-
-Los apuntes están en la carpeta `recursos/html/` del proyecto y se abren **en el
-navegador desde tu copia local**. En GitHub solo verías su código.
-
-- **En Android Studio:** botón derecho sobre el fichero → *Open In → Browser*.
-- **En el explorador de Windows:** doble clic sobre el fichero.
-
-## 3. Índice
-
-| Apuntes | Fichero | Contenido |
+| TODO | Fichero | Qué explica |
 |---|---|---|
-| 📌 **Cómo usar este repositorio** | [`recursos/html/como_usar.html`](recursos/html/como_usar.html) | Traer cada tema nuevo, estudiar una rama y normas para no tener conflictos con Git. |
-| 🧭 **Guía de Android Studio** | [`recursos/html/guia_android_studio.html`](recursos/html/guia_android_studio.html) | Partes del entorno, estructura del proyecto, ficheros clave, Gradle, ejecutar, Logcat, depurador y ciclo de vida. |
-| 📘 **UD1 · Introducción a Android** | [`recursos/html/UD01_Introduccion_Android.html`](recursos/html/UD01_Introduccion_Android.html) | Dispositivos móviles, tecnologías, arquitectura de Android, primer proyecto, despliegue y ciclo de vida. |
+| 1 | `MainActivity.java` | `onCreate()`, el punto de partida de la actividad |
+| 2 | `MainActivity.java` | Declaración de los dos `Button` y el `TextView` |
+| 3 | `MainActivity.java` | `setContentView()`: conectar el layout con la actividad |
+| 4 | `MainActivity.java` | `findViewById()`: inicializar los objetos |
+| 5 | `MainActivity.java` | Las dos formas de atender el clic y la pulsación larga |
+| 6 | `MainActivity.java` | Métodos del ciclo de vida |
+| — | `MainActivity.java` | Método `onClick()` de la actividad (forma 2) |
+| — | `res/layout/activity_main.xml` | El `TextView` y los dos botones |
 
-Estos tres apuntes están en todas las ramas. Cada rama añade los suyos, que
-encontrarás en el `README.md` de esa rama.
+La ventana **TODO** de Android Studio (*View → Tool Windows → TODO*) los lista
+todos: un clic en uno te lleva a su línea.
 
-## 4. Versiones del proyecto
+---
 
-| | |
-|---|---|
-| Lenguaje | Java, con diseño de pantallas en XML |
-| Android mínimo (`minSdk`) | 28 (Android 9) |
-| Compilación (`compileSdk`) | 37 (Android 17) |
-| Comportamiento (`targetSdk`) | 36 (Android 16) |
-| Gradle / plugin de Android | 9.6 / 9.4 |
-
-No hace falta instalar nada aparte de Android Studio: Gradle y el SDK necesario
-se descargan solos al abrir el proyecto.
+📌 [Cómo usar este repositorio](recursos/html/como_usar.html) ·
+🧭 [Guía de Android Studio](recursos/html/guia_android_studio.html)

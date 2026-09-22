@@ -48,13 +48,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.btn_hide = (Button) findViewById(R.id.btnHide);
         this.txt_view = (TextView) findViewById(R.id.txt_view);
 
-        //Todo 5. Los botones tienen un listener según el tipo de toque sobre la vista.
-        //Todo -> para ello se usa una clase anonima y se implementa su interfaz.
-        //Todo -> Desde Java 8 se sustituyen las clases anonimas por lambdas
-
-
+        //Todo 5. Dos formas de atender el clic de un botón (solo puede estar activa una):
+        //Todo -> Forma 2 (activa): la actividad implementa View.OnClickListener y un único
+        //Todo    onClick() atiende a los dos botones, distinguiéndolos por su id.
         this.btn_show.setOnClickListener(this);
         this.btn_hide.setOnClickListener(this);
+
+        //Todo -> Forma 1: una clase anónima por botón.
+        //Todo    Si la activas, sustituye a la forma 2, porque cada botón guarda un solo listener.
+        // this.btn_show.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         btn_show.setText("Un saludo");
+        //     }
+        // });
+        // this.btn_hide.setOnClickListener(new View.OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         btn_show.setText("Adios");
+        //     }
+        // });
+
+        //Todo -> La pulsación larga usa una clase anónima.
+        //Todo    Desde Java 8, las clases anónimas de un solo método se pueden sustituir por lambdas.
 
         this.btn_show.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -94,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
     }
 
-    //Sobrecarga del método de la interfaz OnClickListener
+    //Implementación del método onClick de la interfaz OnClickListener (forma 2)
     @Override
     public void onClick(View view) {
         Button btn = (Button) view;
