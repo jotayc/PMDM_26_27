@@ -204,3 +204,6 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,windows,java,gradle
+
+### Configuración personal de Android Studio (cada uno tiene la suya) ###
+.idea/
