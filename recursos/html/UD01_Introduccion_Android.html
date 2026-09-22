@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introducción a Android</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F9F7;
+    --surface: #FFFFFF;
+    --ink: #17211C;
+    --muted: #56655D;
+    --rule: #DCE6E0;
+    --green: #0E8A4B;
+    --green-soft: #E2F4EA;
+    --green-deep: #0A5C33;
+
+    /* Color = tipo de bloque */
+    --caso: #6D3FD8;      --caso-bg: #F1ECFD;
+    --clave: #0E8A4B;     --clave-bg: #E2F4EA;
+    --conocer: #1A73E8;   --conocer-bg: #E7F0FD;
+    --saber: #00838F;     --saber-bg: #E0F4F5;
+    --consejo: #B26A00;   --consejo-bg: #FDF1DD;
+    --reto: #E8710A;      --reto-bg: #FEEEDF;
+
+    /* Código: tema oscuro tipo Android Studio */
+    --code-bg: #1E1F22;
+    --code-ink: #BCBEC4;
+    --tk-key: #CF8E6D;
+    --tk-str: #6AAB73;
+    --tk-tag: #D5B778;
+    --tk-attr: #BABABA;
+    --tk-ns: #C77DBB;
+    --tk-ann: #B3AE60;
+    --tk-com: #7A7E85;
+
+    --radius: 16px;
+    --font-head: 'Roboto Flex', 'Roboto', system-ui, sans-serif;
+    --font-body: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
+    color-scheme: light;
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); font-size: 17px; line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{ color: var(--green); }
+  code{ font-family: var(--font-mono); font-size: 0.88em; background: var(--green-soft); color: var(--green-deep); padding: 0.08em 0.35em; border-radius: 6px; }
+  :focus-visible{ outline: 3px solid var(--caso); outline-offset: 2px; border-radius: 6px; }
+
+  /* ---------- Layout ---------- */
+  .layout{ display: grid; grid-template-columns: 290px minmax(0, 1fr); min-height: 100vh; }
+  .sidebar{
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    background: var(--surface); border-right: 1px solid var(--rule);
+    padding: 24px 18px 32px;
+  }
+  .brand{ display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+  .brand-icon{ width: 44px; height: 44px; flex: none; }
+  .brand-text{ line-height: 1.2; }
+  .brand-text b{ display: block; font-family: var(--font-head); font-size: 17px; font-weight: 700; }
+  .brand-text span{ font-size: 13px; color: var(--muted); }
+  .navlist{ list-style: none; margin: 0; padding: 0; }
+  .navlist li{ margin: 2px 0; }
+  .navlist a{
+    display: flex; gap: 10px; align-items: baseline; text-decoration: none; color: var(--ink);
+    padding: 7px 12px; border-radius: 999px; font-size: 14.5px; line-height: 1.35;
+  }
+  .navlist a .n{ font-family: var(--font-mono); font-size: 12px; color: var(--muted); min-width: 22px; }
+  .navlist a:hover{ background: var(--bg); }
+  .navlist a.active{ background: var(--green-soft); color: var(--green-deep); font-weight: 500; }
+  .navlist a.active .n{ color: var(--green); }
+  .navlist .sub a{ padding-left: 44px; font-size: 13.5px; color: var(--muted); }
+  .navlist .sub a .n{ display: none; }
+
+  main{ padding: 0 clamp(16px, 5vw, 64px) 80px; max-width: 980px; }
+
+  /* ---------- Cabecera ---------- */
+  .hero{ padding: 56px 0 36px; display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 32px; align-items: center; }
+  .hero .kicker{ font-family: var(--font-mono); font-size: 13px; color: var(--green); margin: 0 0 10px; }
+  .hero h1{ font-family: var(--font-head); font-weight: 800; font-size: clamp(34px, 5.5vw, 56px); line-height: 1.05; margin: 0 0 16px; letter-spacing: -0.01em; }
+  .hero p.lede{ font-size: 19px; color: var(--muted); margin: 0; max-width: 34em; }
+  .hero svg{ width: 100%; height: auto; }
+
+  /* ---------- Capítulos ---------- */
+  .chapter{ padding-top: 40px; scroll-margin-top: 12px; }
+  .chapter-head{ display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .chapter-num{
+    flex: none; width: 56px; height: 56px; border-radius: 18px;
+    background: var(--green); color: #fff; display: grid; place-items: center;
+    font-family: var(--font-head); font-weight: 800; font-size: 26px;
+  }
+  h2{ font-family: var(--font-head); font-weight: 750; font-size: clamp(26px, 3.6vw, 34px); line-height: 1.15; margin: 0; }
+  h3{ font-family: var(--font-head); font-weight: 700; font-size: 23px; line-height: 1.25; margin: 44px 0 12px; scroll-margin-top: 12px; }
+  h3 .sn{ font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--green); margin-right: 10px; }
+  h4{ font-family: var(--font-head); font-weight: 700; font-size: 18px; margin: 26px 0 8px; }
+  p{ margin: 0 0 14px; }
+  ul, ol{ margin: 0 0 16px; padding-left: 22px; }
+  li{ margin: 5px 0; }
+  li::marker{ color: var(--green); }
+  strong{ font-weight: 700; }
+
+  /* ---------- Bloques con significado ---------- */
+  .box{
+    --c: var(--clave); --bgc: var(--clave-bg);
+    background: var(--bgc); border-radius: var(--radius); padding: 18px 22px 8px; margin: 22px 0;
+  }
+  .box-label{
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--c);
+  }
+  .box-label::before{ content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
+  .box.caso{ --c: var(--caso); --bgc: var(--caso-bg); }
+  .box.clave{ --c: var(--clave); --bgc: var(--clave-bg); }
+  .box.conocer{ --c: var(--conocer); --bgc: var(--conocer-bg); }
+  .box.saber{ --c: var(--saber); --bgc: var(--saber-bg); }
+  .box.consejo{ --c: var(--consejo); --bgc: var(--consejo-bg); }
+  .box.reto{ --c: var(--reto); --bgc: var(--reto-bg); }
+  .box.clave p:first-of-type{ font-size: 18px; }
+  .box ul{ margin-bottom: 12px; }
+
+  /* ---------- Tablas ---------- */
+  .table-wrap{ overflow-x: auto; margin: 18px 0 22px; border-radius: var(--radius); border: 1px solid var(--rule); background: var(--surface); }
+  table{ border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td{ text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th{ background: var(--green-soft); color: var(--green-deep); font-weight: 700; font-size: 13.5px; }
+  tr:last-child td{ border-bottom: none; }
+  td.mono{ font-family: var(--font-mono); font-size: 14px; }
+
+  /* ---------- Código ---------- */
+  .code{ margin: 18px 0 22px; border-radius: var(--radius); overflow: hidden; background: var(--code-bg); }
+  .code-bar{
+    display: flex; align-items: center; gap: 8px; padding: 9px 16px;
+    background: #2B2D30; color: #9DA0A8; font-family: var(--font-mono); font-size: 12.5px;
+  }
+  .code-bar::before{ content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+  .code pre{ margin: 0; padding: 16px 18px; overflow-x: auto; color: var(--code-ink); font-family: var(--font-mono); font-size: 14px; line-height: 1.6; }
+  .code pre code{ background: none; color: inherit; padding: 0; font-size: inherit; }
+  .tk-key{ color: var(--tk-key); } .tk-str{ color: var(--tk-str); } .tk-tag{ color: var(--tk-tag); }
+  .tk-attr{ color: var(--tk-attr); } .tk-ns{ color: var(--tk-ns); } .tk-ann{ color: var(--tk-ann); } .tk-com{ color: var(--tk-com); font-style: italic; }
+
+  /* ---------- Diagramas ---------- */
+  figure{ margin: 22px 0 26px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px 18px 12px; }
+  figure svg{ display: block; width: 100%; height: auto; }
+  figure.tall svg{ max-width: 540px; margin: 0 auto; }
+  figcaption{ font-size: 13.5px; color: var(--muted); margin-top: 10px; }
+  svg text{ font-family: var(--font-body); }
+  svg .mono, svg .mono text{ font-family: var(--font-mono); }
+
+
+
+  /* ---------- Tarjetas con icono ---------- */
+  .tiles{ display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; margin: 16px 0 22px; }
+  .tile{ --tc: var(--green); --tb: var(--green-soft); background: var(--tb); border-radius: 14px; padding: 14px 16px; }
+  .tile svg{ width: 28px; height: 28px; color: var(--tc); display: block; margin-bottom: 8px; }
+  .tile b{ display: block; font-family: var(--font-head); font-size: 16px; margin-bottom: 3px; }
+  .tile span{ display: block; font-size: 14.5px; line-height: 1.45; color: var(--muted); }
+  .tile.warn{ --tc: var(--reto); --tb: var(--reto-bg); }
+  .tile.soft{ --tc: var(--muted); --tb: #EEF1EF; }
+  .tiles-head{ font-family: var(--font-head); font-weight: 700; font-size: 15px; margin: 20px 0 -4px; }
+
+  /* ---------- Línea temporal y pasos ---------- */
+  .years, .steps{ list-style: none; padding: 0; margin: 16px 0 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .years li, .steps li{ margin: 0; font-size: 14.5px; line-height: 1.45; border-radius: 14px; padding: 12px 14px; }
+  .years li{ background: var(--surface); border: 1px solid var(--rule); border-top: 4px solid var(--green); }
+  .years li b{ display: block; font-family: var(--font-head); font-size: 22px; color: var(--green); margin-bottom: 4px; }
+  .steps{ counter-reset: st; }
+  .steps li{ counter-increment: st; background: var(--green-soft); }
+  .steps li::before{ content: counter(st); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--green); color: #fff; font-weight: 700; font-size: 13px; margin-bottom: 8px; }
+
+  .pages{ list-style: none; margin: 0 0 18px; padding: 0 0 14px; border-bottom: 1px solid var(--rule); }
+  .pages a{ display: block; padding: 6px 12px; border-radius: 999px; font-size: 13.5px; color: var(--muted); text-decoration: none; }
+  .pages a:hover{ background: var(--bg); }
+  .pages a[aria-current="page"]{ color: var(--green-deep); font-weight: 700; }
+
+  /* ---------- Móvil ---------- */
+  .menu-toggle{ display: none; }
+  .scrim{ display: none; }
+  @media (max-width: 900px){
+    .layout{ grid-template-columns: minmax(0, 1fr); }
+    .sidebar{ position: fixed; z-index: 20; left: 0; top: 0; width: 290px; transform: translateX(-100%); transition: transform 200ms ease; }
+    .sidebar.open{ transform: none; box-shadow: 0 0 40px rgba(0,0,0,0.2); }
+    .scrim.show{ display: block; position: fixed; inset: 0; z-index: 15; background: rgba(0,0,0,0.3); }
+    .menu-toggle{
+      display: inline-flex; position: fixed; z-index: 10; right: 16px; bottom: 16px;
+      background: var(--green); color: #fff; border: 0; border-radius: 18px; padding: 14px 18px;
+      font: 500 15px var(--font-body); box-shadow: 0 6px 18px rgba(14,138,75,0.35); cursor: pointer;
+    }
+    .hero{ grid-template-columns: minmax(0, 1fr); padding-top: 32px; }
+    .hero svg{ max-width: 180px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice de la unidad">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD1 · Introducción a Android</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html" aria-current="page">UD1 · Introducción a Android</a></li></ul>
+    <ul class="navlist">
+      <li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Introducción</a></li>
+      <li class="sub"><a href="#s1-1" data-nav data-target="s1-1">Definición de dispositivo móvil</a></li>
+      <li class="sub"><a href="#s1-2" data-nav data-target="s1-2">Clasificación</a></li>
+      <li class="sub"><a href="#s1-3" data-nav data-target="s1-3">Limitaciones tecnológicas</a></li>
+      <li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Tecnologías disponibles</a></li>
+      <li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Hardware</a></li>
+      <li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Sistemas operativos</a></li>
+      <li class="sub"><a href="#s2-3" data-nav data-target="s2-3">Plataformas y lenguajes</a></li>
+      <li class="sub"><a href="#s2-4" data-nav data-target="s2-4">Elección de una alternativa</a></li>
+      <li class="sub"><a href="#s2-5" data-nav data-target="s2-5">La plataforma Android</a></li>
+      <li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>Arquitectura de Android</a></li>
+      <li class="sub"><a href="#s3-1" data-nav data-target="s3-1">Funcionalidades de Android</a></li>
+      <li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Entorno de desarrollo</a></li>
+      <li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Una aplicación sencilla</a></li>
+      <li class="sub"><a href="#s5-1" data-nav data-target="s5-1">Estructura del proyecto</a></li>
+      <li class="sub"><a href="#s5-2" data-nav data-target="s5-2">Diseño de la pantalla</a></li>
+      <li class="sub"><a href="#s5-3" data-nav data-target="s5-3">Mostrar la pantalla</a></li>
+      <li class="sub"><a href="#s5-4" data-nav data-target="s5-4">El fichero de manifiesto</a></li>
+      <li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Componentes de una app</a></li>
+      <li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Despliegue</a></li>
+      <li class="sub"><a href="#s7-1" data-nav data-target="s7-1">En el emulador</a></li>
+      <li class="sub"><a href="#s7-2" data-nav data-target="s7-2">En un dispositivo real</a></li>
+      <li><a href="#s8" data-nav data-target="s8"><span class="n">08</span>Ciclo de vida de una actividad</a></li>
+    </ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker">Unidad 1</p>
+        <h1>Introducción a Android</h1>
+        <p class="lede">Qué es un dispositivo móvil, qué tecnologías hay para programarlo, cómo está construido
+          Android y cómo se crea, se ejecuta y funciona por dentro tu primera aplicación.</p>
+      </div>
+      <svg viewBox="0 0 220 240" aria-hidden="true">
+        <rect x="46" y="4" width="128" height="232" rx="22" fill="#17211C"/>
+        <rect x="55" y="18" width="110" height="204" rx="12" fill="#fff"/>
+        <rect x="55" y="18" width="110" height="36" rx="12" fill="#0E8A4B"/>
+        <rect x="55" y="38" width="110" height="16" fill="#0E8A4B"/>
+        <text x="66" y="42" fill="#fff" font-size="12" font-weight="700">HelloWorld</text>
+        <text x="110" y="132" text-anchor="middle" fill="#17211C" font-size="13" font-weight="500">Hello World!</text>
+        <rect x="96" y="208" width="28" height="4" rx="2" fill="#DCE6E0"/>
+      </svg>
+    </header>
+
+    <!-- ===================== 1 ===================== -->
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Introducción</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>Ada, socia fundadora de la empresa BK Programación, ha decidido que su compañía entre en el mercado de
+          las aplicaciones para móviles: cada vez más clientes las piden. Es la única de la empresa que ya ha
+          desarrollado para Android, así que va a formar a María y a Juan, que saben programar en Java.</p>
+      </div>
+
+      <p>La telefonía móvil y la evolución de Internet han cambiado por completo el uso que hacemos de los
+        terminales. Los <strong>smartphones</strong> y las <strong>tablets</strong> son hoy, para mucha gente, el
+        principal ordenador que usa cada día. Con ellos han aparecido distintas plataformas para desarrollar
+        aplicaciones.</p>
+      <p>Entre esas plataformas está <strong>Android</strong>, que apareció a finales de 2008 con el primer móvil
+        que lo incorporaba y que hoy es el sistema operativo móvil más usado del mundo, como veremos en esta
+        unidad.</p>
+      <p>Empezaremos estudiando los dispositivos móviles y su clasificación, identificaremos las principales
+        plataformas que existen y nos centraremos en Android. Después veremos qué necesitamos para desarrollar
+        una aplicación, crearemos una primera aplicación muy sencilla y la probaremos tanto en un emulador como
+        en un móvil de verdad.</p>
+
+      <h3 id="s1-1"><span class="sn">1.1</span>Definición de dispositivo móvil</h3>
+      <p>La primera pregunta es: ¿qué entendemos por «móvil»? Si lo buscas en Internet verás que no hay una
+        respuesta única. ¿Es móvil el aparato, la aplicación que usamos en él, o el usuario? ¿Es «móvil» lo mismo
+        que «portátil»? ¿Hay distintos grados de movilidad? Para no perdernos en esas preguntas, trabajaremos
+        durante todo el módulo con esta definición:</p>
+      <div class="box clave">
+        <span class="box-label">¿Qué es un dispositivo móvil?</span>
+        <p>Un aparato de pequeño tamaño y poco peso, con pantalla (normalmente táctil), capacidad de procesamiento
+          y memoria más limitadas que las de un ordenador, y conexión, permanente o no, a una red.</p>
+        <p>Está pensado para funciones concretas (llamar, hacer fotos, navegar con GPS, escuchar música, leer el
+          correo, navegar por Internet…), aunque normalmente también puede hacer tareas más generales.</p>
+      </div>
+      <p>Estos aparatos son especialmente útiles allí donde llevar un ordenador, aunque sea portátil, no es
+        práctico.</p>
+      <div class="box saber">
+        <span class="box-label">Para saber más</span>
+        <p>Más detalles sobre las características de un dispositivo móvil en la Wikipedia:
+          <a href="https://es.wikipedia.org/wiki/Dispositivo_m%C3%B3vil" target="_blank" rel="noopener">Dispositivo móvil</a>.</p>
+      </div>
+
+      <h3 id="s1-2"><span class="sn">1.2</span>Clasificación de los dispositivos móviles</h3>
+      <p>¿Qué tipos de dispositivos móviles existen? Entre los más habituales hoy:</p>
+      <ul>
+        <li><strong>Smartphones</strong> o teléfonos inteligentes. Los modelos con pantallas muy grandes se llegaron
+          a llamar <em>phablets</em> (a medio camino entre teléfono y tablet); hoy casi todos los móviles tienen ese
+          tamaño y el término ha caído en desuso.</li>
+        <li><strong>Tablets</strong> o tabletas.</li>
+        <li><strong>Plegables</strong>: móviles cuya pantalla se dobla, de modo que el mismo aparato funciona como
+          teléfono o como una pequeña tablet.</li>
+        <li><strong>Wearables</strong> o dispositivos que se llevan puestos: relojes inteligentes, pulseras de
+          actividad, gafas…</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 170" role="img" aria-label="Tipos de dispositivos con Android: smartphone, tablet, plegable, reloj, televisión y coche.">
+          <rect x="38" y="16" width="44" height="88" rx="9" fill="#17211C"/><rect x="42" y="24" width="36" height="72" rx="3" fill="#E2F4EA"/><rect x="42" y="24" width="36" height="10" rx="3" fill="#0E8A4B"/>
+          <rect x="132" y="28" width="96" height="68" rx="8" fill="#17211C"/><rect x="138" y="34" width="84" height="56" rx="3" fill="#E2F4EA"/><rect x="138" y="34" width="84" height="10" rx="3" fill="#0E8A4B"/>
+          <rect x="254" y="18" width="92" height="86" rx="8" fill="#17211C"/><rect x="259" y="23" width="82" height="76" rx="3" fill="#E2F4EA"/><line x1="300" y1="23" x2="300" y2="99" stroke="#6FBF92" stroke-width="2" stroke-dasharray="4 4"/>
+          <rect x="408" y="14" width="24" height="96" rx="7" fill="#56655D"/><circle cx="420" cy="62" r="27" fill="#17211C"/><circle cx="420" cy="62" r="21" fill="#E2F4EA"/><text x="420" y="67" text-anchor="middle" font-size="13" font-weight="700" fill="#0A5C33" class="mono">10:08</text>
+          <rect x="488" y="24" width="104" height="66" rx="5" fill="#17211C"/><rect x="493" y="29" width="94" height="56" fill="#E2F4EA"/><rect x="530" y="90" width="20" height="8" fill="#17211C"/><rect x="514" y="98" width="52" height="5" rx="2" fill="#17211C"/>
+          <rect x="608" y="34" width="104" height="62" rx="12" fill="#17211C"/><rect x="615" y="41" width="90" height="48" rx="6" fill="#E2F4EA"/><polyline points="624,80 646,66 666,72 694,50" fill="none" stroke="#0E8A4B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="694" cy="50" r="5" fill="#6D3FD8"/>
+          <g font-size="14" font-weight="700" fill="#17211C" text-anchor="middle">
+            <text x="60" y="132">Smartphone</text><text x="180" y="132">Tablet</text><text x="300" y="132">Plegable</text>
+            <text x="420" y="132">Reloj</text><text x="540" y="132">Televisión</text><text x="660" y="132">Coche</text>
+          </g>
+          <g font-size="12" fill="#56655D" text-anchor="middle">
+            <text x="60" y="150">el más usado</text><text x="180" y="150">pantalla grande</text><text x="300" y="150">se abre como un libro</text>
+            <text x="420" y="150">Wear OS</text><text x="540" y="150">Android TV</text><text x="660" y="150">Android Auto</text>
+          </g>
+        </svg>
+        <figcaption>Aparatos en los que funciona Android hoy. En este módulo nos centraremos en smartphones y tablets.</figcaption>
+      </figure>
+      <p>Antes de que se extendieran los smartphones se usaban otros aparatos, como las <strong>PDA</strong>
+        (asistentes digitales personales, una agenda electrónica de bolsillo), los <strong>PocketPC</strong> o los
+        <strong>ultramóviles</strong> (pequeños ordenadores de unas 7 pulgadas). Hoy están en desuso: sus funciones
+        las hace cualquier smartphone.</p>
+      <p>En este módulo, cuando hablemos de dispositivos móviles nos referiremos sobre todo a
+        <strong>smartphones y tablets</strong>, por ser los más usados. Android funciona además en relojes
+        (Wear OS), televisores (Android TV / Google TV) y coches (Android Auto), y a medida que la tecnología
+        avance irán apareciendo nuevos tipos de aparatos: hay que estar al día.</p>
+
+      <h3 id="s1-3"><span class="sn">1.3</span>Limitaciones tecnológicas de los móviles</h3>
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>María y Juan acaban de descubrir el mundo de posibilidades que se les abre. Lo primero que deben hacer es
+          informarse de qué se puede y qué no se puede hacer con estos aparatos: qué limitaciones se van a
+          encontrar.</p>
+      </div>
+      <p>Antes de desarrollar software para un móvil hay que ser consciente de sus restricciones. Algunas se han
+        suavizado mucho con los años, pero siguen presentes:</p>
+      <div class="tiles">
+        <div class="tile warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 11v2"/><path d="M5 10v4"/></svg><b>Batería</b><span>Todo depende de ella. Una aplicación que gasta mucha batería acaba desinstalada.</span></div>
+        <div class="tile warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg><b>Procesador y RAM</b><span>Los móviles de gama alta son muy potentes, pero la aplicación debe funcionar también en los de gama media y baja.</span></div>
+        <div class="tile warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></svg><b>Almacenamiento</b><span>El espacio se reparte entre aplicaciones, fotos y vídeos; el aviso «queda poco espacio» es habitual.</span></div>
+        <div class="tile warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20v-3M9 20v-7M14 20v-11"/><path d="M19 20V4" opacity=".35"/></svg><b>Conexión intermitente</b><span>La cobertura va y viene. La aplicación no puede dar por hecho que siempre hay conexión.</span></div>
+        <div class="tile warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="13" height="18" rx="2"/><rect x="17" y="8" width="5" height="10" rx="1"/></svg><b>Pantallas muy distintas</b><span>La misma aplicación se verá en móviles pequeños, grandes, plegables y tablets.</span></div>
+        <div class="tile warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg><b>Entrada táctil</b><span>Se escribe con un teclado en pantalla, más incómodo que uno físico.</span></div>
+      </div>
+      <p>Estas restricciones hay que tenerlas muy en cuenta al analizar y diseñar una aplicación móvil: no podemos
+        pretender que tenga lo mismo que un programa de escritorio.</p>
+      <p>Pero no todo son restricciones. Esta tecnología también aporta ventajas muy importantes que podrás
+        aprovechar en tus aplicaciones:</p>
+      <div class="tiles">
+        <div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><b>Movilidad</b><span>Poco peso y pequeño tamaño: va siempre contigo.</span></div>
+        <div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1"/></svg><b>Conectividad</b><span>4G y 5G, Wi-Fi, Bluetooth, NFC…</span></div>
+        <div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><b>Sensores</b><span>GPS, cámara, acelerómetro, huella dactilar… que un ordenador no suele tener.</span></div>
+      </div>
+    </section>
+
+    <!-- ===================== 2 ===================== -->
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Tecnologías disponibles</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>María y Juan ya saben que programar para un móvil no es lo mismo que para un ordenador. Ahora Ada va a
+          hacer un pequeño estudio de las tecnologías más utilizadas: el hardware, los sistemas operativos, las
+          plataformas de desarrollo y los lenguajes. Es un estudio que conviene repetir cada año, porque este
+          mundo avanza muy deprisa.</p>
+      </div>
+
+      <p>Cuando vas a desarrollar una aplicación para móviles, las primeras preguntas suelen ser:</p>
+      <ul>
+        <li>¿Sobre qué tipo de dispositivos, sobre qué hardware, se puede programar?</li>
+        <li>¿Qué sistema operativo lleva ese hardware?</li>
+        <li>¿Qué plataformas de desarrollo existen para ese hardware y ese sistema operativo?</li>
+        <li>¿Con qué lenguajes puedo programar? ¿Qué herramientas hay disponibles?</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 242" role="img" aria-label="Cuatro niveles que hay que decidir, de abajo arriba: hardware, sistema operativo, plataforma y entorno de desarrollo, lenguaje.">
+          <rect x="150" y="4" width="420" height="52" rx="12" fill="#0E8A4B"/>
+          <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Lenguaje</text>
+          <text x="360" y="45" text-anchor="middle" font-size="13" fill="#E2F4EA">Kotlin, Java, Swift, Dart…</text>
+          <rect x="100" y="64" width="520" height="52" rx="12" fill="#3AA36B"/>
+          <text x="360" y="86" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Plataforma y entorno de desarrollo</text>
+          <text x="360" y="105" text-anchor="middle" font-size="13" fill="#E2F4EA">Android Studio, Xcode, Flutter…</text>
+          <rect x="50" y="124" width="620" height="52" rx="12" fill="#6FBF92"/>
+          <text x="360" y="146" text-anchor="middle" font-size="15" font-weight="700" fill="#0A3D22">Sistema operativo</text>
+          <text x="360" y="165" text-anchor="middle" font-size="13" fill="#0A3D22">Android, iOS</text>
+          <rect x="0" y="184" width="720" height="52" rx="12" fill="#A8DABC"/>
+          <text x="360" y="206" text-anchor="middle" font-size="15" font-weight="700" fill="#0A3D22">Hardware</text>
+          <text x="360" y="225" text-anchor="middle" font-size="13" fill="#0A3D22">smartphones, tablets, relojes, televisores…</text>
+        </svg>
+        <figcaption>Cada nivel depende del de abajo: el hardware lleva un sistema operativo, cada sistema tiene sus
+          plataformas de desarrollo y cada plataforma usa unos lenguajes.</figcaption>
+      </figure>
+      <p>Las respuestas son muy variadas:</p>
+      <ul>
+        <li><strong>Hardware</strong>: smartphones, tablets y otros dispositivos. Entre los fabricantes de
+          smartphones que más venden están Samsung, Apple y Xiaomi, seguidos de marcas como OPPO, vivo o
+          Transsion; buena parte de ellos son asiáticos. En tablets domina Apple con el iPad, seguido de Samsung,
+          Lenovo o Xiaomi.</li>
+        <li><strong>Sistemas operativos</strong>: prácticamente todo el mercado se reparte entre dos,
+          <strong>Android</strong> e <strong>iOS</strong>.</li>
+        <li><strong>Plataformas y entornos de desarrollo</strong>: cada sistema tiene los suyos (Android Studio para
+          Android, Xcode para iOS) y existen además entornos multiplataforma.</li>
+        <li><strong>Lenguajes</strong>: algunos ya conocidos de otras plataformas, como Java o C#, y otros más
+          recientes como Kotlin, Swift o Dart.</li>
+      </ul>
+      <p>En definitiva, el desarrollo para móviles tiene una problemática parecida a la de los ordenadores:
+        distintos tipos de hardware, distintos sistemas operativos, y distintos lenguajes, bibliotecas y entornos
+        de desarrollo.</p>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>Hardware</h3>
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>El primer acercamiento de Ada con María y Juan es el hardware, lo físico. ¿Qué aparatos hay? ¿Cómo son por
+          dentro? ¿Son todos parecidos? ¿Cuáles son los más vendidos?</p>
+      </div>
+      <p>Todos hemos tenido que decidir qué móvil comprar. Esa decisión se toma según sus características, que son
+        las que hacen que un teléfono se considere de <strong>gama alta, media o baja</strong>. Hoy, un móvil de
+        gama media suele tener:</p>
+      <ul>
+        <li>Pantalla <strong>Full HD+</strong> (1080 píxeles de ancho o más), muchas veces OLED y con alta tasa de
+          refresco (90 o 120 Hz).</li>
+        <li>Un procesador de gama media (por ejemplo, Qualcomm Snapdragon de la serie 7 o MediaTek Dimensity).</li>
+        <li>Entre 6 y 8 GB de RAM y 128 GB o más de almacenamiento.</li>
+        <li>Varias cámaras traseras.</li>
+        <li>Batería de unos 5000 mAh con carga rápida.</li>
+        <li>Conexión 5G.</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 280" role="img" aria-label="Qué hay dentro de un móvil: cámaras, procesador (SoC), memoria RAM, almacenamiento, batería, antenas, sensores y pantalla táctil.">
+          <rect x="300" y="18" width="120" height="244" rx="20" fill="#17211C"/>
+          <rect x="308" y="28" width="104" height="224" rx="12" fill="#2B3A33"/>
+          <circle cx="330" cy="50" r="8" fill="#56655D" stroke="#A8DABC" stroke-width="2"/><circle cx="352" cy="50" r="8" fill="#56655D" stroke="#A8DABC" stroke-width="2"/>
+          <rect x="335" y="78" width="50" height="40" rx="5" fill="#0E8A4B"/><text x="360" y="103" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">SoC</text>
+          <rect x="335" y="124" width="50" height="14" rx="3" fill="#3AA36B"/>
+          <rect x="335" y="144" width="50" height="14" rx="3" fill="#6FBF92"/>
+          <rect x="394" y="92" width="12" height="12" rx="3" fill="#6D3FD8"/>
+          <rect x="318" y="168" width="84" height="70" rx="7" fill="#E8710A"/><text x="360" y="208" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">batería</text>
+          <path d="M316 34 H404 M316 246 H404" stroke="#6D3FD8" stroke-width="3" stroke-dasharray="6 5"/>
+          <g stroke="#56655D" stroke-width="1.5">
+            <line x1="286" y1="50" x2="320" y2="50"/><line x1="286" y1="98" x2="335" y2="98"/><line x1="286" y1="131" x2="335" y2="131"/>
+            <line x1="286" y1="151" x2="335" y2="151"/><line x1="286" y1="203" x2="318" y2="203"/>
+            <line x1="404" y1="34" x2="434" y2="34"/><line x1="406" y1="98" x2="434" y2="98"/><line x1="412" y1="232" x2="434" y2="232"/>
+          </g>
+          <g font-size="13.5" fill="#17211C" text-anchor="end">
+            <text x="280" y="55">Cámaras</text>
+            <text x="280" y="103"><tspan font-weight="700">Procesador (SoC)</tspan>: CPU + GPU</text>
+            <text x="280" y="136">Memoria RAM</text>
+            <text x="280" y="156">Almacenamiento</text>
+            <text x="280" y="208">Batería</text>
+          </g>
+          <g font-size="13.5" fill="#17211C">
+            <text x="440" y="39">Antenas: 5G, Wi-Fi, Bluetooth, NFC</text>
+            <text x="440" y="103">Sensores: GPS, acelerómetro, huella…</text>
+            <text x="440" y="237">Pantalla táctil (va encima de todo)</text>
+          </g>
+        </svg>
+        <figcaption>Esquema de lo que hay dentro de un smartphone. El SoC (<em>System on a Chip</em>) reúne en un solo
+          chip el procesador, el procesador gráfico y otros componentes para gastar menos energía.</figcaption>
+      </figure>
+      <p>Como desarrolladores podemos pensar que nuestra aplicación no tiene límites, pero el teléfono sí los tiene.
+        Además, no todos los móviles tienen el mismo hardware: si nuestra aplicación se desbloquea con la
+        <strong>huella dactilar</strong>, solo podrá usar ese método en móviles con lector de huellas. En los que no
+        lo tengan, tendremos que ofrecer otro método de seguridad.</p>
+      <figure>
+        <svg viewBox="0 0 720 176" role="img" aria-label="Cuota de envíos mundiales de smartphones en el segundo trimestre de 2026: Samsung alrededor del 23 %, Apple alrededor del 20 %, Xiaomi alrededor del 11 %, el resto de marcas alrededor del 46 %.">
+          <g font-size="15" font-weight="700" fill="#17211C">
+            <text x="0" y="31">Samsung</text><text x="0" y="73">Apple</text><text x="0" y="115">Xiaomi</text><text x="0" y="157">Resto</text>
+          </g>
+          <rect x="110" y="12" width="230" height="28" rx="7" fill="#0E8A4B"/><text x="350" y="32" font-size="14" font-weight="700" fill="#0A5C33">≈ 23 %</text>
+          <rect x="110" y="54" width="200" height="28" rx="7" fill="#3AA36B"/><text x="320" y="74" font-size="14" font-weight="700" fill="#0A5C33">≈ 20 %</text>
+          <rect x="110" y="96" width="110" height="28" rx="7" fill="#6FBF92"/><text x="230" y="116" font-size="14" font-weight="700" fill="#0A5C33">≈ 11 %</text>
+          <rect x="110" y="138" width="460" height="28" rx="7" fill="#DCE6E0"/><text x="580" y="158" font-size="14" font-weight="700" fill="#56655D">≈ 46 %</text>
+        </svg>
+        <figcaption>Fabricantes que más smartphones vendieron en el mundo en el 2.º trimestre de 2026 (datos aproximados
+          de IDC y Counterpoint). En «resto» están OPPO, vivo, Transsion, Honor, Motorola…</figcaption>
+      </figure>
+
+      <h3 id="s2-2"><span class="sn">2.2</span>Sistemas operativos</h3>
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>Toca pasar al software, empezando por el nivel más bajo: el sistema operativo. ¿Hay más de uno? ¿Los hay
+          libres y propietarios, como en los ordenadores? ¿Quién los desarrolla?</p>
+      </div>
+      <p>Los dos sistemas operativos que encontrarás en casi cualquier móvil actual son:</p>
+      <ul>
+        <li><strong>Android</strong>. Desarrollado por Android Inc., empresa que Google compró en 2005. Está basado
+          en el núcleo (kernel) de Linux y su código es abierto, por lo que lo usan fabricantes muy distintos
+          (Samsung, Xiaomi, Motorola, Google…), cada uno con su propia capa de personalización.</li>
+        <li><strong>iOS</strong>. Desarrollado por Apple para el iPhone. En el iPad se usa una variante llamada
+          iPadOS. Solo funciona en aparatos de Apple.</li>
+      </ul>
+      <p>Otros sistemas que tuvieron su momento ya han desaparecido o quedan para usos muy concretos:</p>
+      <ul>
+        <li><strong>Windows Phone / Windows 10 Mobile</strong>, de Microsoft (sin soporte desde 2020).</li>
+        <li><strong>BlackBerry OS</strong>, de RIM (sin servicio desde 2022).</li>
+        <li><strong>Symbian</strong>, usado sobre todo por Nokia; <strong>Palm OS</strong>, <strong>webOS</strong>,
+          <strong>Maemo</strong> y <strong>Bada</strong> (todos en desuso).</li>
+        <li><strong>HarmonyOS</strong>, de Huawei, que se usa principalmente en China.</li>
+        <li><strong>KaiOS</strong>, para teléfonos sencillos con teclado físico.</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 222" role="img" aria-label="Años de vida de los sistemas operativos móviles: Symbian hasta 2014, Windows Mobile y Windows Phone hasta 2020, BlackBerry OS hasta 2022; iOS desde 2007 y Android desde 2008 siguen hoy.">
+          <g font-size="13.5" font-weight="700" fill="#17211C">
+            <text x="0" y="33">Symbian</text><text x="0" y="67">Windows Phone</text><text x="0" y="101">BlackBerry OS</text><text x="0" y="135">iOS</text><text x="0" y="169">Android</text>
+          </g>
+          <rect x="110" y="18" width="308" height="22" rx="6" fill="#C9D3CD"/>
+          <rect x="110" y="52" width="440" height="22" rx="6" fill="#C9D3CD"/>
+          <rect x="110" y="86" width="484" height="22" rx="6" fill="#C9D3CD"/>
+          <rect x="264" y="120" width="448" height="22" rx="6" fill="#56655D"/>
+          <rect x="286" y="154" width="426" height="22" rx="6" fill="#0E8A4B"/>
+          <g font-size="12" fill="#56655D">
+            <text x="424" y="34">fin: 2014</text><text x="556" y="68">fin: 2020</text><text x="600" y="102">fin: 2022</text>
+          </g>
+          <g font-size="12" fill="#fff" font-weight="700"><text x="272" y="136">2007 →</text><text x="294" y="170">2008 →</text></g>
+          <line x1="110" y1="190" x2="712" y2="190" stroke="#DCE6E0" stroke-width="1.5"/>
+          <g font-size="12" fill="#56655D" text-anchor="middle" class="mono">
+            <line x1="110" y1="186" x2="110" y2="194" stroke="#C9D3CD"/><text x="110" y="210">2000</text><line x1="220" y1="186" x2="220" y2="194" stroke="#C9D3CD"/><text x="220" y="210">2005</text><line x1="330" y1="186" x2="330" y2="194" stroke="#C9D3CD"/><text x="330" y="210">2010</text><line x1="440" y1="186" x2="440" y2="194" stroke="#C9D3CD"/><text x="440" y="210">2015</text><line x1="550" y1="186" x2="550" y2="194" stroke="#C9D3CD"/><text x="550" y="210">2020</text><line x1="660" y1="186" x2="660" y2="194" stroke="#C9D3CD"/><text x="660" y="210">2025</text>
+          </g>
+        </svg>
+        <figcaption>Sistemas operativos móviles a lo largo del tiempo (las barras de los antiguos empiezan en 2000, aunque
+          algunos nacieron antes). Solo Android e iOS siguen vivos.</figcaption>
+      </figure>
+      <p>A medida que los móviles ganan popularidad, sus sistemas operativos también ganan importancia. La gráfica
+        muestra el reparto actual del mercado mundial:</p>
+      <figure>
+        <svg viewBox="0 0 640 190" role="img" aria-label="Cuota de mercado mundial de sistemas operativos móviles: Android alrededor del 68 %, iOS alrededor del 32 %, el resto por debajo del 1 %.">
+          <text x="0" y="48" font-size="15" font-weight="700" fill="#17211C">Android</text>
+          <rect x="100" y="28" width="518" height="30" rx="8" fill="#E2F4EA"/>
+          <rect x="100" y="28" width="350" height="30" rx="8" fill="#0E8A4B"/>
+          <text x="461" y="49" font-size="15" font-weight="700" fill="#0A5C33">≈ 68 %</text>
+
+          <text x="0" y="102" font-size="15" font-weight="700" fill="#17211C">iOS</text>
+          <rect x="100" y="82" width="518" height="30" rx="8" fill="#EEF1EF"/>
+          <rect x="100" y="82" width="168" height="30" rx="8" fill="#56655D"/>
+          <text x="279" y="103" font-size="15" font-weight="700" fill="#17211C">≈ 32 %</text>
+
+          <text x="0" y="156" font-size="15" font-weight="700" fill="#17211C">Otros</text>
+          <rect x="100" y="136" width="518" height="30" rx="8" fill="#EEF1EF"/>
+          <rect x="100" y="136" width="5" height="30" rx="2" fill="#56655D"/>
+          <text x="116" y="157" font-size="15" font-weight="700" fill="#17211C">&lt; 1 %</text>
+        </svg>
+        <figcaption>Cuota de mercado mundial de sistemas operativos móviles (StatCounter, agosto de
+          2026). El reparto varía mucho por países: en Estados Unidos o Japón, por ejemplo, iOS tiene mucho más
+          peso.</figcaption>
+      </figure>
+      <p>Los datos cambian cada trimestre, pero una cosa está clara: <strong>Android es el sistema operativo para
+        móviles más extendido del mundo</strong>, con iOS como segunda opción y el resto prácticamente
+        desaparecidos.</p>
+
+      <h3 id="s2-3"><span class="sn">2.3</span>Plataformas de desarrollo y lenguajes de programación</h3>
+      <p>¿Qué necesitamos para programar móviles? Una <strong>plataforma de desarrollo</strong> que genere código
+        que el sistema operativo pueda ejecutar, directamente o a través de una máquina virtual.</p>
+      <p>Las plataformas más usadas son las que ofrecen los propios creadores de cada sistema operativo:</p>
+      <ul>
+        <li><strong>Android</strong>. Google ofrece gratis el <strong>Android SDK</strong> y el entorno
+          <strong>Android Studio</strong>. Se programa en <strong>Kotlin</strong> (el lenguaje que Google recomienda
+          desde 2019) o en <strong>Java</strong>. Con el <strong>Android NDK</strong> también se puede programar en
+          C o C++, generando código nativo que se ejecuta directamente en el procesador, a diferencia del código
+          gestionado de Java o Kotlin, que se ejecuta sobre una máquina virtual.</li>
+        <li><strong>iOS</strong>. Apple ofrece gratis el entorno <strong>Xcode</strong>, que solo funciona en macOS.
+          El lenguaje actual es <strong>Swift</strong>; las aplicaciones antiguas usan Objective-C.</li>
+        <li><strong>Multiplataforma</strong>. Permiten escribir una sola aplicación que funcione en Android y en iOS:
+          <strong>Flutter</strong> (lenguaje Dart, de Google), <strong>React Native</strong> (JavaScript o
+          TypeScript, de Meta), <strong>Kotlin Multiplatform</strong> (Kotlin, de JetBrains) o
+          <strong>.NET MAUI</strong> (C#, de Microsoft).</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 176" role="img" aria-label="Desarrollo nativo: código Kotlin o Java para la app Android y código Swift para la app iOS. Desarrollo multiplataforma: un solo código genera las dos apps.">
+          <defs><marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+          <text x="0" y="18" font-size="14" font-weight="700" fill="#17211C">Nativo: un código por sistema</text>
+          <text x="400" y="18" font-size="14" font-weight="700" fill="#17211C">Multiplataforma: un solo código</text>
+          <line x1="378" y1="0" x2="378" y2="176" stroke="#DCE6E0" stroke-width="2" stroke-dasharray="5 5"/>
+          <rect x="0" y="36" width="170" height="50" rx="10" fill="#E2F4EA"/><text x="85" y="66" text-anchor="middle" font-size="13.5" fill="#0A5C33">Código Kotlin / Java</text>
+          <rect x="0" y="110" width="170" height="50" rx="10" fill="#EEF1EF"/><text x="85" y="140" text-anchor="middle" font-size="13.5" fill="#17211C">Código Swift</text>
+          <rect x="230" y="36" width="126" height="50" rx="10" fill="#0E8A4B"/><text x="293" y="66" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">App Android</text>
+          <rect x="230" y="110" width="126" height="50" rx="10" fill="#56655D"/><text x="293" y="140" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">App iOS</text>
+          <rect x="400" y="66" width="176" height="64" rx="10" fill="#F1ECFD"/>
+          <text x="488" y="93" text-anchor="middle" font-size="13.5" font-weight="700" fill="#4A2A99">Un solo código</text>
+          <text x="488" y="112" text-anchor="middle" font-size="12" fill="#4A2A99">Flutter, React Native, KMP…</text>
+          <rect x="610" y="36" width="110" height="50" rx="10" fill="#0E8A4B"/><text x="665" y="66" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">App Android</text>
+          <rect x="610" y="110" width="110" height="50" rx="10" fill="#56655D"/><text x="665" y="140" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">App iOS</text>
+          <g stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#m1)">
+            <line x1="172" y1="61" x2="226" y2="61"/><line x1="172" y1="135" x2="226" y2="135"/>
+            <path d="M578 88 L606 64"/><path d="M578 108 L606 132"/>
+          </g>
+        </svg>
+        <figcaption>Con el desarrollo nativo hay que mantener dos aplicaciones; con el multiplataforma, una sola
+          que funciona en los dos sistemas.</figcaption>
+      </figure>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Plataforma</th><th>Lenguajes</th><th>Entorno</th><th>Publicar en la tienda</th></tr></thead>
+          <tbody>
+            <tr><td>Android</td><td>Kotlin, Java (C/C++ con NDK)</td><td>Android Studio</td><td>Google Play: pago único de 25 $</td></tr>
+            <tr><td>iOS</td><td>Swift (antes Objective-C)</td><td>Xcode (solo macOS)</td><td>App Store: 99 $ al año</td></tr>
+            <tr><td>Multiplataforma</td><td>Dart, JavaScript/TypeScript, Kotlin, C#</td><td>Según el framework</td><td>Las dos tiendas</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Otras plataformas que se usaron durante años, como <strong>Java ME</strong> (Java para teléfonos
+        sencillos) o las herramientas de Windows Phone, desaparecieron junto con esos teléfonos.</p>
+
+      <h3 id="s2-4"><span class="sn">2.4</span>Elección de una alternativa</h3>
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>María y Juan aprendieron Java en el módulo de Programación, y Ada quiere una opción relacionada con ese
+          lenguaje. Aun así, saben que es solo una de las alternativas del mercado: en otros proyectos quizá tengan
+          que trabajar con Kotlin, Swift, Dart o C#.</p>
+      </div>
+      <p>En nuestro caso elegimos <strong>Android con Java</strong>:</p>
+      <ul>
+        <li><strong>Java</strong> es el lenguaje con el que aprendiste a programar en 1º. No tendrás que aprender un
+          lenguaje nuevo y podrás dedicarte de lleno a lo específico de las aplicaciones móviles. Además, es un
+          lenguaje multiplataforma, muy adecuado para un ciclo llamado «Desarrollo de Aplicaciones
+          Multiplataforma».</li>
+        <li><strong>Android</strong> tiene la mayor cuota de mercado, así que nuestras aplicaciones podrán
+          instalarse en muchísimos dispositivos. Además, Google ofrece todas las herramientas de desarrollo
+          gratis.</li>
+      </ul>
+      <p>No olvides que es una de muchas opciones, y que las tecnologías aparecen y desaparecen según su éxito. Hay
+        que formarse en lo más demandado sin perder de vista lo que viene detrás.</p>
+
+      <h3 id="s2-5"><span class="sn">2.5</span>Introducción a la plataforma Android</h3>
+      <p>La historia de Android en pocas fechas:</p>
+      <ol class="years">
+        <li><b>2005</b>Google compra Android Inc., una pequeña empresa que desarrollaba software para móviles.</li>
+        <li><b>2007</b>Nace la Open Handset Alliance (Google, Samsung, HTC, Motorola, Qualcomm…) y se publica el primer SDK.</li>
+        <li><b>2008</b>Primer móvil con Android, el HTC Dream. Se libera el código con licencia Apache y abre Android Market.</li>
+        <li><b>2011</b>Aparece una versión específica para tablets.</li>
+        <li><b>2012</b>Android Market pasa a llamarse Google Play.</li>
+        <li><b>2017</b>Kotlin se convierte en lenguaje oficial de Android.</li>
+        <li><b>2026</b>Sale Android 17 (API 37).</li>
+      </ol>
+      <p>En cada versión de Android aparecen clases y métodos nuevos. Por eso, al desarrollar una aplicación hay que
+        decidir para qué versiones se programa. Las versiones nuevas no eliminan de golpe lo anterior: lo marcan
+        como <strong>obsoleto</strong> (<em>deprecated</em>), y se puede seguir usando durante un tiempo.</p>
+      <p>Cada versión de Android se identifica de tres formas:</p>
+      <ul>
+        <li>El <strong>número de versión</strong>: 9, 10, 14…</li>
+        <li>El <strong>nivel de API</strong>: un número entero que empieza en 1 y crece con cada versión. Es el que
+          usaremos al configurar un proyecto.</li>
+        <li>El <strong>nombre comercial</strong>: hasta Android 9 eran nombres de postres en orden alfabético
+          (Cupcake, Donut, Eclair…). Desde Android 10 se usa solo el número.</li>
+      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Versión</th><th>Nivel de API</th><th>Nombre</th><th>Año</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">1.0 – 1.1</td><td class="mono">1 – 2</td><td></td><td>2008 – 2009</td></tr>
+            <tr><td class="mono">1.5</td><td class="mono">3</td><td>Cupcake</td><td>2009</td></tr>
+            <tr><td class="mono">1.6</td><td class="mono">4</td><td>Donut</td><td>2009</td></tr>
+            <tr><td class="mono">2.0 – 2.1</td><td class="mono">5 – 7</td><td>Eclair</td><td>2009</td></tr>
+            <tr><td class="mono">2.2</td><td class="mono">8</td><td>Froyo</td><td>2010</td></tr>
+            <tr><td class="mono">2.3</td><td class="mono">9 – 10</td><td>Gingerbread</td><td>2010</td></tr>
+            <tr><td class="mono">3.x</td><td class="mono">11 – 13</td><td>Honeycomb (solo tablets)</td><td>2011</td></tr>
+            <tr><td class="mono">4.0</td><td class="mono">14 – 15</td><td>Ice Cream Sandwich</td><td>2011</td></tr>
+            <tr><td class="mono">4.1 – 4.3</td><td class="mono">16 – 18</td><td>Jelly Bean</td><td>2012</td></tr>
+            <tr><td class="mono">4.4</td><td class="mono">19 – 20</td><td>KitKat</td><td>2013</td></tr>
+            <tr><td class="mono">5.0 – 5.1</td><td class="mono">21 – 22</td><td>Lollipop</td><td>2014</td></tr>
+            <tr><td class="mono">6.0</td><td class="mono">23</td><td>Marshmallow</td><td>2015</td></tr>
+            <tr><td class="mono">7.0 – 7.1</td><td class="mono">24 – 25</td><td>Nougat</td><td>2016</td></tr>
+            <tr><td class="mono">8.0 – 8.1</td><td class="mono">26 – 27</td><td>Oreo</td><td>2017</td></tr>
+            <tr><td class="mono">9</td><td class="mono">28</td><td>Pie</td><td>2018</td></tr>
+            <tr><td class="mono">10</td><td class="mono">29</td><td>—</td><td>2019</td></tr>
+            <tr><td class="mono">11</td><td class="mono">30</td><td>—</td><td>2020</td></tr>
+            <tr><td class="mono">12 – 12L</td><td class="mono">31 – 32</td><td>—</td><td>2021 – 2022</td></tr>
+            <tr><td class="mono">13</td><td class="mono">33</td><td>—</td><td>2022</td></tr>
+            <tr><td class="mono">14</td><td class="mono">34</td><td>—</td><td>2023</td></tr>
+            <tr><td class="mono">15</td><td class="mono">35</td><td>—</td><td>2024</td></tr>
+            <tr><td class="mono">16</td><td class="mono">36</td><td>—</td><td>2025</td></tr>
+            <tr><td class="mono">17</td><td class="mono">37</td><td>—</td><td>2026</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <figure>
+        <svg viewBox="0 0 720 126" role="img" aria-label="Niveles de API del 21 al 37. Con versión mínima 28, la aplicación se instala en los niveles 28 a 37 y no en los anteriores.">
+          <defs><marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6D3FD8"/></marker></defs>
+          <text x="323" y="14" text-anchor="middle" font-size="13" font-weight="700" fill="#6D3FD8">versión mínima: API 28</text>
+          <line x1="323" y1="20" x2="323" y2="36" stroke="#6D3FD8" stroke-width="2" marker-end="url(#m2)"/>
+          <rect x="40" y="40" width="34" height="34" rx="7" fill="#EEF1EF"/><text x="57" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#8A9690">21</text><rect x="78" y="40" width="34" height="34" rx="7" fill="#EEF1EF"/><text x="95" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#8A9690">22</text><rect x="116" y="40" width="34" height="34" rx="7" fill="#EEF1EF"/><text x="133" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#8A9690">23</text><rect x="154" y="40" width="34" height="34" rx="7" fill="#EEF1EF"/><text x="171" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#8A9690">24</text><rect x="192" y="40" width="34" height="34" rx="7" fill="#EEF1EF"/><text x="209" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#8A9690">25</text><rect x="230" y="40" width="34" height="34" rx="7" fill="#EEF1EF"/><text x="247" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#8A9690">26</text><rect x="268" y="40" width="34" height="34" rx="7" fill="#EEF1EF"/><text x="285" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#8A9690">27</text><rect x="306" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="323" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">28</text><rect x="344" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="361" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">29</text><rect x="382" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="399" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">30</text><rect x="420" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="437" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">31</text><rect x="458" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="475" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">32</text><rect x="496" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="513" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">33</text><rect x="534" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="551" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">34</text><rect x="572" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="589" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">35</text><rect x="610" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="627" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">36</text><rect x="648" y="40" width="34" height="34" rx="7" fill="#0E8A4B"/><text x="665" y="62" text-anchor="middle" class="mono" font-size="12.5" font-weight="600" fill="#fff">37</text>
+          <text x="0" y="62" font-size="12" fill="#56655D">API</text>
+          <line x1="40" y1="88" x2="302" y2="88" stroke="#C9D3CD" stroke-width="3"/>
+          <line x1="306" y1="88" x2="682" y2="88" stroke="#0E8A4B" stroke-width="3"/>
+          <text x="173.0" y="110" text-anchor="middle" font-size="13" fill="#56655D">no se puede instalar</text>
+          <text x="494.0" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="#0A5C33">se puede instalar (Android 9 a Android 17)</text>
+        </svg>
+      </figure>
+      <p>Por ejemplo, una aplicación con versión mínima API 28 se puede instalar en móviles con Android 9 o
+        cualquier versión posterior, pero no en uno con Android 8.</p>
+      <div class="box clave">
+        <span class="box-label">Consejo</span>
+        <p>Android se actualiza cada año. Conviene programar para que la aplicación funcione en el mayor número
+          posible de dispositivos, así que es importante saber qué versiones están más extendidas antes de elegir
+          la versión mínima.</p>
+      </div>
+      <div class="box saber">
+        <span class="box-label">Para saber más</span>
+        <p>Los cambios de cada versión, en la web oficial:
+          <a href="https://developer.android.com/about/versions" target="_blank" rel="noopener">Versiones de Android</a>.</p>
+      </div>
+    </section>
+
+    <!-- ===================== 3 ===================== -->
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>Arquitectura del sistema Android</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>Decidido el entorno, María y Juan quieren saber cómo es por dentro: ¿qué clases nuevas hay que aprender?
+          ¿Qué máquina virtual se usa? ¿Con qué herramientas vamos a trabajar?</p>
+      </div>
+
+      <p>Android está organizado en <strong>capas</strong>. Cada capa usa los servicios de la que tiene debajo y
+        ofrece los suyos a la de arriba:</p>
+      <figure>
+        <svg viewBox="0 0 640 372" role="img" aria-label="Capas de Android, de arriba abajo: aplicaciones; entorno de aplicación (framework de Java); runtime de Android y librerías nativas C/C++; capa de abstracción de hardware; núcleo Linux.">
+          <rect x="0" y="0" width="640" height="60" rx="12" fill="#0E8A4B"/>
+          <text x="20" y="27" font-size="16" font-weight="700" fill="#fff">Aplicaciones</text>
+          <text x="20" y="47" font-size="13" fill="#E2F4EA">Teléfono, Contactos, Cámara, Navegador… y las tuyas</text>
+
+          <rect x="0" y="72" width="640" height="76" rx="12" fill="#3AA36B"/>
+          <text x="20" y="98" font-size="16" font-weight="700" fill="#fff">Entorno de aplicación (API en Java)</text>
+          <g font-size="12" fill="#0A5C33">
+            <rect x="20" y="110" width="112" height="26" rx="13" fill="#fff"/><text x="76" y="127" text-anchor="middle">Activity Manager</text>
+            <rect x="140" y="110" width="112" height="26" rx="13" fill="#fff"/><text x="196" y="127" text-anchor="middle">Window Manager</text>
+            <rect x="260" y="110" width="60" height="26" rx="13" fill="#fff"/><text x="290" y="127" text-anchor="middle">Views</text>
+            <rect x="328" y="110" width="120" height="26" rx="13" fill="#fff"/><text x="388" y="127" text-anchor="middle">Content Providers</text>
+            <rect x="456" y="110" width="164" height="26" rx="13" fill="#fff"/><text x="538" y="127" text-anchor="middle">Notification Manager…</text>
+          </g>
+
+          <rect x="0" y="160" width="314" height="76" rx="12" fill="#6FBF92"/>
+          <text x="20" y="186" font-size="16" font-weight="700" fill="#0A3D22">Librerías nativas (C/C++)</text>
+          <text x="20" y="208" font-size="13" fill="#0A3D22">Gráficos, multimedia, SQLite,</text>
+          <text x="20" y="225" font-size="13" fill="#0A3D22">WebView…</text>
+
+          <rect x="326" y="160" width="314" height="76" rx="12" fill="#6FBF92"/>
+          <text x="346" y="186" font-size="16" font-weight="700" fill="#0A3D22">Android Runtime (ART)</text>
+          <text x="346" y="208" font-size="13" fill="#0A3D22">Máquina que ejecuta las apps</text>
+          <text x="346" y="225" font-size="13" fill="#0A3D22">+ librerías básicas de Java</text>
+
+          <rect x="0" y="248" width="640" height="52" rx="12" fill="#A8DABC"/>
+          <text x="20" y="279" font-size="16" font-weight="700" fill="#0A3D22">Capa de abstracción de hardware (HAL)</text>
+          <text x="620" y="279" font-size="13" fill="#0A3D22" text-anchor="end">cámara, audio, sensores…</text>
+
+          <rect x="0" y="312" width="640" height="60" rx="12" fill="#17211C"/>
+          <text x="20" y="339" font-size="16" font-weight="700" fill="#fff">Núcleo Linux</text>
+          <text x="20" y="359" font-size="13" fill="#C9D3CD">Memoria, procesos, red, seguridad, controladores</text>
+        </svg>
+        <figcaption>Capas de Android, de la más interna (abajo) a la más externa (arriba). Basado en el esquema de
+          la documentación oficial.</figcaption>
+      </figure>
+      <ul>
+        <li><strong>Núcleo Linux</strong> (capa más interna). Gestiona la memoria, los procesos, la red, la
+          seguridad y los controladores de los dispositivos. Es la capa que depende del hardware y hace de
+          intermediaria entre el hardware y el resto del software.</li>
+        <li><strong>Capa de abstracción de hardware (HAL)</strong>. Ofrece a las capas superiores una forma común de
+          usar la cámara, el audio o los sensores, sea cual sea el fabricante del componente.</li>
+        <li><strong>Librerías nativas</strong>. Bibliotecas escritas en C/C++ que usa el sistema: gráficos,
+          reproducción multimedia, el motor de base de datos <strong>SQLite</strong>, el componente
+          <strong>WebView</strong> para mostrar páginas web…</li>
+        <li><strong>Android Runtime (ART)</strong>. La máquina que ejecuta las aplicaciones. La primera máquina
+          virtual de Android se llamaba <strong>Dalvik</strong> y estaba adaptada a la poca memoria y el procesador
+          limitado de los primeros móviles. Desde Android 5.0 (Lollipop) la sustituye <strong>ART</strong>, que
+          traduce las aplicaciones a código del procesador para que se ejecuten más rápido. En esta capa están
+          también las librerías básicas de Java.</li>
+        <li><strong>Entorno de aplicación</strong> (framework). Las API en Java que usamos al programar, las mismas
+          que usan las aplicaciones del sistema. Algunas:
+          <ul>
+            <li><strong>Activity Manager</strong>: gestiona el ciclo de vida de las pantallas de las aplicaciones.</li>
+            <li><strong>Window Manager</strong>: gestiona las ventanas.</li>
+            <li><strong>Telephony Manager</strong>: funciones propias del teléfono, como llamadas y mensajes.</li>
+            <li><strong>Views</strong>: los elementos con los que se construyen las interfaces (botones, textos,
+              listas…).</li>
+            <li><strong>Content Providers</strong>: permiten compartir datos entre aplicaciones; así una aplicación
+              puede leer los contactos o los mensajes.</li>
+            <li><strong>Notification Manager</strong>: muestra al usuario avisos de lo que ocurre (llamada entrante,
+              mensaje nuevo, descarga terminada…).</li>
+          </ul>
+        </li>
+        <li><strong>Aplicaciones</strong>. Todas las aplicaciones instaladas: las que trae el móvil, las que se
+          descargan y las nuestras. Todas se ejecutan en ART usando los servicios de las capas inferiores.</li>
+      </ul>
+      <div class="box saber">
+        <span class="box-label">Para saber más</span>
+        <p>La arquitectura completa en la documentación oficial:
+          <a href="https://developer.android.com/guide/platform" target="_blank" rel="noopener">Arquitectura de la plataforma</a>.</p>
+      </div>
+
+      <h3 id="s3-1"><span class="sn">3.1</span>Funcionalidades de Android</h3>
+      <p>¿Qué permite hacer un móvil con Android? Si lo usas a diario lo sabes bien: llamar, enviar mensajes,
+        navegar por Internet, descargar ficheros, hacer fotos, recoger datos con sus sensores…</p>
+      <p>En este módulo aprenderemos las funcionalidades principales. Entre las que desarrollaremos a lo
+        largo del curso están:</p>
+      <div class="tiles">
+        <div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg><b>Interfaces</b><span>Pantallas interactivas con botones, textos, listas…</span></div>
+        <div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><b>Datos</b><span>Guardar y gestionar la información de la aplicación.</span></div>
+        <div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg><b>Multimedia</b><span>Procesar y reproducir sonido, imagen y vídeo.</span></div>
+      </div>
+      <p>Otras funcionalidades de Android son:</p>
+      <div class="tiles">
+        <div class="tile soft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><b>Mensajes</b><span>Enviar y recibir mensajes, con los permisos adecuados.</span></div>
+        <div class="tile soft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg><b>Notificaciones push</b><span>Avisos enviados desde un servidor.</span></div>
+        <div class="tile soft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><b>Segundo plano</b><span>Tareas con hilos y servicios mientras usas otra cosa.</span></div>
+        <div class="tile soft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><b>Sensores</b><span>Movimiento, orientación, luz, ubicación…</span></div>
+        <div class="tile soft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r="1"/></svg><b>Wi-Fi y Bluetooth</b><span>Conexión con redes y otros dispositivos.</span></div>
+        <div class="tile soft"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><b>HTTP y HTTPS</b><span>Comunicarse con servidores de Internet.</span></div>
+      </div>
+      <div class="box saber">
+        <span class="box-label">Para saber más</span>
+        <p>Cuando domines lo básico, puedes ampliar tus aplicaciones con:</p>
+        <ul>
+          <li><a href="https://developer.android.com/develop/background-work/services" target="_blank" rel="noopener">Servicios</a>: descargar ficheros o reproducir música sin bloquear la aplicación.</li>
+          <li><a href="https://developer.android.com/guide/components/intents-common" target="_blank" rel="noopener">Intents comunes</a>: llamar, enviar mensajes, abrir el navegador…</li>
+          <li><a href="https://developer.android.com/develop/sensors-and-location/sensors/sensors_overview" target="_blank" rel="noopener">Sensores</a>: temperatura, orientación, movimiento…</li>
+          <li><a href="https://developer.android.com/reference/android/net/ConnectivityManager" target="_blank" rel="noopener">ConnectivityManager</a>: consultar las conexiones de red disponibles.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== 4 ===================== -->
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>Entorno de desarrollo para Android</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>María y Juan discuten qué necesitan instalar en el ordenador para empezar: ¿qué bibliotecas hacen falta?
+          ¿Qué entorno de desarrollo es el más apropiado?</p>
+      </div>
+
+      <p>Google eligió <strong>Java</strong> como primer lenguaje de Android por ser fácil, muy extendido e
+        independiente de la plataforma. En 2017 anunció que <strong>Kotlin</strong> pasaba a ser lenguaje oficial y,
+        desde 2019, es el que recomienda para proyectos nuevos: genera código más corto y sencillo y es 100 %
+        compatible con Java. Código Java y Kotlin pueden convivir en el mismo proyecto, y las librerías de uno se
+        usan desde el otro.</p>
+      <p>Nosotros aprovecharemos lo que ya sabes de Java para no dedicar el tiempo del módulo a aprender otro
+        lenguaje. Aun así, conocer Kotlin te dará ventaja frente a otros programadores: no lo pierdas de vista.</p>
+      <p>Como entorno usaremos <strong>Android Studio</strong>, el entorno oficial de Android, basado en IntelliJ
+        IDEA. Google lo actualiza con las últimas herramientas para cada tipo de dispositivo. Su instalador incluye
+        todo lo necesario:</p>
+      <ul>
+        <li>Un <strong>JDK</strong> propio, así que no hace falta instalar Java aparte.</li>
+        <li>El <strong>SDK de Android</strong>, gestionado desde el <strong>SDK Manager</strong>. Incluye:
+          <ul>
+            <li>Las <strong>API</strong> de cada versión de Android, para programar las aplicaciones.</li>
+            <li>Las herramientas para instalar y <strong>depurar</strong> aplicaciones, como <code>adb</code>
+              (Android Debug Bridge).</li>
+            <li>El <strong>emulador</strong>, que ejecuta la aplicación en un dispositivo virtual.</li>
+          </ul>
+        </li>
+        <li><strong>Gradle</strong>, la herramienta que compila el proyecto, descarga las librerías que usa y genera
+          la aplicación instalable (el fichero APK).</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 190" role="img" aria-label="Android Studio incluye el editor y diseñador, un JDK, el SDK de Android (API de cada versión, herramientas como adb y el emulador) y Gradle.">
+          <rect x="0" y="0" width="720" height="190" rx="16" fill="#F6F9F7" stroke="#DCE6E0" stroke-width="1.5"/>
+          <text x="18" y="28" font-size="16" font-weight="800" fill="#0A5C33">Android Studio</text>
+          <rect x="16" y="44" width="160" height="128" rx="12" fill="#fff" stroke="#DCE6E0"/>
+          <text x="96" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#17211C">Editor</text>
+          <text x="96" y="120" text-anchor="middle" font-size="12.5" fill="#56655D">código y diseño</text>
+          <text x="96" y="136" text-anchor="middle" font-size="12.5" fill="#56655D">de pantallas</text>
+          <rect x="188" y="44" width="110" height="128" rx="12" fill="#fff" stroke="#DCE6E0"/>
+          <text x="243" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#17211C">JDK</text>
+          <text x="243" y="120" text-anchor="middle" font-size="12.5" fill="#56655D">compila Java</text>
+          <rect x="310" y="44" width="240" height="128" rx="12" fill="#0E8A4B"/>
+          <text x="430" y="68" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">SDK de Android</text>
+          <g font-size="12.5" fill="#0A5C33" text-anchor="middle">
+            <rect x="326" y="80" width="208" height="24" rx="12" fill="#fff"/><text x="430" y="96">API de cada versión de Android</text>
+            <rect x="326" y="110" width="208" height="24" rx="12" fill="#fff"/><text x="430" y="126">adb y herramientas de depuración</text>
+            <rect x="326" y="140" width="208" height="24" rx="12" fill="#fff"/><text x="430" y="156">Emulador</text>
+          </g>
+          <rect x="562" y="44" width="142" height="128" rx="12" fill="#6D3FD8"/>
+          <text x="633" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Gradle</text>
+          <text x="633" y="120" text-anchor="middle" font-size="12.5" fill="#F1ECFD">construye</text>
+          <text x="633" y="136" text-anchor="middle" font-size="12.5" fill="#F1ECFD">la aplicación</text>
+        </svg>
+        <figcaption>Lo que se instala con Android Studio. El SDK se amplía y actualiza desde el SDK Manager.</figcaption>
+      </figure>
+      <p>Así convierte Gradle tu proyecto en una aplicación que se puede instalar:</p>
+      <figure>
+        <svg viewBox="0 0 720 176" role="img" aria-label="El código Java, los recursos y el manifiesto entran en Gradle, que compila y empaqueta todo en un fichero APK; con adb se instala en el emulador o en el móvil.">
+          <defs><marker id="m3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+          <g font-size="11.5" class="mono" fill="#0A5C33">
+            <rect x="0" y="10" width="188" height="36" rx="10" fill="#E2F4EA"/><text x="12" y="33">MainActivity.java</text>
+            <rect x="0" y="60" width="188" height="36" rx="10" fill="#E2F4EA"/><text x="12" y="83">res/ (pantallas, textos…)</text>
+            <rect x="0" y="110" width="188" height="36" rx="10" fill="#E2F4EA"/><text x="12" y="133">AndroidManifest.xml</text>
+          </g>
+          <rect x="226" y="10" width="186" height="136" rx="14" fill="#6D3FD8"/>
+          <text x="319" y="42" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">Gradle</text>
+          <g font-size="12.5" fill="#F1ECFD" text-anchor="middle">
+            <text x="319" y="70">compila el código</text><text x="319" y="92">añade las librerías</text><text x="319" y="114">empaqueta los recursos</text>
+          </g>
+          <rect x="452" y="60" width="96" height="36" rx="10" fill="#17211C"/><text x="500" y="83" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" class="mono">app.apk</text>
+          <rect x="624" y="18" width="52" height="96" rx="10" fill="#17211C"/><rect x="629" y="26" width="42" height="80" rx="5" fill="#E2F4EA"/><rect x="629" y="26" width="42" height="12" rx="5" fill="#0E8A4B"/>
+          <text x="650" y="136" text-anchor="middle" font-size="12.5" fill="#56655D">emulador</text><text x="650" y="152" text-anchor="middle" font-size="12.5" fill="#56655D">o móvil</text>
+          <g stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#m3)">
+            <line x1="190" y1="28" x2="222" y2="44"/><line x1="190" y1="78" x2="222" y2="78"/><line x1="190" y1="128" x2="222" y2="112"/>
+            <line x1="414" y1="78" x2="448" y2="78"/><line x1="550" y1="70" x2="618" y2="62"/>
+          </g>
+          <text x="584" y="56" text-anchor="middle" font-size="12" fill="#56655D" class="mono">adb</text>
+        </svg>
+        <figcaption>Al pulsar <strong>Run</strong>, Gradle construye el APK (el fichero instalable de Android) y
+          Android Studio lo instala con <code>adb</code> en el dispositivo elegido.</figcaption>
+      </figure>
+      <div class="box conocer">
+        <span class="box-label">Debes conocer</span>
+        <p>La guía oficial explica la instalación en cada sistema operativo. Descarga antes el instalador del tuyo:</p>
+        <ul>
+          <li><a href="https://developer.android.com/studio" target="_blank" rel="noopener">Descargar Android Studio</a></li>
+          <li><a href="https://developer.android.com/studio/install" target="_blank" rel="noopener">Guía de instalación de Android Studio</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== 5 ===================== -->
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Desarrollo de una aplicación sencilla</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>Ha llegado la hora de ponerse manos a la obra. María va a crear un «Hola mundo». Con el entorno ya
+          preparado le surgen dudas: ¿qué ficheros hay que crear? ¿Qué carpetas tiene el proyecto? ¿Qué genera el
+          entorno automáticamente?</p>
+      </div>
+
+      <p>Vamos a crear una primera aplicación que muestre en pantalla el famoso «Hello World!». Para nombrar el
+        proyecto y sus componentes usaremos el inglés, como es costumbre: el proyecto se llamará
+        <strong>HelloWorld</strong>.</p>
+      <ol>
+        <li>En la pantalla de bienvenida de Android Studio, elige <strong>New Project</strong>.</li>
+        <li>En <strong>Phone and Tablet</strong>, elige la plantilla <strong>Empty Views Activity</strong>. Ojo:
+          la plantilla llamada solo <em>Empty Activity</em> crea la pantalla con Jetpack Compose, otra forma de
+          hacer interfaces que no usaremos. Nosotros diseñaremos las pantallas en XML.</li>
+        <li>Rellena los datos del proyecto:
+          <ul>
+            <li><strong>Name</strong>: el nombre de la aplicación, <code>HelloWorld</code>.</li>
+            <li><strong>Package name</strong>: el nombre del paquete, que identifica la aplicación. Se forma con un
+              dominio al revés más el nombre de la aplicación. En Google Play tiene que ser <strong>único</strong>:
+              no puede haber dos aplicaciones con el mismo, y el móvil lo usa para distinguir cada aplicación
+              instalada. Usaremos <code>com.example.helloworld</code>; <code>com.example</code> indica que es un
+              ejemplo que no se publicará.</li>
+            <li><strong>Save location</strong>: la carpeta donde se guarda el proyecto.</li>
+            <li><strong>Language</strong>: <code>Java</code>.</li>
+            <li><strong>Minimum SDK</strong>: la versión mínima de Android (nivel de API) en la que funcionará la
+              aplicación. No se podrá instalar en dispositivos, reales o virtuales, con una versión anterior. El
+              enlace <em>Help me choose</em> muestra qué porcentaje de dispositivos cubre cada versión.</li>
+            <li><strong>Build configuration language</strong>: el lenguaje en que se escriben los ficheros de
+              Gradle, <em>Kotlin DSL</em> (<code>build.gradle.kts</code>) o <em>Groovy DSL</em>
+              (<code>build.gradle</code>). Usaremos Groovy DSL.</li>
+          </ul>
+        </li>
+        <li>Pulsa <strong>Finish</strong> y espera a que Gradle termine de preparar el proyecto (la primera vez
+          descarga bastantes cosas y tarda).</li>
+      </ol>
+      <figure>
+        <svg viewBox="0 0 720 306" role="img" aria-label="Esquema del asistente New Project: categoría Phone and Tablet seleccionada y plantilla Empty Views Activity marcada.">
+          <rect x="0" y="0" width="720" height="306" rx="12" fill="#fff" stroke="#DCE6E0" stroke-width="1.5"/>
+          <path d="M0 12 a12 12 0 0 1 12 -12 H708 a12 12 0 0 1 12 12 V34 H0 z" fill="#EEF1EF"/>
+          <text x="16" y="22" font-size="13" font-weight="700" fill="#17211C">New Project</text>
+          <text x="16" y="56" font-size="11" fill="#56655D">Templates</text>
+          <rect x="8" y="64" width="160" height="28" rx="6" fill="#E2F4EA"/><text x="18" y="83" font-size="12.5" font-weight="700" fill="#0A5C33">Phone and Tablet</text>
+          <g font-size="12.5" fill="#17211C"><text x="18" y="115">Wear OS</text><text x="18" y="143">Television</text><text x="18" y="171">Automotive</text></g>
+          <line x1="176" y1="34" x2="176" y2="306" stroke="#DCE6E0"/>
+          <rect x="190" y="50" width="160" height="100" rx="8" fill="#F6F9F7" stroke="#DCE6E0" stroke-width="1.5"/><rect x="254" y="62" width="32" height="52" rx="5" fill="#fff" stroke="#17211C" stroke-width="2"/><text x="270" y="136" text-anchor="middle" font-size="11" fill="#17211C" >No Activity</text><rect x="364" y="50" width="160" height="100" rx="8" fill="#F6F9F7" stroke="#DCE6E0" stroke-width="1.5"/><rect x="428" y="62" width="32" height="52" rx="5" fill="#fff" stroke="#17211C" stroke-width="2"/><rect x="428" y="62" width="32" height="10" rx="4" fill="#0E8A4B"/><text x="444" y="136" text-anchor="middle" font-size="11" fill="#17211C" >Empty Activity</text><rect x="468" y="60" width="48" height="16" rx="8" fill="#F1ECFD"/><text x="492" y="72" text-anchor="middle" font-size="9.5" fill="#4A2A99">Compose</text><rect x="538" y="50" width="160" height="100" rx="8" fill="#F6F9F7" stroke="#DCE6E0" stroke-width="1.5"/><rect x="602" y="62" width="32" height="52" rx="5" fill="#fff" stroke="#17211C" stroke-width="2"/><rect x="602" y="62" width="32" height="10" rx="4" fill="#0E8A4B"/><text x="618" y="136" text-anchor="middle" font-size="11" fill="#17211C" >Basic Views Activity</text><rect x="190" y="164" width="160" height="100" rx="8" fill="#E2F4EA" stroke="#0E8A4B" stroke-width="3"/><rect x="254" y="176" width="32" height="52" rx="5" fill="#fff" stroke="#17211C" stroke-width="2"/><rect x="254" y="176" width="32" height="10" rx="4" fill="#0E8A4B"/><text x="270" y="250" text-anchor="middle" font-size="11" fill="#17211C" font-weight="700">Empty Views Activity</text><circle cx="336" cy="178" r="9" fill="#0E8A4B"/><path d="M331 178 l3 3 l6 -6" stroke="#fff" stroke-width="2" fill="none"/><rect x="364" y="164" width="160" height="100" rx="8" fill="#F6F9F7" stroke="#DCE6E0" stroke-width="1.5"/><rect x="428" y="176" width="32" height="52" rx="5" fill="#fff" stroke="#17211C" stroke-width="2"/><rect x="428" y="176" width="32" height="10" rx="4" fill="#0E8A4B"/><text x="444" y="250" text-anchor="middle" font-size="11" fill="#17211C" >Bottom Navigation Views…</text><rect x="538" y="164" width="160" height="100" rx="8" fill="#F6F9F7" stroke="#DCE6E0" stroke-width="1.5"/><rect x="602" y="176" width="32" height="52" rx="5" fill="#fff" stroke="#17211C" stroke-width="2"/><rect x="602" y="176" width="32" height="10" rx="4" fill="#0E8A4B"/><text x="618" y="250" text-anchor="middle" font-size="11" fill="#17211C" >Navigation Drawer Views…</text>
+          <rect x="530" y="274" width="80" height="24" rx="12" fill="#fff" stroke="#DCE6E0"/><text x="570" y="290" text-anchor="middle" font-size="12" fill="#17211C">Cancel</text>
+          <rect x="620" y="274" width="84" height="24" rx="12" fill="#0E8A4B"/><text x="662" y="290" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Next</text>
+        </svg>
+        <figcaption>Paso 1 del asistente (esquema; el aspecto exacto cambia con cada versión de Android Studio).
+          Elige <strong>Empty Views Activity</strong>, no <em>Empty Activity</em>.</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 720 310" role="img" aria-label="Esquema del paso 2 del asistente con los datos del proyecto HelloWorld: nombre, paquete, carpeta, lenguaje Java, versión mínima API 28 y Groovy DSL.">
+          <rect x="0" y="0" width="720" height="310" rx="12" fill="#fff" stroke="#DCE6E0" stroke-width="1.5"/>
+          <path d="M0 12 a12 12 0 0 1 12 -12 H708 a12 12 0 0 1 12 12 V34 H0 z" fill="#EEF1EF"/>
+          <text x="16" y="22" font-size="13" font-weight="700" fill="#17211C">New Project · Empty Views Activity</text>
+          <text x="24" y="73" font-size="13" fill="#56655D">Name</text><rect x="250" y="56" width="446" height="26" rx="6" fill="#F6F9F7" stroke="#DCE6E0"/><text x="262" y="73" font-size="12.5" class="mono" fill="#17211C">HelloWorld</text><text x="24" y="109" font-size="13" fill="#56655D">Package name</text><rect x="250" y="92" width="446" height="26" rx="6" fill="#F6F9F7" stroke="#DCE6E0"/><text x="262" y="109" font-size="12.5" class="mono" fill="#17211C">com.example.helloworld</text><text x="24" y="145" font-size="13" fill="#56655D">Save location</text><rect x="250" y="128" width="446" height="26" rx="6" fill="#F6F9F7" stroke="#DCE6E0"/><text x="262" y="145" font-size="12.5" class="mono" fill="#17211C">C:\Users\alumno\AndroidStudioProjects\HelloWorld</text><text x="24" y="181" font-size="13" fill="#56655D">Language</text><rect x="250" y="164" width="446" height="26" rx="6" fill="#F6F9F7" stroke="#DCE6E0"/><text x="262" y="181" font-size="12.5" class="mono" fill="#17211C">Java</text><path d="M676 174 l5 6 l5 -6" stroke="#56655D" stroke-width="1.6" fill="none"/><text x="24" y="217" font-size="13" fill="#56655D">Minimum SDK</text><rect x="250" y="200" width="446" height="26" rx="6" fill="#F6F9F7" stroke="#DCE6E0"/><text x="262" y="217" font-size="12.5" class="mono" fill="#17211C">API 28 (&quot;Pie&quot;; Android 9.0)</text><path d="M676 210 l5 6 l5 -6" stroke="#56655D" stroke-width="1.6" fill="none"/><text x="24" y="253" font-size="13" fill="#56655D">Build configuration language</text><rect x="250" y="236" width="446" height="26" rx="6" fill="#F6F9F7" stroke="#DCE6E0"/><text x="262" y="253" font-size="12.5" class="mono" fill="#17211C">Groovy DSL (build.gradle)</text><path d="M676 246 l5 6 l5 -6" stroke="#56655D" stroke-width="1.6" fill="none"/>
+          <text x="664" y="217" text-anchor="end" font-size="11.5" fill="#1A73E8">Help me choose</text>
+          <rect x="530" y="278" width="80" height="24" rx="12" fill="#fff" stroke="#DCE6E0"/><text x="570" y="294" text-anchor="middle" font-size="12" fill="#17211C">Previous</text>
+          <rect x="620" y="278" width="84" height="24" rx="12" fill="#0E8A4B"/><text x="662" y="294" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Finish</text>
+        </svg>
+        <figcaption>Paso 2 del asistente (esquema) con los datos de nuestro proyecto.</figcaption>
+      </figure>
+      <p>Veamos qué ficheros y carpetas se han generado para entender cómo se estructura una aplicación Android.</p>
+
+      <h3 id="s5-1"><span class="sn">5.1</span>Estructura de un proyecto Android</h3>
+      <p>Android Studio genera la estructura de carpetas y los ficheros de configuración y ayuda a diseñar las
+        pantallas. Los ficheros se ven en el panel <strong>Project</strong>, a la izquierda. Arriba de ese panel
+        puedes elegir la <strong>vista</strong>:</p>
+      <ul>
+        <li>La vista <strong>Android</strong> (la que sale por defecto) agrupa los ficheros por tipo para
+          encontrarlos rápido, pero no es la estructura real de carpetas.</li>
+        <li>La vista <strong>Project</strong> muestra las carpetas tal como están en el disco.</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 306" role="img" aria-label="Vista Android del panel Project: app con manifests, java y res, y Gradle Scripts; a la derecha, la carpeta real de cada grupo.">
+          <rect x="0" y="0" width="310" height="306" rx="12" fill="#fff" stroke="#DCE6E0" stroke-width="1.5"/>
+          <path d="M0 12 a12 12 0 0 1 12 -12 H298 a12 12 0 0 1 12 12 V24 H0 z" fill="#EEF1EF"/>
+          <text x="14" y="17" font-size="12" font-weight="700" fill="#17211C">Project · Android ▾</text>
+          <path d="M16 31 h6 l2 2 h7 v9 h-15 z" fill="#6FBF92"/><text x="38" y="41" font-size="12.5" fill="#17211C">app</text><path d="M34 53 h6 l2 2 h7 v9 h-15 z" fill="#6FBF92"/><text x="56" y="63" font-size="12.5" fill="#17211C">manifests</text><rect x="54" y="74" width="11" height="13" rx="2" fill="#fff" stroke="#56655D"/><text x="74" y="85" font-size="12.5" fill="#17211C">AndroidManifest.xml</text><path d="M34 97 h6 l2 2 h7 v9 h-15 z" fill="#6FBF92"/><text x="56" y="107" font-size="12.5" fill="#17211C">java</text><path d="M52 119 h6 l2 2 h7 v9 h-15 z" fill="#6FBF92"/><text x="74" y="129" font-size="12.5" fill="#17211C">com.example.helloworld</text><rect x="72" y="140" width="11" height="13" rx="2" fill="#fff" stroke="#56655D"/><text x="92" y="151" font-size="12.5" fill="#17211C">MainActivity</text><path d="M34 163 h6 l2 2 h7 v9 h-15 z" fill="#6FBF92"/><text x="56" y="173" font-size="12.5" fill="#17211C">res</text><path d="M52 185 h6 l2 2 h7 v9 h-15 z" fill="#6FBF92"/><text x="74" y="195" font-size="12.5" fill="#17211C">drawable · layout · mipmap · values</text><path d="M16 213 h6 l2 2 h7 v9 h-15 z" fill="#6FBF92"/><text x="38" y="223" font-size="12.5" fill="#17211C">Gradle Scripts</text><rect x="36" y="234" width="11" height="13" rx="2" fill="#fff" stroke="#56655D"/><text x="56" y="245" font-size="12.5" fill="#17211C">build.gradle (Project: HelloWorld)</text><rect x="36" y="256" width="11" height="13" rx="2" fill="#fff" stroke="#56655D"/><text x="56" y="267" font-size="12.5" fill="#17211C">build.gradle (Module :app)</text><rect x="36" y="278" width="11" height="13" rx="2" fill="#fff" stroke="#56655D"/><text x="56" y="289" font-size="12.5" fill="#17211C">libs.versions.toml · settings.gradle</text>
+          <text x="374" y="30" font-size="13" font-weight="700" fill="#17211C">Carpeta real (vista Project)</text>
+          <line x1="318" y1="59" x2="366" y2="59" stroke="#6D3FD8" stroke-width="1.5" stroke-dasharray="4 3"/><text x="374" y="63" font-size="12.5" class="mono" fill="#4A2A99">app/src/main/AndroidManifest.xml</text><line x1="318" y1="103" x2="366" y2="103" stroke="#6D3FD8" stroke-width="1.5" stroke-dasharray="4 3"/><text x="374" y="107" font-size="12.5" class="mono" fill="#4A2A99">app/src/main/java/</text><line x1="318" y1="169" x2="366" y2="169" stroke="#6D3FD8" stroke-width="1.5" stroke-dasharray="4 3"/><text x="374" y="173" font-size="12.5" class="mono" fill="#4A2A99">app/src/main/res/</text><line x1="318" y1="219" x2="366" y2="219" stroke="#6D3FD8" stroke-width="1.5" stroke-dasharray="4 3"/><text x="374" y="223" font-size="12.5" class="mono" fill="#4A2A99">build.gradle, settings.gradle… (raíz y app/)</text>
+        </svg>
+        <figcaption>La vista <strong>Android</strong> agrupa los ficheros; a la derecha, dónde están realmente en el
+          disco.</figcaption>
+      </figure>
+      <p>Un proyecto puede tener varios módulos, pero el nuestro tiene uno solo, llamado <code>app</code>. Esta es
+        su estructura real, con lo más importante:</p>
+      <div class="code">
+        <div class="code-bar">HelloWorld/</div>
+<pre><code>HelloWorld/
+├── app/
+│   ├── build/                  <span class="tk-com">← generado al compilar (no se toca)</span>
+│   ├── src/main/
+│   │   ├── java/com/example/helloworld/
+│   │   │   └── MainActivity.java   <span class="tk-com">← código de la pantalla principal</span>
+│   │   ├── res/                <span class="tk-com">← recursos</span>
+│   │   │   ├── drawable/       <span class="tk-com">← imágenes y gráficos</span>
+│   │   │   ├── layout/         <span class="tk-com">← diseño de las pantallas (XML)</span>
+│   │   │   │   └── activity_main.xml
+│   │   │   ├── mipmap-*/       <span class="tk-com">← icono de la app en varias densidades</span>
+│   │   │   └── values/         <span class="tk-com">← textos, colores y temas (XML)</span>
+│   │   └── AndroidManifest.xml <span class="tk-com">← ficha de la aplicación</span>
+│   └── build.gradle            <span class="tk-com">← configuración de compilación del módulo</span>
+├── gradle/
+│   └── libs.versions.toml      <span class="tk-com">← versiones de las librerías</span>
+├── build.gradle                <span class="tk-com">← configuración del proyecto</span>
+└── settings.gradle             <span class="tk-com">← módulos que forman el proyecto</span></code></pre>
+      </div>
+      <ul>
+        <li><code>app/build/</code>: ficheros que se generan automáticamente al compilar.</li>
+        <li><code>src/main/java/</code>: el código fuente Java. Android Studio crea la clase de la pantalla
+          principal, <code>MainActivity.java</code>.</li>
+        <li><code>src/main/res/</code>: los <strong>recursos</strong> de la aplicación: imágenes, textos,
+          colores, diseños de pantalla… Los veremos a fondo más adelante. Algunas subcarpetas:
+          <ul>
+            <li><code>drawable/</code>: imágenes y elementos gráficos.</li>
+            <li><code>mipmap/</code>: el icono de la aplicación, en varias versiones según la resolución y densidad
+              de la pantalla.</li>
+            <li><code>layout/</code>: los ficheros XML que definen cada pantalla.</li>
+            <li><code>values/</code>: ficheros XML con los textos (<code>strings.xml</code>), los colores y los
+              temas.</li>
+            <li><code>menu/</code>: los menús de la aplicación (no se crea hasta que añades uno).</li>
+          </ul>
+        </li>
+        <li><code>AndroidManifest.xml</code>: la ficha de la aplicación: nombre, icono, pantallas, permisos… Lo
+          estudiamos en el apartado 5.4.</li>
+        <li>Ficheros de <strong>Gradle</strong>: <code>build.gradle</code> guarda cómo se compila el módulo
+          (versión mínima, nombre del paquete, librerías que usa…) y <code>libs.versions.toml</code> reúne las
+          versiones de esas librerías en un solo sitio.</li>
+      </ul>
+      <div class="box conocer">
+        <span class="box-label">Debes conocer</span>
+        <p>Es necesario que te familiarices con la interfaz de Android Studio y sus herramientas:
+          <a href="https://developer.android.com/studio/intro" target="_blank" rel="noopener">Descripción general de Android Studio</a>.</p>
+      </div>
+
+      <h3 id="s5-2"><span class="sn">5.2</span>Diseño de la pantalla principal</h3>
+      <p>Al ejecutar cualquier aplicación Android aparece una pantalla principal con distintos elementos
+        organizados de una forma determinada: su <strong>diseño</strong> o <em>layout</em>. Ese diseño está en el
+        fichero <code>activity_main.xml</code>, dentro de <code>app/src/main/res/layout/</code>.</p>
+      <p>Android Studio permite ver la pantalla de tres formas, con los botones de la esquina superior derecha del
+        editor: <strong>Code</strong> (solo el XML), <strong>Split</strong> (el XML y el resultado a la vez) y
+        <strong>Design</strong> (solo el resultado, con un editor visual para arrastrar elementos).</p>
+      <p>Este es el código que genera la plantilla:</p>
+      <div class="code">
+        <div class="code-bar">res/layout/activity_main.xml</div>
+<pre><code class="lang-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"&gt;
+
+    &lt;TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" /&gt;
+
+&lt;/androidx.constraintlayout.widget.ConstraintLayout&gt;</code></pre>
+      </div>
+      <p>El editor colorea el código para que se lea mejor. Fíjate en tres cosas:</p>
+      <ul>
+        <li>Los <strong>espacios de nombres</strong> se declaran en la etiqueta raíz con
+          <code>xmlns:prefijo="uri"</code>. Aquí hay tres: <code>android</code>, <code>app</code> y
+          <code>tools</code>.</li>
+        <li>Cada <strong>atributo</strong> lleva delante el prefijo de su espacio de nombres:
+          <code>android:text</code>, <code>app:layout_constraintTop_toTopOf</code>…</li>
+        <li>El <strong>valor</strong> de cada atributo va entre comillas.</li>
+      </ul>
+      <p>Por ahora nos basta con saber que el fichero tiene un elemento <code>ConstraintLayout</code>, que ocupa
+        toda la pantalla (<code>match_parent</code>), y dentro un elemento visual, un <code>TextView</code>, con
+        el texto que muestra la aplicación. Sus cuatro atributos <code>layout_constraint…</code> lo sujetan a los
+        cuatro bordes de la pantalla, y por eso aparece centrado.</p>
+      <figure>
+        <svg viewBox="0 0 720 300" role="img" aria-label="El TextView sujeto a los cuatro bordes de la pantalla por cuatro restricciones: arriba, abajo, inicio y fin. Por eso queda centrado.">
+          <defs><marker id="m4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6D3FD8"/></marker></defs>
+          <rect x="220" y="8" width="280" height="284" rx="18" fill="#fff" stroke="#17211C" stroke-width="3"/>
+          <g stroke="#6D3FD8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#m4)">
+            <line x1="360" y1="134" x2="360" y2="12"/><line x1="360" y1="166" x2="360" y2="288"/>
+            <line x1="302" y1="150" x2="224" y2="150"/><line x1="418" y1="150" x2="496" y2="150"/>
+          </g>
+          <rect x="302" y="134" width="116" height="32" rx="6" fill="#E2F4EA" stroke="#0E8A4B" stroke-width="2"/>
+          <text x="360" y="155" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A5C33">Hello World!</text>
+          <g font-size="12" class="mono" fill="#4A2A99">
+            <text x="368" y="72">Top_toTopOf="parent"</text>
+            <text x="368" y="236">Bottom_toBottomOf="parent"</text>
+            <text x="210" y="154" text-anchor="end">Start_toStartOf="parent"</text>
+            <text x="510" y="154">End_toEndOf="parent"</text>
+          </g>
+        </svg>
+        <figcaption>Cada atributo <code>app:layout_constraint…</code> tira del <code>TextView</code> hacia un borde de la
+          pantalla (<code>parent</code>). Como tira por los cuatro lados con la misma fuerza, queda en el centro.</figcaption>
+      </figure>
+      <h4>Los textos van en strings.xml</h4>
+      <p>La plantilla escribe «Hello World!» directamente en el layout, y Android Studio lo marca con un aviso.
+        Lo correcto en Android es guardar todos los textos de la aplicación en el fichero
+        <code>res/values/strings.xml</code>, cada uno con un nombre:</p>
+      <div class="code">
+        <div class="code-bar">res/values/strings.xml</div>
+<pre><code class="lang-xml">&lt;resources&gt;
+    &lt;string name="app_name"&gt;HelloWorld&lt;/string&gt;
+&lt;/resources&gt;</code></pre>
+      </div>
+      <p>Para usar uno de esos textos en un fichero XML se escribe <code>@string/</code> seguido de su nombre: por
+        ejemplo, <code>android:text="@string/app_name"</code> mostraría «HelloWorld». Tener los textos en un solo
+        fichero permite cambiarlos sin buscar por todos los layouts y traducir la aplicación a otros idiomas.</p>
+      <div class="box reto">
+        <span class="box-label">Reto</span>
+        <p>Cambia la aplicación para que muestre «Bienvenido a Android» en lugar de «Hello World!». Añade el texto
+          a <code>strings.xml</code> con un nombre nuevo y haz que el <code>TextView</code> lo use.</p>
+      </div>
+      <div class="box clave">
+        <span class="box-label">Widget y View</span>
+        <p>Fuera de la programación, un <em>widget</em> es una pequeña aplicación que se coloca en la pantalla de
+          inicio del móvil, como un reloj o el tiempo. Pero al programar en Android, <em>widget</em> también se usa
+          para los elementos que forman una pantalla (un texto, un botón…), que llamaremos
+          <strong>vistas</strong> u objetos <strong>View</strong>.</p>
+      </div>
+
+      <h3 id="s5-3"><span class="sn">5.3</span>Mostrar la pantalla principal</h3>
+      <p>El siguiente fichero es la clase <code>MainActivity.java</code>, en
+        <code>app/src/main/java/</code>, dentro del paquete <code>com.example.helloworld</code>. Es la encargada de
+        cargar el diseño que acabamos de ver:</p>
+      <div class="code">
+        <div class="code-bar">java/com/example/helloworld/MainActivity.java</div>
+<pre><code class="lang-java">package com.example.helloworld;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+}</code></pre>
+      </div>
+      <ul>
+        <li>La clase <strong>extiende</strong> <code>AppCompatActivity</code>: es una <strong>actividad</strong>,
+          es decir, una pantalla.</li>
+        <li>Sobrescribe el método <code>onCreate()</code>, que se ejecuta al crearse la pantalla.</li>
+        <li><code>setContentView(R.layout.activity_main)</code> es la línea clave: indica qué diseño se muestra.</li>
+        <li><code>EdgeToEdge.enable(this)</code> hace que la aplicación ocupe toda la pantalla, también detrás de la
+          barra de estado y la de navegación; el bloque siguiente añade el margen justo para que el contenido no
+          quede tapado por ellas. Por ahora basta con dejarlo como está.</li>
+      </ul>
+      <p>¿Qué es <code>R.layout.activity_main</code>? Al compilar, Android genera automáticamente una clase llamada
+        <strong>R</strong> con una constante por cada recurso del proyecto. Por cada fichero de
+        <code>res/layout/</code> hay una constante en <code>R.layout</code>; por cada elemento con
+        <code>android:id</code> hay una en <code>R.id</code> (como <code>R.id.main</code>). Así, desde Java nos
+        referimos a los recursos por su nombre.</p>
+      <figure>
+        <svg viewBox="0 0 720 196" role="img" aria-label="La clase R conecta cada recurso con el código: activity_main.xml con R.layout.activity_main y setContentView; el id main con R.id.main y findViewById; el texto app_name con R.string.app_name.">
+          <defs><marker id="m5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+          <text x="0" y="16" font-size="12.5" font-weight="700" fill="#56655D">Recurso</text>
+          <text x="260" y="16" font-size="12.5" font-weight="700" fill="#56655D">Clase R (generada)</text>
+          <text x="468" y="16" font-size="12.5" font-weight="700" fill="#56655D">Uso en el código</text>
+          <g font-size="12" class="mono" fill="#0A5C33">
+            <rect x="0" y="30" width="216" height="36" rx="10" fill="#E2F4EA"/><text x="12" y="53">layout/activity_main.xml</text>
+            <rect x="0" y="86" width="216" height="36" rx="10" fill="#E2F4EA"/><text x="12" y="109">android:id="@+id/main"</text>
+            <rect x="0" y="142" width="216" height="36" rx="10" fill="#E2F4EA"/><text x="12" y="165">&lt;string name="app_name"&gt;</text>
+          </g>
+          <rect x="258" y="26" width="178" height="156" rx="14" fill="#0E8A4B"/>
+          <g font-size="11" class="mono" fill="#fff">
+            <text x="270" y="53">R.layout.activity_main</text><text x="270" y="109">R.id.main</text><text x="270" y="165">R.string.app_name</text>
+          </g>
+          <g font-size="10.5" class="mono" fill="#17211C">
+            <rect x="468" y="30" width="252" height="36" rx="10" fill="#EEF1EF"/><text x="476" y="53">setContentView(R.layout.activity_main)</text>
+            <rect x="468" y="86" width="252" height="36" rx="10" fill="#EEF1EF"/><text x="476" y="109">findViewById(R.id.main)</text>
+            <rect x="468" y="142" width="252" height="36" rx="10" fill="#F1ECFD"/><text x="476" y="165" fill="#4A2A99">en XML: @string/app_name</text>
+          </g>
+          <g stroke="#56655D" stroke-width="2" marker-end="url(#m5)">
+            <line x1="218" y1="48" x2="254" y2="48"/><line x1="218" y1="104" x2="254" y2="104"/><line x1="218" y1="160" x2="254" y2="160"/>
+            <line x1="438" y1="48" x2="464" y2="48"/><line x1="438" y1="104" x2="464" y2="104"/><line x1="438" y1="160" x2="464" y2="160"/>
+          </g>
+        </svg>
+        <figcaption>Cada recurso tiene su constante en la clase <strong>R</strong>, y el código usa esa constante para
+          referirse a él.</figcaption>
+      </figure>
+
+      <h3 id="s5-4"><span class="sn">5.4</span>El fichero de manifiesto</h3>
+      <p>Sabemos diseñar una pantalla en XML y mostrarla desde Java, pero ¿cómo sabe Android qué pantalla abrir al
+        pulsar el icono? ¿Cómo sabe de qué componentes está formada la aplicación? La respuesta está en el
+        <strong>fichero de manifiesto</strong>, uno de los más importantes de la aplicación.</p>
+      <div class="code">
+        <div class="code-bar">AndroidManifest.xml</div>
+<pre><code class="lang-xml">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"&gt;
+
+    &lt;application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.HelloWorld"&gt;
+        &lt;activity
+            android:name=".MainActivity"
+            android:exported="true"&gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name="android.intent.action.MAIN" /&gt;
+                &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+    &lt;/application&gt;
+
+&lt;/manifest&gt;</code></pre>
+      </div>
+      <ul>
+        <li><code>manifest</code> es la etiqueta raíz. Su atributo <code>xmlns:android</code> declara el espacio de
+          nombres de Android y siempre tiene ese valor. El nombre del paquete no se escribe aquí, sino en
+          <code>build.gradle</code> (<code>namespace</code> y <code>applicationId</code>).</li>
+        <li><code>application</code> describe la aplicación y contiene todos sus componentes. Atributos como
+          <code>android:icon</code> o <code>android:label</code> indican, mediante referencias a recursos, el icono y
+          el nombre de la aplicación.</li>
+        <li><code>activity</code> declara una pantalla. <code>android:name</code> indica la clase que la carga, y
+          <code>android:exported="true"</code> permite que se abra desde fuera de la aplicación (desde el icono del
+          móvil); es obligatorio indicarlo en las actividades que tienen <code>intent-filter</code>.</li>
+        <li><code>intent-filter</code> lo veremos más adelante. Por ahora basta saber que <code>MAIN</code> y
+          <code>LAUNCHER</code> indican que esta es la pantalla principal y que aparece con su icono entre las
+          aplicaciones del móvil.</li>
+      </ul>
+      <p>Qué ocurre, paso a paso, cuando pulsas el icono de la aplicación:</p>
+      <ol class="steps">
+        <li>Pulsas el icono de <strong>HelloWorld</strong> en el móvil.</li>
+        <li>Android consulta el <strong>manifiesto</strong> de la aplicación.</li>
+        <li>Busca la actividad con <code>MAIN</code> y <code>LAUNCHER</code>: <code>MainActivity</code>.</li>
+        <li>Crea <code>MainActivity</code> y llama a su método <code>onCreate()</code>.</li>
+        <li><code>setContentView()</code> carga <code>activity_main.xml</code> y ves la pantalla.</li>
+      </ol>
+      <p>Una aplicación suele tener varias pantallas, y <strong>cada una debe declararse en el manifiesto</strong>
+        para poder abrirse.</p>
+    </section>
+
+    <!-- ===================== 6 ===================== -->
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Componentes de una aplicación Android</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>Ada explica a Juan y María los componentes con los que van a trabajar, con ejemplos que pueden ver en sus
+          propios móviles: ¿qué pasa al pulsar el icono de una aplicación? ¿Cómo se llaman las pantallas que se
+          abren? ¿Cómo se comparten datos entre aplicaciones?</p>
+      </div>
+
+      <p>Una aplicación de escritorio se construye con ventanas, controles (botones, cuadros de texto…) y eventos.
+        En Android hay ideas parecidas, con algunas diferencias. Los cuatro <strong>componentes</strong> de una
+        aplicación Android son:</p>
+      <ul>
+        <li><strong>Activity</strong> (actividad): una pantalla de la aplicación, con su interfaz gráfica. Es el
+          equivalente a una ventana.</li>
+        <li><strong>Service</strong> (servicio): se ejecuta en segundo plano, sin interfaz. Por ejemplo, para
+          reproducir música mientras usas otra aplicación o para sincronizar datos.</li>
+        <li><strong>Content Provider</strong> (proveedor de contenido): comparte datos entre aplicaciones.</li>
+        <li><strong>Broadcast Receiver</strong> (receptor de anuncios): detecta y reacciona a mensajes que envía el
+          sistema (batería baja, cambio de conexión, llegada de un SMS…) u otras aplicaciones.</li>
+      </ul>
+      <figure>
+        <svg viewBox="0 0 720 300" role="img" aria-label="Componentes de una aplicación: el icono abre la Activity 1, que con intents abre la Activity 2 e inicia un Service; un Broadcast Receiver recibe avisos del sistema; un Content Provider comparte datos con otra aplicación.">
+          <defs><marker id="m6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+          <defs><marker id="m7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6D3FD8"/></marker></defs>
+          <rect x="146" y="8" width="424" height="284" rx="18" fill="#F6F9F7" stroke="#0E8A4B" stroke-width="2" stroke-dasharray="7 5"/>
+          <text x="164" y="32" font-size="13" font-weight="700" fill="#0A5C33">Tu aplicación</text>
+          <rect x="176" y="50" width="136" height="52" rx="12" fill="#0E8A4B"/><text x="244" y="72" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">Activity</text><text x="244" y="90" text-anchor="middle" font-size="12" fill="#E2F4EA">pantalla 1</text>
+          <rect x="410" y="50" width="136" height="52" rx="12" fill="#0E8A4B"/><text x="478" y="72" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">Activity</text><text x="478" y="90" text-anchor="middle" font-size="12" fill="#E2F4EA">pantalla 2</text>
+          <rect x="176" y="148" width="136" height="52" rx="12" fill="#3AA36B"/><text x="244" y="170" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">Service</text><text x="244" y="188" text-anchor="middle" font-size="12" fill="#E2F4EA">música de fondo</text>
+          <rect x="410" y="148" width="136" height="52" rx="12" fill="#6FBF92"/><text x="478" y="170" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A3D22">Broadcast</text><text x="478" y="188" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A3D22">Receiver</text>
+          <rect x="292" y="230" width="136" height="50" rx="12" fill="#A8DABC"/><text x="360" y="252" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A3D22">Content</text><text x="360" y="270" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A3D22">Provider</text>
+          <rect x="0" y="50" width="118" height="52" rx="12" fill="#EEF1EF"/><text x="59" y="72" text-anchor="middle" font-size="12.5" fill="#17211C">Icono en</text><text x="59" y="90" text-anchor="middle" font-size="12.5" fill="#17211C">el móvil</text>
+          <rect x="600" y="148" width="120" height="52" rx="12" fill="#FEEEDF"/><text x="660" y="170" text-anchor="middle" font-size="12.5" font-weight="700" fill="#17211C">Sistema</text><text x="660" y="188" text-anchor="middle" font-size="12" fill="#56655D">«batería baja»</text>
+          <rect x="0" y="230" width="118" height="50" rx="12" fill="#EEF1EF"/><text x="59" y="260" text-anchor="middle" font-size="12.5" fill="#17211C">Otra aplicación</text>
+          <g stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#m6)">
+            <line x1="120" y1="76" x2="172" y2="76"/><line x1="598" y1="174" x2="550" y2="174"/>
+          </g>
+          <g stroke="#6D3FD8" stroke-width="2.5" fill="none" marker-end="url(#m7)">
+            <line x1="314" y1="76" x2="406" y2="76"/><line x1="244" y1="104" x2="244" y2="144"/>
+          </g>
+          <line x1="122" y1="255" x2="288" y2="255" stroke="#56655D" stroke-width="2" marker-start="url(#m6)" marker-end="url(#m6)"/>
+          <g font-size="12" fill="#4A2A99" font-weight="700"><text x="360" y="68" text-anchor="middle">Intent</text><text x="252" y="128">Intent</text></g>
+          <g font-size="12" fill="#56655D"><text x="132" y="68" text-anchor="middle">abre</text><text x="586" y="166" text-anchor="middle">aviso</text><text x="205" y="247" text-anchor="middle">datos</text></g>
+        </svg>
+        <figcaption>Los cuatro componentes y cómo se relacionan. Las flechas violetas son <em>intents</em>, los
+          mensajes con los que un componente pide algo a otro.</figcaption>
+      </figure>
+      <p>Todos los componentes se declaran en el manifiesto, dentro de <code>&lt;application&gt;</code>, con la
+        etiqueta que corresponde a su tipo:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Componente</th><th>Etiqueta en el manifiesto</th></tr></thead>
+          <tbody>
+            <tr><td>Subclase de <code>Activity</code></td><td class="mono">&lt;activity&gt;</td></tr>
+            <tr><td>Subclase de <code>Service</code></td><td class="mono">&lt;service&gt;</td></tr>
+            <tr><td>Subclase de <code>BroadcastReceiver</code></td><td class="mono">&lt;receiver&gt;</td></tr>
+            <tr><td>Subclase de <code>ContentProvider</code></td><td class="mono">&lt;provider&gt;</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Además hay otros elementos con una función concreta:</p>
+      <ul>
+        <li><strong>Intent</strong> (intención): el mensaje con el que se comunican los componentes. Con un intent
+          se abre una pantalla desde otra, se inicia un servicio, se envía un anuncio o se abre otra aplicación.</li>
+        <li><strong>View</strong> (vista): el elemento básico de una interfaz: un texto, un botón, una casilla, una
+          lista… Es el equivalente a los controles de una aplicación de escritorio.</li>
+        <li><strong>Layout</strong> (diseño): agrupa y organiza las vistas de una pantalla. Hay varios tipos, y un
+          layout puede contener otros layouts.</li>
+        <li><strong>Widget</strong>: la pequeña aplicación que se muestra en la pantalla de inicio del móvil con
+          información de una aplicación. Como se explicó en el apartado 5.2, al programar también se llama así a las vistas.</li>
+      </ul>
+    </section>
+
+    <!-- ===================== 7 ===================== -->
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Despliegue de aplicaciones Android</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>Juan ha visto cómo María creaba la aplicación, pero ¿cómo se ve el resultado? ¿Dónde se ejecuta? ¿Se
+          puede probar en sus propios móviles?</p>
+      </div>
+
+      <p>Los entornos de desarrollo incorporan <strong>emuladores</strong> para probar las aplicaciones antes de
+        instalarlas en un dispositivo real: así compruebas si funcionan y si tienen el aspecto que pensabas. En
+        Android Studio los dispositivos virtuales se crean y gestionan desde el <strong>Device Manager</strong>
+        (antes llamado AVD Manager; AVD significa <em>Android Virtual Device</em>).</p>
+      <p>El emulador no siempre coincide del todo, en aspecto o en funcionamiento, con un dispositivo real. Conviene
+        probar en <strong>varios emuladores con distintos niveles de API y tamaños de pantalla</strong>: hay
+        muchísimos modelos de móviles Android y nadie los tiene todos.</p>
+      <p>Casi toda la depuración se hace en el emulador, igual que con un programa de ordenador: ejecutar paso a
+        paso, poner puntos de ruptura (<em>breakpoints</em>), ver el valor de las variables… Al final, la aplicación
+        se prueba también en un dispositivo real.</p>
+      <figure>
+        <svg viewBox="0 0 720 200" role="img" aria-label="Android Studio instala la aplicación mediante adb en un emulador que funciona en el propio ordenador o en un móvil real conectado por USB o Wi-Fi.">
+          <defs><marker id="m8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+          <rect x="0" y="30" width="210" height="130" rx="10" fill="#17211C"/><rect x="8" y="38" width="194" height="106" rx="4" fill="#fff"/>
+          <rect x="8" y="38" width="194" height="18" rx="4" fill="#EEF1EF"/><text x="16" y="51" font-size="11" font-weight="700" fill="#17211C">Android Studio</text>
+          <path d="M150 64 l10 6 l-10 6 z" fill="#0E8A4B"/><text x="166" y="74" font-size="11" fill="#0A5C33" font-weight="700">Run</text>
+          <g fill="#DCE6E0"><rect x="18" y="66" width="110" height="7" rx="3"/><rect x="18" y="80" width="150" height="7" rx="3"/><rect x="18" y="94" width="90" height="7" rx="3"/><rect x="18" y="108" width="130" height="7" rx="3"/></g>
+          <rect x="-8" y="160" width="226" height="8" rx="4" fill="#56655D"/>
+          <rect x="258" y="84" width="72" height="32" rx="16" fill="#6D3FD8"/><text x="294" y="105" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" class="mono">adb</text>
+          <rect x="400" y="14" width="320" height="76" rx="14" fill="#E2F4EA"/>
+          <rect x="416" y="24" width="30" height="56" rx="6" fill="#fff" stroke="#0E8A4B" stroke-width="2" stroke-dasharray="4 3"/>
+          <text x="462" y="46" font-size="14" font-weight="700" fill="#0A5C33">Emulador</text><text x="462" y="66" font-size="12.5" fill="#0A5C33">móvil virtual dentro de tu ordenador</text>
+          <rect x="400" y="110" width="320" height="76" rx="14" fill="#EEF1EF"/>
+          <rect x="416" y="120" width="30" height="56" rx="6" fill="#17211C"/><rect x="420" y="126" width="22" height="44" rx="3" fill="#E2F4EA"/>
+          <text x="462" y="142" font-size="14" font-weight="700" fill="#17211C">Móvil real</text><text x="462" y="162" font-size="12.5" fill="#56655D">conectado por USB o por Wi-Fi</text>
+          <g stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#m8)">
+            <line x1="212" y1="100" x2="254" y2="100"/><path d="M332 94 C362 94 366 52 396 52"/><path d="M332 106 C362 106 366 148 396 148"/>
+          </g>
+        </svg>
+        <figcaption>Desde Android Studio la aplicación se instala, a través de <code>adb</code>, en un emulador o en un
+          móvil real.</figcaption>
+      </figure>
+
+      <h3 id="s7-1"><span class="sn">7.1</span>Desplegando una aplicación en el emulador</h3>
+      <ol>
+        <li>Abre el <strong>Device Manager</strong> desde el icono de un móvil en la barra lateral derecha, o desde
+          <strong>View → Tool Windows → Device Manager</strong>.</li>
+        <li>Pulsa <strong>+</strong> y sigue el asistente: elige un modelo (por ejemplo, un Pixel) y una imagen del
+          sistema con una versión de Android igual o superior al <em>Minimum SDK</em> del proyecto.</li>
+        <li>En el Device Manager puedes arrancar el dispositivo (▶), editar su configuración y, desde su menú,
+          duplicarlo o borrar sus datos (<em>Wipe Data</em>) para dejarlo como recién creado.</li>
+        <li>En la barra de herramientas superior está la configuración de ejecución (<code>app</code>) y, a su
+          lado, el desplegable para elegir el dispositivo donde ejecutar.</li>
+        <li>Pulsa <strong>Run</strong> (▶, o <kbd>Mayús</kbd>+<kbd>F10</kbd>): la aplicación se compila, se instala
+          en el dispositivo elegido y se abre.</li>
+      </ol>
+      <div class="box conocer">
+        <span class="box-label">Debes conocer</span>
+        <p>El emulador necesita que el procesador tenga activada la <strong>virtualización</strong> (Intel VT-x o
+          AMD-V, que se activa en la BIOS/UEFI). Sin ella funciona muy lento o no arranca. La documentación oficial
+          explica cómo comprobarlo y configurar la aceleración:
+          <a href="https://developer.android.com/studio/run/emulator-acceleration" target="_blank" rel="noopener">Aceleración del emulador</a>.
+          Para crear dispositivos virtuales:
+          <a href="https://developer.android.com/studio/run/managing-avds" target="_blank" rel="noopener">Crear y administrar dispositivos virtuales</a>.</p>
+      </div>
+      <div class="box consejo">
+        <span class="box-label">Recomendación</span>
+        <p>Si tu ordenador va justo de memoria, crea un solo dispositivo virtual con una versión de Android reciente
+          y ciérralo cuando no lo uses: el emulador consume varios gigas de RAM. Si tienes un móvil Android, probar
+          en él (apartado siguiente) es a menudo más rápido.</p>
+      </div>
+
+      <h3 id="s7-2"><span class="sn">7.2</span>Desplegando una aplicación en un dispositivo real</h3>
+      <p>Los emuladores facilitan mucho el trabajo, pero ¿de qué sirven si la aplicación no funciona igual en un
+        móvil de verdad? Puede haber diferencias, así que hay que probar también en dispositivos reales:</p>
+      <ol>
+        <li><strong>Activa las opciones de desarrollador</strong> del móvil: en <em>Ajustes → Información del
+          teléfono</em>, pulsa siete veces sobre <em>Número de compilación</em>. La ruta exacta cambia algo según
+          el fabricante.</li>
+        <li>En <em>Ajustes → Sistema → Opciones de desarrollador</em>, activa la <strong>Depuración
+          USB</strong>.</li>
+        <li>Conecta el móvil al ordenador por USB y acepta en el móvil el aviso que pide permitir la depuración
+          desde ese ordenador.</li>
+        <li>En <strong>Windows</strong> puede hacer falta un controlador (<em>driver</em>): el
+          <strong>Google USB Driver</strong> (se instala desde el SDK Manager, pestaña <em>SDK Tools</em>) para los
+          móviles de Google, o el del fabricante para los demás. En macOS y Linux no hace falta.</li>
+        <li>El móvil aparecerá en el desplegable de dispositivos junto a los emuladores. Elígelo y pulsa
+          <strong>Run</strong>.</li>
+      </ol>
+      <figure>
+        <svg viewBox="0 0 720 372" role="img" aria-label="Tres pantallas: pulsar siete veces Número de compilación en Información del teléfono; entrar en Sistema, Opciones para desarrolladores; activar Depuración USB.">
+          <rect x="0" y="0" width="200" height="330" rx="24" fill="#17211C"/><rect x="9" y="12" width="182" height="306" rx="14" fill="#fff"/><text x="22" y="44" font-size="13.5" font-weight="700" fill="#17211C">Información del teléfono</text><text x="26" y="87" font-size="12" fill="#17211C">Nombre del dispositivo</text><text x="26" y="133" font-size="12" fill="#17211C">Modelo</text><text x="26" y="179" font-size="12" fill="#17211C">Versión de Android</text><rect x="15" y="200" width="170" height="40" rx="10" fill="#E2F4EA" stroke="#0E8A4B" stroke-width="2"/><text x="26" y="218" font-size="12" font-weight="700" fill="#17211C">Número de</text><text x="26" y="233" font-size="12" font-weight="700" fill="#17211C">compilación</text><circle cx="158" cy="220" r="15" fill="#6D3FD8"/><text x="158" y="225" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">×7</text><rect x="22" y="272" width="156" height="30" rx="15" fill="#17211C"/><text x="100" y="291" text-anchor="middle" font-size="11" fill="#fff">¡Ya eres desarrollador!</text><rect x="260" y="0" width="200" height="330" rx="24" fill="#17211C"/><rect x="269" y="12" width="182" height="306" rx="14" fill="#fff"/><text x="282" y="44" font-size="13.5" font-weight="700" fill="#17211C">Sistema</text><text x="286" y="87" font-size="12" fill="#17211C">Idiomas</text><text x="286" y="133" font-size="12" fill="#17211C">Fecha y hora</text><text x="286" y="179" font-size="12" fill="#17211C">Copia de seguridad</text><rect x="275" y="200" width="170" height="40" rx="10" fill="#E2F4EA" stroke="#0E8A4B" stroke-width="2"/><text x="286" y="218" font-size="12" font-weight="700" fill="#17211C">Opciones para</text><text x="286" y="233" font-size="12" font-weight="700" fill="#17211C">desarrolladores</text><rect x="520" y="0" width="200" height="330" rx="24" fill="#17211C"/><rect x="529" y="12" width="182" height="306" rx="14" fill="#fff"/><text x="542" y="44" font-size="13.5" font-weight="700" fill="#17211C">Desarrolladores</text><rect x="535" y="62" width="170" height="40" rx="10" fill="#E2F4EA" stroke="#0E8A4B" stroke-width="2"/><text x="546" y="87" font-size="12" font-weight="700" fill="#17211C">Depuración USB</text><rect x="666" y="74" width="30" height="16" rx="8" fill="#0E8A4B"/><circle cx="688" cy="82" r="6" fill="#fff"/><text x="546" y="126" font-size="12" fill="#17211C">Depuración</text><text x="546" y="141" font-size="12" fill="#17211C">inalámbrica</text><rect x="666" y="120" width="30" height="16" rx="8" fill="#C9D3CD"/><circle cx="674" cy="128" r="6" fill="#fff"/><text x="546" y="179" font-size="12" fill="#17211C">Mostrar toques</text><rect x="666" y="166" width="30" height="16" rx="8" fill="#C9D3CD"/><circle cx="674" cy="174" r="6" fill="#fff"/>
+          <g font-size="13" fill="#17211C" text-anchor="middle">
+            <text x="100" y="356"><tspan font-weight="700">1.</tspan> Pulsa 7 veces</text>
+            <text x="360" y="356"><tspan font-weight="700">2.</tspan> Entra en las opciones</text>
+            <text x="620" y="356"><tspan font-weight="700">3.</tspan> Activa la depuración</text>
+          </g>
+        </svg>
+        <figcaption>Pasos en el móvil (esquema; los nombres y la ruta cambian algo según el fabricante: en un Samsung,
+          por ejemplo, el número de compilación está en <em>Información del teléfono → Información de software</em>).</figcaption>
+      </figure>
+      <p>Desde Android 11 también se puede depurar sin cable, por <strong>Wi-Fi</strong>, si el móvil y el
+        ordenador están en la misma red: se activa <em>Depuración inalámbrica</em> en el móvil y se empareja desde el
+        Device Manager con un código QR.</p>
+      <div class="box saber">
+        <span class="box-label">Para saber más</span>
+        <ul>
+          <li><a href="https://developer.android.com/studio/run/device" target="_blank" rel="noopener">Ejecutar apps en un dispositivo real</a></li>
+          <li><a href="https://developer.android.com/studio/debug/dev-options" target="_blank" rel="noopener">Opciones para desarrolladores</a></li>
+          <li><a href="https://developer.android.com/studio/run/oem-usb" target="_blank" rel="noopener">Controladores USB de los fabricantes</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== 8 ===================== -->
+    <section class="chapter" id="s8">
+      <div class="chapter-head"><span class="chapter-num">8</span><h2>Ciclo de vida de una actividad</h2></div>
+
+      <div class="box caso">
+        <span class="box-label">Caso práctico</span>
+        <p>Juan y María han probado su aplicación en emuladores y en sus móviles. Antes de hacer aplicaciones más
+          complejas preguntan a Ada cómo funciona por dentro. Ada les explica que tendrán que conocer los métodos
+          que gestionan la vida de cada pantalla.</p>
+      </div>
+
+      <p>Una aplicación tiene normalmente varias actividades. La primera que se abre es la <strong>actividad
+        principal</strong>, y desde ella se abren otras según el usuario usa la aplicación. Cada vez que una
+        actividad cambia de estado, el sistema llama automáticamente a un método suyo. A estos métodos que llama el
+        sistema, y no nuestro código, se les llama métodos <strong>callback</strong>.</p>
+      <p>Las actividades que dejan de verse no se destruyen: se guardan en una <strong>pila de actividades</strong>
+        en el orden en que se abrieron. Al pulsar <strong>Atrás</strong>, la actividad de arriba termina y sale de la
+        pila, y vuelve a verse la anterior.</p>
+      <div class="box clave">
+        <span class="box-label">La pila</span>
+        <p>Las actividades de la pila nunca se reordenan: solo se añaden arriba o se quitan de arriba.</p>
+      </div>
+      <figure>
+        <svg viewBox="0 0 720 222" role="img" aria-label="Pila de actividades: se abre A; A abre B, que queda encima; B abre C; al pulsar Atrás, C sale y vuelve a verse B.">
+          <defs><marker id="m9" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+          <rect x="6" y="150" width="140" height="36" rx="9" fill="#0E8A4B"/><text x="76" y="173" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Actividad A</text><line x1="0" y1="192" x2="152" y2="192" stroke="#56655D" stroke-width="2"/><text x="76" y="214" text-anchor="middle" font-size="12.5" fill="#56655D">se abre la app</text>
+          <rect x="196" y="150" width="140" height="36" rx="9" fill="#A8DABC"/><text x="266" y="173" text-anchor="middle" font-size="13" font-weight="700" fill="#0A3D22">Actividad A</text><rect x="196" y="108" width="140" height="36" rx="9" fill="#0E8A4B"/><text x="266" y="131" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Actividad B</text><line x1="190" y1="192" x2="342" y2="192" stroke="#56655D" stroke-width="2"/><text x="266" y="214" text-anchor="middle" font-size="12.5" fill="#56655D">A abre B</text>
+          <rect x="386" y="150" width="140" height="36" rx="9" fill="#A8DABC"/><text x="456" y="173" text-anchor="middle" font-size="13" font-weight="700" fill="#0A3D22">Actividad A</text><rect x="386" y="108" width="140" height="36" rx="9" fill="#A8DABC"/><text x="456" y="131" text-anchor="middle" font-size="13" font-weight="700" fill="#0A3D22">Actividad B</text><rect x="386" y="66" width="140" height="36" rx="9" fill="#0E8A4B"/><text x="456" y="89" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Actividad C</text><line x1="380" y1="192" x2="532" y2="192" stroke="#56655D" stroke-width="2"/><text x="456" y="214" text-anchor="middle" font-size="12.5" fill="#56655D">B abre C</text>
+          <rect x="576" y="150" width="140" height="36" rx="9" fill="#A8DABC"/><text x="646" y="173" text-anchor="middle" font-size="13" font-weight="700" fill="#0A3D22">Actividad A</text><rect x="576" y="108" width="140" height="36" rx="9" fill="#0E8A4B"/><text x="646" y="131" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Actividad B</text><rect x="576" y="66" width="140" height="36" rx="9" fill="none" stroke="#C2185B" stroke-width="2" stroke-dasharray="5 4"/><text x="646" y="89" text-anchor="middle" font-size="13" fill="#C2185B">C sale</text><line x1="570" y1="192" x2="722" y2="192" stroke="#56655D" stroke-width="2"/><text x="646" y="214" text-anchor="middle" font-size="12.5" fill="#56655D">Atrás: C termina</text>
+          <g stroke="#56655D" stroke-width="2" marker-end="url(#m9)"><line x1="152" y1="168" x2="186" y2="168"/><line x1="342" y1="168" x2="376" y2="168"/><line x1="532" y1="168" x2="566" y2="168"/></g>
+        </svg>
+        <figcaption>La actividad que se ve es siempre la de arriba de la pila (en verde oscuro).</figcaption>
+      </figure>
+      <p>Una actividad también se destruye y se vuelve a crear cuando cambia la <strong>configuración</strong> del
+        dispositivo. El caso más común es <strong>girar el móvil</strong>; también pasa al cambiar el idioma. Como la
+        interfaz debe adaptarse, el sistema llama a <code>onPause()</code>, <code>onStop()</code> y
+        <code>onDestroy()</code>, y crea una actividad nueva con <code>onCreate()</code>, <code>onStart()</code> y
+        <code>onResume()</code>.</p>
+      <p>Además, la memoria es limitada: si falta, el sistema puede <strong>eliminar el proceso</strong> de una
+        aplicación cuyas actividades están paradas, sin avisar.</p>
+      <p>Los estados por los que pasa una actividad son:</p>
+      <ul>
+        <li><strong>Activa</strong> (en primer plano): visible y el usuario puede usarla.</li>
+        <li><strong>Pausada</strong>: todavía visible, pero ha perdido el foco porque otra ventana se ha puesto
+          delante sin taparla del todo (un diálogo, por ejemplo).</li>
+        <li><strong>Parada</strong>: ya no es visible. Conviene haber guardado su estado por si el usuario
+          vuelve.</li>
+      </ul>
+      <figure class="tall">
+        <svg viewBox="0 0 640 560" role="img" aria-label="Ciclo de vida de una actividad: onCreate, onStart y onResume llevan al estado Activa; onPause lleva a Pausada; onStop a Parada; onDestroy la destruye. Desde Pausada, onResume vuelve a Activa. Desde Parada, onRestart y onStart la vuelven a mostrar. Si el proceso se elimina estando parada, al volver se empieza por onCreate.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker>
+          </defs>
+          <g stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#ar)">
+            <line x1="320" y1="44" x2="320" y2="70"/>
+            <line x1="320" y1="102" x2="320" y2="118"/>
+            <line x1="320" y1="150" x2="320" y2="166"/>
+            <line x1="320" y1="198" x2="320" y2="214"/>
+            <line x1="320" y1="262" x2="320" y2="278"/>
+            <line x1="320" y1="310" x2="320" y2="326"/>
+            <line x1="320" y1="374" x2="320" y2="390"/>
+            <line x1="320" y1="422" x2="320" y2="438"/>
+            <line x1="320" y1="486" x2="320" y2="502"/>
+            <!-- Pausada -> onResume -->
+            <path d="M412 350 H470 V182 H396"/>
+            <!-- Parada -> onRestart -> onStart -->
+            <path d="M412 462 H560 V300"/>
+            <path d="M560 268 V134 H396"/>
+            <!-- Parada -> proceso eliminado -> onCreate -->
+            <path d="M228 462 H130 V420"/>
+            <path d="M130 388 V86 H244"/>
+          </g>
+
+          <rect x="236" y="12" width="168" height="32" rx="16" fill="#EEF1EF"/>
+          <text x="320" y="33" text-anchor="middle" font-size="14" fill="#17211C">Se abre la actividad</text>
+
+          <g class="mono" font-size="14" text-anchor="middle" fill="#0A5C33">
+            <rect x="244" y="70" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="91">onCreate()</text>
+            <rect x="244" y="118" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="139">onStart()</text>
+            <rect x="244" y="166" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="187">onResume()</text>
+            <rect x="244" y="278" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="299">onPause()</text>
+            <rect x="244" y="390" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="411">onStop()</text>
+            <rect x="244" y="502" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="320" y="523">onDestroy()</text>
+            <rect x="484" y="268" width="152" height="32" rx="8" fill="#E2F4EA"/><text x="560" y="289">onRestart()</text>
+          </g>
+
+          <rect x="228" y="214" width="184" height="48" rx="14" fill="#0E8A4B"/>
+          <text x="320" y="244" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">ACTIVA</text>
+          <rect x="228" y="326" width="184" height="48" rx="14" fill="#3AA36B"/>
+          <text x="320" y="356" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">PAUSADA</text>
+          <rect x="228" y="438" width="184" height="48" rx="14" fill="#6FBF92"/>
+          <text x="320" y="468" text-anchor="middle" font-size="16" font-weight="700" fill="#0A3D22">PARADA</text>
+
+          <rect x="40" y="388" width="180" height="32" rx="16" fill="#FCE7EF"/>
+          <text x="130" y="409" text-anchor="middle" font-size="13" fill="#8E1243">Proceso eliminado</text>
+
+          <g font-size="12.5" fill="#56655D">
+            <text x="478" y="232">vuelve el foco</text>
+            <text x="568" y="376">vuelve a</text>
+            <text x="568" y="392">mostrarse</text>
+            <text x="138" y="250">el usuario</text>
+            <text x="138" y="266">vuelve</text>
+            <text x="138" y="480">falta memoria</text>
+          </g>
+          <text x="320" y="556" text-anchor="middle" font-size="13" fill="#56655D">Destruida</text>
+        </svg>
+        <figcaption>Ciclo de vida de una actividad: estados (bloques grandes) y métodos que llama el sistema en cada
+          cambio.</figcaption>
+      </figure>
+      <p>Los métodos del ciclo de vida son:</p>
+      <ul>
+        <li><code>onCreate()</code>: la actividad se crea. Aquí se prepara la interfaz y los datos. Es
+          <strong>obligatorio</strong> sobrescribirlo. Recibe un objeto <code>Bundle</code> con la información para
+          restaurar el estado anterior; si es la primera vez que se crea, vale <code>null</code>.</li>
+        <li><code>onStart()</code>: la actividad va a hacerse visible.</li>
+        <li><code>onResume()</code>: la actividad está arriba de la pila, visible, y el usuario ya puede
+          usarla.</li>
+        <li><code>onPause()</code>: otra actividad se pone delante y esta pierde el foco. Debe ser rápido: aquí se
+          detiene lo que no deba seguir funcionando (una animación, un vídeo…).</li>
+        <li><code>onStop()</code>: la actividad deja de verse por completo. Es el sitio para <strong>guardar
+          datos</strong> y liberar recursos, porque después el sistema podría eliminar el proceso sin llamar a
+          ningún método más.</li>
+        <li><code>onRestart()</code>: la actividad estaba parada y vuelve a mostrarse, sin haberse destruido. Tras
+          él se llama a <code>onStart()</code>.</li>
+        <li><code>onDestroy()</code>: la actividad se destruye y libera su memoria. Si el sistema elimina el proceso
+          por falta de memoria, este método puede no llegar a llamarse.</li>
+      </ul>
+      <p>Resumiendo: la vida completa de la actividad va de <code>onCreate()</code> a <code>onDestroy()</code>.
+        Es <strong>visible</strong> entre <code>onStart()</code> y <code>onStop()</code>, aunque puede que no tenga
+        el foco. Está <strong>visible y con el foco</strong> entre <code>onResume()</code> y
+        <code>onPause()</code>.</p>
+      <div class="box saber">
+        <span class="box-label">Para saber más</span>
+        <ul>
+          <li><a href="https://developer.android.com/guide/components/activities/activity-lifecycle" target="_blank" rel="noopener">El ciclo de vida de una actividad</a></li>
+          <li><a href="https://developer.android.com/guide/components/activities/tasks-and-back-stack" target="_blank" rel="noopener">Tareas y pila de actividades</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Resaltado de código (XML y Java) ---------- */
+  function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function hlXml(src){
+    return src.replace(/(&lt;\?[\s\S]*?\?&gt;)|(&lt;\/?)([\w.:-]+)|([\w-]+)(:)([\w-]+)(=)|([\w-]+)(=)|("[^"]*")|(\/?&gt;)/g,
+      function(m, pi, open, tag, pre, colon, attr, eq, attr2, eq2, str, close){
+        if(pi) return '<span class="tk-com">' + pi + '</span>';
+        if(open) return '<span class="tk-tag">' + open + tag + '</span>';
+        if(pre) return '<span class="tk-ns">' + pre + '</span>' + colon + '<span class="tk-attr">' + attr + '</span>' + eq;
+        if(attr2) return '<span class="tk-attr">' + attr2 + '</span>' + eq2;
+        if(str) return '<span class="tk-str">' + str + '</span>';
+        if(close) return '<span class="tk-tag">' + close + '</span>';
+        return m;
+      });
+  }
+  function hlJava(src){
+    return src.replace(/("[^"]*")|(\/\/.*)|(@\w+)|\b(package|import|public|protected|private|class|extends|implements|void|return|new|super|this|static|final|null|true|false|if|else)\b/g,
+      function(m, str, com, ann, key){
+        if(str) return '<span class="tk-str">' + str + '</span>';
+        if(com) return '<span class="tk-com">' + com + '</span>';
+        if(ann) return '<span class="tk-ann">' + ann + '</span>';
+        if(key) return '<span class="tk-key">' + key + '</span>';
+        return m;
+      });
+  }
+  document.querySelectorAll("code.lang-xml").forEach(function(c){ c.innerHTML = hlXml(esc(c.textContent)); });
+  document.querySelectorAll("code.lang-java").forEach(function(c){ c.innerHTML = hlJava(esc(c.textContent)); });
+
+  /* ---------- Índice lateral: scroll-spy + móvil ---------- */
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll(".navlist a[data-nav]"));
+  var targets = navLinks.map(function(l){ return document.getElementById(l.getAttribute("data-target")); });
+
+  navLinks.forEach(function(link){
+    link.addEventListener("click", function(ev){
+      ev.preventDefault();
+      closeSidebar();
+      var t = document.getElementById(link.getAttribute("data-target"));
+      if(t) window.scrollTo({top: t.getBoundingClientRect().top + window.pageYOffset - 12, behavior: "smooth"});
+    });
+  });
+
+  function updateActive(){
+    var current = 0;
+    targets.forEach(function(t, i){ if(t && t.getBoundingClientRect().top < 140) current = i; });
+    navLinks.forEach(function(l, i){ l.classList.toggle("active", i === current); });
+  }
+  window.addEventListener("scroll", updateActive, {passive: true});
+  updateActive();
+
+  var sidebar = document.getElementById("sidebar");
+  var scrim = document.getElementById("scrim");
+  function openSidebar(){ sidebar.classList.add("open"); scrim.classList.add("show"); }
+  function closeSidebar(){ sidebar.classList.remove("open"); scrim.classList.remove("show"); }
+  document.getElementById("menuToggle").addEventListener("click", openSidebar);
+  scrim.addEventListener("click", closeSidebar);
+})();
+</script>
+</body>
+</html>
