@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.3 · Intent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.3 · Intent</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_3_New_Intent.html" aria-current="page">UD 2.3 · Intent</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Más de una pantalla</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">La intención</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">El manifiesto</a></li><li class="sub"><a href="#s2-4" data-nav data-target="s2-4">Enviar datos: los extras</a></li><li class="sub"><a href="#s2-5" data-nav data-target="s2-5">Recibirlos al otro lado</a></li><li class="sub"><a href="#s2-6" data-nav data-target="s2-6">La pila de actividades</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1-4</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 5</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 6</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 7</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 8</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 9</a></li><li class="sub"><a href="#s3-7" data-nav data-target="s3-7">TODO 10-12</a></li><li class="sub"><a href="#s3-8" data-nav data-target="s3-8">TODO 13-14</a></li><li class="sub"><a href="#s3-9" data-nav data-target="s3-9">TODO 15</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Los layouts</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_3_New_Intent</p>
+      <h1>Intent</h1>
+      <p class="lede">Dos pantallas: en la primera escribes un texto y pulsas un botón; la segunda se abre y lo muestra. Con esta rama verás cómo una aplicación pasa de una actividad a otra y cómo se le envían datos por el camino.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="12" height="16" rx="2"/><rect x="9" y="7" width="12" height="16" rx="2"/></svg><b>Varias actividades</b><span>Una aplicación con más de una pantalla, cada una con su clase y su layout.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h14"/><path d="M13 6l6 6-6 6"/></svg><b>Intent explícito</b><span>El objeto con el que se le pide a Android abrir otra actividad.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg><b>Extras</b><span>Datos que viajan dentro de la intención, como pares nombre-valor.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V4h16v3"/><path d="M9 20h6M12 4v16"/></svg><b>EditText</b><span>Leer lo que el usuario escribe con <code>getText().toString()</code>.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="5" rx="1"/><rect x="3" y="11" width="18" height="5" rx="1"/><path d="M7 20h10"/></svg><b>Pila de actividades</b><span>Cómo se apilan las pantallas y qué hace el botón Atrás.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M9 9l6 6M15 9l-6 6"/></svg><b>finish()</b><span>Cerrar una actividad desde el código.</span></div></div>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>Más de una pantalla: las actividades</h3>
+      <p>Hasta ahora todo ocurría en una sola pantalla. Una <strong>actividad</strong> es una pantalla de la aplicación, y cada una necesita tres cosas: su clase Java, su layout XML y una línea en el manifiesto.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Pantalla</th><th>Clase</th><th>Layout</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td>Primera</td><td class="mono">MainActivity.java</td><td class="mono">activity_main.xml</td><td>Un campo de texto y un botón que abre la segunda.</td></tr>
+          <tr><td>Segunda</td><td class="mono">SecondActivity.java</td><td class="mono">activity_second.xml</td><td>Muestra el texto recibido y un botón para volver.</td></tr>
+        </tbody>
+      </table></div>
+      <h3 id="s2-2"><span class="sn">2.2</span>La intención: cómo se pide abrir otra pantalla</h3>
+      <p>En Android no se abre una pantalla llamando a su constructor. Se crea un <code>Intent</code> —una <strong>intención</strong>, la descripción de lo que se quiere hacer— y se le entrega al sistema, que es quien se encarga del resto.</p>
+      <figure>
+<svg viewBox="0 0 720 240" role="img" aria-label="MainActivity crea un objeto Intent indicando la actividad de destino y le añade el texto como extra. Se lo entrega a Android con startActivity, y Android crea SecondActivity y le pasa esa misma intención.">
+  <defs><marker id="in1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="40" width="190" height="120" rx="14" fill="#E2F4EA"/>
+  <text x="95" y="76" text-anchor="middle" font-size="14" font-weight="700" fill="#0A5C33">MainActivity</text>
+  <text x="95" y="104" text-anchor="middle" font-size="12" fill="#0A5C33">crea la intención</text>
+  <text x="95" y="126" text-anchor="middle" font-size="12" fill="#0A5C33">y le pone el texto</text>
+  <rect x="258" y="30" width="204" height="140" rx="14" fill="#6D3FD8"/>
+  <text x="360" y="60" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Intent</text>
+  <rect x="274" y="74" width="172" height="34" rx="8" fill="#fff" fill-opacity="0.22"/>
+  <text x="286" y="96" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">destino: SecondActivity</text>
+  <rect x="274" y="116" width="172" height="40" rx="8" fill="#fff" fill-opacity="0.22"/>
+  <text x="286" y="134" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">extras:</text>
+  <text x="286" y="150" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">"INFO" = "Hola"</text>
+  <rect x="530" y="40" width="190" height="120" rx="14" fill="#E2F4EA"/>
+  <text x="625" y="76" text-anchor="middle" font-size="14" font-weight="700" fill="#0A5C33">SecondActivity</text>
+  <text x="625" y="104" text-anchor="middle" font-size="12" fill="#0A5C33">la recibe entera</text>
+  <text x="625" y="126" text-anchor="middle" font-size="12" fill="#0A5C33">y saca el texto</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#in1)">
+    <line x1="194" y1="100" x2="254" y2="100"/>
+    <line x1="466" y1="100" x2="526" y2="100"/>
+  </g>
+  <text x="224" y="90" text-anchor="middle" font-size="11" fill="#56655D">crea</text>
+  <text x="496" y="90" text-anchor="middle" font-size="11" fill="#56655D">Android</text>
+  <text x="360" y="200" text-anchor="middle" font-size="12.5" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">startActivity(i)</text>
+  <text x="360" y="222" text-anchor="middle" font-size="12" fill="#56655D">La actividad no se crea con new: la crea Android.</text>
+</svg>
+<figcaption>La intención es un sobre: dentro va la dirección (la actividad de destino) y lo que quieras enviar (los extras). <code>startActivity()</code> lo echa al buzón.</figcaption>
+</figure>
+      <div class="tiles">
+        <div class="tile"><b>Explícita</b><span>Dices exactamente qué clase quieres abrir: <code>new Intent(this, SecondActivity.class)</code>. Es la de esta rama.</span></div>
+        <div class="tile"><b>Implícita</b><span>Dices qué quieres hacer (ver una web, enviar un correo) y Android ofrece las aplicaciones que saben hacerlo.</span></div>
+      </div>
+      <h3 id="s2-3"><span class="sn">2.3</span>Toda actividad va en el manifiesto</h3>
+      <p>Android solo puede abrir una actividad si está declarada en <code>AndroidManifest.xml</code>. Android Studio la añade solo cuando creas la actividad desde el asistente (<em>New → Activity</em>).</p>
+      <div class="code"><div class="code-bar">AndroidManifest.xml</div>
+<pre><code class="lang-xml">&lt;activity
+    android:name=&quot;.SecondActivity&quot;
+    android:exported=&quot;false&quot; /&gt;</code></pre></div>
+      <p><code>exported="false"</code> significa que solo la puede abrir tu propia aplicación. La actividad principal sí está exportada, porque la abre el lanzador del móvil al tocar el icono.</p>
+      <h3 id="s2-4"><span class="sn">2.4</span>Enviar datos: los extras</h3>
+      <p>Dentro de la intención se pueden meter datos con <code>putExtra()</code>. Cada dato es un par <strong>nombre-valor</strong>: el nombre sirve para volver a sacarlo al otro lado.</p>
+      <div class="code"><div class="code-bar">Al enviar</div>
+<pre><code class="lang-java">i.putExtra(INFO_ID, msg);   // INFO_ID es el nombre; msg, el valor</code></pre></div>
+      <div class="box clave"><span class="box-label">El nombre, en una constante</span><p>Si el nombre se escribe a mano en los dos sitios (<code>"INFO"</code> aquí y <code>"INFO"</code> allá), basta una errata para que el dato no aparezca y el programa no dé ningún error: simplemente llega <code>null</code>. Por eso se declara una sola vez como <code>public static final String</code> y las dos actividades usan esa constante.</p></div>
+      <p>Pueden enviarse varios extras y de distintos tipos: <code>putExtra("edad", 20)</code>, <code>putExtra("activo", true)</code>… Cada tipo se recupera después con su método correspondiente.</p>
+      <h3 id="s2-5"><span class="sn">2.5</span>Recibir los datos al otro lado</h3>
+      <p>La actividad que se abre recupera la intención con la que ha sido lanzada y le pide el extra por su nombre:</p>
+      <div class="code"><div class="code-bar">Al recibir</div>
+<pre><code class="lang-java">Intent i = getIntent();
+String msg = i.getStringExtra(INFO_ID);</code></pre></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Método</th><th>Qué devuelve</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">getIntent()</td><td>La intención que abrió esta actividad. Siempre hay una.</td></tr>
+          <tr><td class="mono">getStringExtra(nombre)</td><td>El texto guardado con ese nombre, o <code>null</code> si no se envió.</td></tr>
+          <tr><td class="mono">getIntExtra(nombre, 0)</td><td>Un número. Lleva un segundo parámetro: el valor por defecto si no venía.</td></tr>
+        </tbody>
+      </table></div>
+      <h3 id="s2-6"><span class="sn">2.6</span>La pila de actividades y finish()</h3>
+      <p>Las actividades se van <strong>apilando</strong>: al abrir la segunda, la primera no desaparece, se queda debajo esperando. Por eso el botón Atrás del móvil te devuelve a ella.</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="Al principio la pila solo tiene MainActivity. Tras startActivity, SecondActivity se coloca encima y es la que se ve. Al pulsar finish o el botón Atrás, SecondActivity se quita de la pila y vuelve a verse MainActivity.">
+  <defs><marker id="in2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <g font-size="12.5" font-weight="700" fill="#56655D"><text x="0" y="16">1. Al abrir la app</text><text x="258" y="16">2. startActivity()</text><text x="516" y="16">3. finish() o Atrás</text></g>
+  <rect x="0" y="120" width="200" height="46" rx="10" fill="#0E8A4B"/>
+  <text x="100" y="149" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">MainActivity</text>
+  <text x="100" y="188" text-anchor="middle" font-size="11.5" fill="#56655D">se ve en pantalla</text>
+  <rect x="258" y="70" width="200" height="46" rx="10" fill="#0E8A4B"/>
+  <text x="358" y="99" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">SecondActivity</text>
+  <rect x="258" y="120" width="200" height="46" rx="10" fill="#C9D3CD"/>
+  <text x="358" y="149" text-anchor="middle" font-size="13" font-weight="700" fill="#3B463F">MainActivity</text>
+  <text x="358" y="188" text-anchor="middle" font-size="11.5" fill="#56655D">la de arriba se ve;</text>
+  <text x="358" y="206" text-anchor="middle" font-size="11.5" fill="#56655D">la de abajo espera</text>
+  <rect x="516" y="120" width="200" height="46" rx="10" fill="#0E8A4B"/>
+  <text x="616" y="149" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">MainActivity</text>
+  <text x="616" y="188" text-anchor="middle" font-size="11.5" fill="#56655D">vuelve a verse,</text>
+  <text x="616" y="206" text-anchor="middle" font-size="11.5" fill="#56655D">tal como estaba</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#in2)">
+    <line x1="206" y1="143" x2="252" y2="143"/>
+    <line x1="464" y1="143" x2="510" y2="143"/>
+  </g>
+</svg>
+<figcaption>La pila de actividades. <code>finish()</code> hace lo mismo que el botón Atrás: quita la actividad de arriba.</figcaption>
+</figure>
+      <p>Como la primera actividad sigue viva debajo, al volver aparece <strong>tal como la dejaste</strong>, con el texto que habías escrito todavía en el campo.</p>
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 15. Los ocho primeros están en <code>MainActivity</code>, la pantalla que envía; del 9 al 15, en <code>SecondActivity</code>, la que recibe.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1-4</span>La pantalla y sus vistas</h3>
+      <p>El comienzo es el mismo de siempre: <code>onCreate()</code>, los objetos declarados como atributos, <code>setContentView()</code> con el layout y <code>findViewById()</code> para obtener las vistas.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">EditText edTxtMain;
+Button btnMain;
+
+setContentView(R.layout.activity_main);
+
+edTxtMain = (EditText) findViewById(R.id.edtxt_main);
+btnMain = (Button) findViewById(R.id.btn_main);</code></pre></div>
+      <h3 id="s3-2"><span class="sn">TODO 5</span>El botón que lanza el cambio</h3>
+      <p>Un <code>OnClickListener</code> con una clase anónima, igual que en la rama del botón. Todo lo que viene después ocurre dentro de su <code>onClick()</code>.</p>
+      <h3 id="s3-3"><span class="sn">TODO 6</span>Crear la intención</h3>
+      <p>Dos parámetros: el contexto y la clase de la actividad que se quiere abrir.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">Intent i = new Intent(MainActivity.this, SecondActivity.class);</code></pre></div>
+      <div class="box conocer"><span class="box-label">Por qué MainActivity.this y no this</span><p>Estamos dentro de la clase anónima del listener, así que <code>this</code> se refiere <em>al listener</em>, que no es un contexto. Con <code>MainActivity.this</code> se nombra el objeto de la clase que lo contiene, que sí lo es.</p></div>
+      <h3 id="s3-4"><span class="sn">TODO 7</span>Leer el texto y adjuntarlo</h3>
+      <p><code>getText()</code> no devuelve un <code>String</code>, sino un <code>Editable</code> (el texto que el usuario puede seguir modificando), así que hay que convertirlo con <code>toString()</code>. Si el campo está vacío no se envía nada.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">String msg = edTxtMain.getText().toString();
+if (!msg.isEmpty())
+    i.putExtra(INFO_ID, msg);</code></pre></div>
+      <div class="box clave"><span class="box-label">Cadenas: isEmpty() y equals(), nunca ==</span><p>Para comprobar si un texto está vacío se usa <code>isEmpty()</code>, y para comparar dos textos, <code>equals()</code>. Los operadores <code>==</code> y <code>!=</code> comparan si son <strong>el mismo objeto</strong> en memoria, no si dicen lo mismo, y con cadenas que vienen de la interfaz eso da resultados que parecen caprichosos.</p></div>
+      <h3 id="s3-5"><span class="sn">TODO 8</span>Abrir la actividad</h3>
+      <p>Se le entrega la intención a Android, que crea la segunda actividad y la pone encima en la pila.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">startActivity(i);</code></pre></div>
+      <h3 id="s3-6"><span class="sn">TODO 9</span>La constante con el nombre del dato</h3>
+      <p>Está declarada en <code>SecondActivity</code> y <code>MainActivity</code> la usa gracias a un <em>import estático</em>, que permite nombrarla sin escribir la clase delante.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java y, arriba del todo, MainActivity.java</div>
+<pre><code class="lang-java">public static final String INFO_ID = &quot;INFO&quot;;
+
+import static com.example.pmdm.SecondActivity.INFO_ID;</code></pre></div>
+      <h3 id="s3-7"><span class="sn">TODO 10-12</span>La pantalla y sus vistas</h3>
+      <p>Lo mismo que en la primera actividad, pero con <strong>su propio layout</strong>, <code>activity_second.xml</code>, y sus tres vistas.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">setContentView(R.layout.activity_second);
+
+txtVwSec    = (TextView) findViewById(R.id.txtVw_scnd);
+btnSec      = (Button) findViewById(R.id.btn_fin_scnd);
+editText    = (EditText) findViewById(R.id.edTxt_scnd);</code></pre></div>
+      <div class="box conocer"><span class="box-label">El EditText de esta pantalla todavía no hace nada</span><p>Está en el layout y se inicializa, pero no se usa: aquí no hay forma de devolver nada a la primera pantalla. Para eso hace falta abrir la actividad esperando un resultado, que es justo lo de la rama siguiente, <code>UD_2_4_ActivityForResult</code>.</p></div>
+      <h3 id="s3-8"><span class="sn">TODO 13-14</span>Recuperar la intención y el dato</h3>
+      <p>Se pide la intención que abrió esta actividad y se saca el extra por su nombre.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">Intent i = getIntent();
+
+String msg = i.getStringExtra(INFO_ID);
+txtVwSec.setText(msg);</code></pre></div>
+      <p>Si el campo estaba vacío no se envió ningún extra, así que <code>msg</code> vale <code>null</code> y el <code>TextView</code> se queda sin texto.</p>
+      <h3 id="s3-9"><span class="sn">TODO 15</span>Cerrar la actividad</h3>
+      <p><code>finish()</code> termina esta actividad y la quita de la pila: se vuelve a ver la anterior. Es lo mismo que hace el botón Atrás.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">btnSec.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        finish();
+    }
+});</code></pre></div>
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>Los layouts</h2></div>
+
+      <p>Cada actividad tiene el suyo. El de la primera, con el campo de texto y el botón:</p>
+      <div class="code"><div class="code-bar">res/layout/activity_main.xml</div>
+<pre><code class="lang-xml">&lt;EditText
+    android:id=&quot;@+id/edtxt_main&quot;
+    android:layout_width=&quot;256dp&quot;
+    android:layout_height=&quot;45dp&quot;
+    android:hint=&quot;Introduce el texto a enviar...&quot;
+    android:inputType=&quot;textPersonName&quot;
+    ... /&gt;
+
+&lt;Button
+    android:id=&quot;@+id/btn_main&quot;
+    android:text=&quot;Ir a Second Activity&quot;
+    ... /&gt;</code></pre></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Atributo</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">android:hint</td><td>El texto gris que se ve cuando el campo está vacío. No es su contenido: <code>getText()</code> devuelve una cadena vacía, no el <em>hint</em>.</td></tr>
+          <tr><td class="mono">android:inputType</td><td>Qué clase de texto se espera. Decide el teclado que sale y cómo se comporta: <code>textPersonName</code>, <code>number</code>, <code>textPassword</code>, <code>textEmailAddress</code>…</td></tr>
+        </tbody>
+      </table></div>
+      <p>El de la segunda, con el texto recibido, un campo que de momento no se usa y el botón de volver:</p>
+      <div class="code"><div class="code-bar">res/layout/activity_second.xml</div>
+<pre><code class="lang-xml">&lt;TextView
+    android:id=&quot;@+id/txtVw_scnd&quot;
+    android:text=&quot;Información desde main activity &quot;
+    android:textSize=&quot;20sp&quot;
+    ... /&gt;
+
+&lt;Button
+    android:id=&quot;@+id/btn_fin_scnd&quot;
+    android:text=&quot;Finalizar&quot;
+    ... /&gt;</code></pre></div>
+      <div class="box conocer"><span class="box-label">El texto del TextView se reemplaza siempre</span><p>«Información desde main activity» solo se ve en el editor de diseño: al ejecutarse, <code>setText()</code> lo sustituye por lo que llegue en la intención (o lo deja vacío si no llegó nada).</p></div>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+
+      <ol class="steps">
+        <li>Ejecuta la aplicación (<strong>Run</strong>). Verás el campo de texto con su pista en gris y el botón.</li>
+        <li>Escribe algo y pulsa el botón: se abre la segunda pantalla con ese texto arriba.</li>
+        <li>Pulsa <strong>Finalizar</strong>: vuelves a la primera, y el texto que escribiste <em>sigue ahí</em>. La actividad nunca se cerró, estaba debajo en la pila.</li>
+        <li>Repite, pero vuelve con el botón <strong>Atrás</strong> del móvil: ocurre exactamente lo mismo.</li>
+        <li>Ahora deja el campo <strong>vacío</strong> y pulsa el botón: la segunda pantalla se abre sin texto, porque no se envió ningún extra.</li>
+        <li>Con la segunda pantalla abierta, gira el móvil: se vuelve a crear y el texto sigue apareciendo, porque se lee otra vez de la intención en <code>onCreate()</code>.</li>
+      </ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr><td>La aplicación se cierra al pulsar el botón, con <code>ActivityNotFoundException</code></td><td>La actividad no está declarada en <code>AndroidManifest.xml</code> (apartado 2.3).</td></tr>
+          <tr><td>La segunda pantalla se abre, pero sin texto</td><td>El nombre del extra no coincide al enviar y al recibir. Con la constante compartida esto no puede pasar; sí ocurre si se escriben los nombres a mano.</td></tr>
+          <tr><td>Se abre la pantalla equivocada, o la misma otra vez</td><td>En <code>new Intent(...)</code> se ha puesto la clase de destino equivocada.</td></tr>
+          <tr><td><code>NullPointerException</code> al usar el texto recibido</td><td><code>getStringExtra()</code> devuelve <code>null</code> cuando no venía ese extra. Si se va a llamar a algún método sobre él, hay que comprobarlo antes.</td></tr>
+          <tr><td>Se acumulan pantallas: hay que pulsar Atrás muchas veces</td><td>Cada <code>startActivity()</code> apila una actividad más. Si la segunda vuelve con <code>startActivity()</code> en lugar de <code>finish()</code>, la pila crece sin parar.</td></tr>
+          <tr><td>El <code>if</code> del texto vacío no funciona como se espera</td><td>Se ha comparado con <code>==</code> o <code>!=</code> en lugar de <code>isEmpty()</code> o <code>equals()</code> (apartado TODO 7).</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+
+      <p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_2_3_New_Intent</code>.</p>
+      <ol class="steps">
+        <li>Pasa a <code>strings.xml</code> los textos de los dos layouts (la pista del campo y los textos de los botones).</li>
+        <li>Si el campo está vacío, en lugar de abrir la segunda pantalla muestra un <code>Toast</code> avisando de que hay que escribir algo.</li>
+        <li>Envía un segundo extra: el número de caracteres del texto (<code>msg.length()</code>), recógelo con <code>getIntExtra()</code> y muéstralo también.</li>
+        <li>Haz que la segunda pantalla enseñe «No has escrito nada» cuando no llegue ningún texto, en vez de quedarse en blanco.</li>
+        <li>Añade una tercera actividad y un botón en la segunda que la abra, pasándole el mismo texto. Observa cómo crece la pila al volver con Atrás.</li>
+        <li>Prueba una intención implícita: un botón que abra el navegador con <code>new Intent(Intent.ACTION_VIEW, Uri.parse("https://developer.android.com"))</code>.</li>
+      </ol>
+    </section>
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+</body>
+</html>
