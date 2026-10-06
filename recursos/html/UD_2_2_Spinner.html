@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.2 · Spinner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.2 · Spinner</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_2_Spinner.html" aria-current="page">UD 2.2 · Spinner</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Qué es un Spinner</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Datos, adaptador y vista</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">Los datos en array.xml</a></li><li class="sub"><a href="#s2-4" data-nav data-target="s2-4">Los dos diseños de fila</a></li><li class="sub"><a href="#s2-5" data-nav data-target="s2-5">El listener de selección</a></li><li class="sub"><a href="#s2-6" data-nav data-target="s2-6">Toast</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 2</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 3</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 4</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 5</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 6</a></li><li class="sub"><a href="#s3-7" data-nav data-target="s3-7">TODO 7</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>El layout</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_2_Spinner</p>
+      <h1>Spinner</h1>
+      <p class="lede">Un desplegable con las provincias de Andalucía: al elegir una, aparece un mensaje con su nombre. Con esta rama verás cómo una vista muestra una lista de datos que no están escritos en el layout, sino que le llegan a través de un adaptador.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="6" rx="2"/><path d="M8 16l4 4 4-4"/></svg><b>Spinner</b><span>La vista desplegable: muestra una opción y despliega la lista al tocarla.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h6M14 7h6M4 12h6M14 12h6M4 17h6M14 17h6"/><path d="M11 12h2"/></svg><b>Adaptador</b><span>La pieza que une los datos con la vista que los muestra.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"/></svg><b>array.xml</b><span>Guardar una lista de textos como recurso, fuera del código.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg><b>Eventos de selección</b><span><code>OnItemSelectedListener</code>: enterarte de qué ha elegido el usuario.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><b>Toast</b><span>Un mensaje breve que aparece y se va solo.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg><b>Recursos de Android</b><span>La diferencia entre <code>R</code> y <code>android.R</code>.</span></div></div>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>Qué es un Spinner</h3>
+      <p>Un <code>Spinner</code> es una lista desplegable. Ocupa poco en pantalla porque solo enseña la opción seleccionada; al tocarlo se abre y muestra todas las demás. Equivale al <code>&lt;select&gt;</code> de HTML.</p>
+      <figure>
+<svg viewBox="0 0 720 230" role="img" aria-label="A la izquierda, el spinner cerrado muestra solo la provincia seleccionada, Granada, con una flecha hacia abajo. Al tocarlo se abre y muestra la lista completa de provincias, de la que el usuario elige una.">
+  <defs><marker id="sp1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <g font-size="12.5" font-weight="700" fill="#56655D"><text x="0" y="16">Cerrado</text><text x="400" y="16">Desplegado</text></g>
+  <rect x="0" y="30" width="250" height="46" rx="10" fill="#fff" stroke="#C9D3CD" stroke-width="2"/>
+  <text x="18" y="59" font-size="15" fill="#17211C">Granada</text>
+  <path d="M212 48 l10 10 l10 -10" stroke="#56655D" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="0" y="104" font-size="12.5" fill="#56655D">Solo se ve la opción elegida.</text>
+  <path d="M258 53 C320 53 330 53 392 53" stroke="#56655D" stroke-width="2" fill="none" marker-end="url(#sp1)"/>
+  <text x="268" y="42" font-size="12" fill="#56655D">el usuario lo toca</text>
+  <rect x="400" y="30" width="250" height="46" rx="10" fill="#E2F4EA" stroke="#0E8A4B" stroke-width="2"/>
+  <text x="418" y="59" font-size="15" font-weight="700" fill="#0A5C33">Granada</text>
+  <rect x="400" y="80" width="250" height="140" rx="10" fill="#fff" stroke="#C9D3CD" stroke-width="2"/>
+  <g font-size="14" fill="#17211C">
+    <text x="418" y="104">Cádiz</text>
+    <text x="418" y="132">Málaga</text>
+    <text x="418" y="160">Jaén</text>
+    <text x="418" y="188">Almería</text>
+    <text x="418" y="212">…</text>
+  </g>
+</svg>
+<figcaption>El mismo <code>Spinner</code> cerrado y abierto. La lista que despliega no está escrita en el layout: se la pone el adaptador desde el código.</figcaption>
+</figure>
+      <h3 id="s2-2"><span class="sn">2.2</span>Las tres piezas: datos, adaptador y vista</h3>
+      <p>En el tema anterior, el texto de un <code>TextView</code> se ponía directamente con <code>setText()</code>. Aquí no vale: un desplegable tiene <em>muchos</em> elementos y cada uno necesita su propia fila en pantalla. Entre los datos y la vista hace falta una pieza intermedia, el <strong>adaptador</strong>.</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="Tres piezas enlazadas: los datos del fichero array.xml, el adaptador ArrayAdapter que recibe los datos y el diseño de cada fila, y la vista Spinner que muestra el resultado en pantalla.">
+  <defs><marker id="sp2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <g font-size="12.5" font-weight="700" fill="#56655D"><text x="0" y="16">1. Los datos</text><text x="262" y="16">2. El adaptador</text><text x="534" y="16">3. La vista</text></g>
+  <rect x="0" y="30" width="200" height="104" rx="12" fill="#E2F4EA"/>
+  <text x="14" y="54" font-size="12.5" font-weight="700" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">array.xml</text>
+  <g font-size="12" fill="#0A5C33"><text x="14" y="78">Granada, Cádiz,</text><text x="14" y="98">Málaga, Jaén…</text></g>
+  <text x="14" y="122" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">R.array.provincias</text>
+  <rect x="0" y="152" width="200" height="74" rx="12" fill="#FEEEDF"/>
+  <text x="14" y="176" font-size="12.5" font-weight="700" fill="#8A4A08">Diseño de cada fila</text>
+  <text x="14" y="200" font-size="11" fill="#8A4A08" font-family="'JetBrains Mono', Consolas, monospace">android.R.layout.</text>
+  <text x="14" y="216" font-size="11" fill="#8A4A08" font-family="'JetBrains Mono', Consolas, monospace">simple_spinner_item</text>
+  <rect x="262" y="60" width="200" height="130" rx="14" fill="#6D3FD8"/>
+  <text x="362" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">ArrayAdapter</text>
+  <text x="362" y="130" text-anchor="middle" font-size="11.5" fill="#fff">coge cada dato y</text>
+  <text x="362" y="148" text-anchor="middle" font-size="11.5" fill="#fff">construye su fila</text>
+  <rect x="534" y="60" width="186" height="130" rx="14" fill="#0E8A4B"/>
+  <text x="627" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">Spinner</text>
+  <text x="627" y="130" text-anchor="middle" font-size="11.5" fill="#fff">muestra las filas</text>
+  <text x="627" y="148" text-anchor="middle" font-size="11.5" fill="#fff">en pantalla</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#sp2)">
+    <line x1="204" y1="82" x2="258" y2="105"/>
+    <line x1="204" y1="188" x2="258" y2="150"/>
+    <line x1="466" y1="125" x2="530" y2="125"/>
+  </g>
+  <text x="474" y="116" font-size="11.5" fill="#56655D" font-family="'JetBrains Mono', Consolas, monospace">setAdapter()</text>
+</svg>
+<figcaption>El adaptador es el intermediario: recibe los datos y un diseño de fila, y le entrega a la vista cada elemento ya convertido en algo que se puede pintar.</figcaption>
+</figure>
+      <div class="box conocer"><span class="box-label">Dónde más aparece el adaptador</span><p>Este mismo patrón se repite en todas las vistas que muestran listas: <code>ListView</code>, <code>GridView</code> y, sobre todo, <code>RecyclerView</code>, que verás en la rama <code>UD_2_5_RecyclerView</code>. Si entiendes el adaptador aquí, con el caso más sencillo, allí solo cambian los detalles.</p></div>
+      <h3 id="s2-3"><span class="sn">2.3</span>Los datos viven en array.xml</h3>
+      <p>Las provincias no están en el código Java, sino en un recurso: <code>res/values/array.xml</code>. Es el mismo motivo por el que los textos van en <code>strings.xml</code> (apartado 2.5 del tema anterior): se cambian en un solo sitio y la aplicación se puede traducir sin tocar el código.</p>
+      <div class="code"><div class="code-bar">res/values/array.xml</div>
+<pre><code class="lang-xml">&lt;resources&gt;
+    &lt;string-array name=&quot;provincias&quot;&gt;
+        &lt;item&gt;Granada&lt;/item&gt;
+        &lt;item&gt;Cádiz&lt;/item&gt;
+        &lt;item&gt;Málaga&lt;/item&gt;
+        ...
+    &lt;/string-array&gt;
+&lt;/resources&gt;</code></pre></div>
+      <p>El nombre del <code>string-array</code> genera la constante <code>R.array.provincias</code>, igual que cada <code>string</code> genera una constante en <code>R.string</code> y cada <code>id</code> una en <code>R.id</code>.</p>
+      <h3 id="s2-4"><span class="sn">2.4</span>Los dos diseños de fila: R y android.R</h3>
+      <p>El adaptador necesita saber <strong>cómo</strong> dibujar cada elemento, y un spinner tiene dos situaciones distintas: la fila que se ve cuando está cerrado y las filas de la lista cuando está abierto. Por eso se le indican dos diseños.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Diseño</th><th>Dónde se usa</th><th>Se indica en</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">simple_spinner_item</td><td>La fila visible con el spinner cerrado.</td><td>El tercer parámetro de <code>createFromResource()</code>.</td></tr>
+          <tr><td class="mono">simple_spinner_dropdown_item</td><td>Cada fila de la lista desplegada.</td><td><code>setDropDownViewResource()</code>.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Los dos llevan delante <code>android.R.layout</code>, no <code>R.layout</code>, y esa diferencia es importante:</p>
+      <div class="tiles">
+        <div class="tile"><b><code>R</code></b><span>Los recursos <strong>de tu proyecto</strong>: los que tú creas en la carpeta <code>res/</code>.</span></div>
+        <div class="tile"><b><code>android.R</code></b><span>Los recursos <strong>que trae Android</strong>. No los has escrito tú y no están en tu carpeta <code>res/</code>.</span></div>
+      </div>
+      <p>Usar los de Android ahorra escribir dos layouts para algo tan corriente como una fila con un texto. Si algún día necesitas que cada fila tenga otro aspecto (un icono, dos líneas…), creas tu propio layout en <code>res/layout/</code> y entonces sí usarás <code>R.layout</code>.</p>
+      <h3 id="s2-5"><span class="sn">2.5</span>El listener de selección</h3>
+      <p>Igual que el botón avisaba con <code>OnClickListener</code>, el spinner avisa con <code>OnItemSelectedListener</code>. Esta interfaz tiene <strong>dos</strong> métodos y hay que implementar los dos, aunque uno casi nunca se use.</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="Secuencia: el usuario elige una provincia de la lista; Android llama a onItemSelected del listener pasándole la posición elegida; el listener pide a getItemAtPosition el dato de esa posición y muestra un Toast con el resultado.">
+  <defs><marker id="sp3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker><marker id="sp4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6D3FD8"/></marker></defs>
+  <g font-size="13" font-weight="700" text-anchor="middle">
+    <rect x="20" y="8" width="120" height="38" rx="10" fill="#17211C"/><text x="80" y="32" fill="#fff">Usuario</text>
+    <rect x="190" y="8" width="120" height="38" rx="10" fill="#56655D"/><text x="250" y="32" fill="#fff">Android</text>
+    <rect x="360" y="8" width="150" height="38" rx="10" fill="#6D3FD8"/><text x="435" y="32" fill="#fff">Listener</text>
+    <rect x="560" y="8" width="140" height="38" rx="10" fill="#0E8A4B"/><text x="630" y="32" fill="#fff">Adaptador</text>
+  </g>
+  <g stroke="#C9D3CD" stroke-width="2" stroke-dasharray="5 5"><line x1="80" y1="46" x2="80" y2="240"/><line x1="250" y1="46" x2="250" y2="240"/><line x1="435" y1="46" x2="435" y2="240"/><line x1="630" y1="46" x2="630" y2="240"/></g>
+  <g stroke-width="2.2" fill="none">
+    <line x1="82" y1="82" x2="246" y2="82" stroke="#56655D" marker-end="url(#sp3)"/>
+    <line x1="252" y1="124" x2="431" y2="124" stroke="#6D3FD8" marker-end="url(#sp4)"/>
+    <line x1="437" y1="166" x2="626" y2="166" stroke="#56655D" marker-end="url(#sp3)"/>
+    <line x1="624" y1="206" x2="441" y2="206" stroke="#56655D" stroke-dasharray="6 4" marker-end="url(#sp3)"/>
+  </g>
+  <g font-size="12.5" fill="#17211C" text-anchor="middle">
+    <text x="164" y="74">1. elige «Málaga»</text>
+    <text x="342" y="116" font-family="'JetBrains Mono', Consolas, monospace" fill="#4A2A99">2. onItemSelected(…, i, …)</text>
+    <text x="532" y="158" font-family="'JetBrains Mono', Consolas, monospace">3. getItemAtPosition(i)</text>
+    <text x="532" y="198" fill="#56655D">4. devuelve "Málaga"</text>
+  </g>
+</svg>
+<figcaption>Android no te entrega el texto elegido, sino su <strong>posición</strong> en la lista. Con ella le pides al adaptador el dato que hay en ese sitio.</figcaption>
+</figure>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Parámetro de <code>onItemSelected</code></th><th>Qué es</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">AdapterView&lt;?&gt; adapterView</td><td>La vista que avisa, es decir, el propio spinner. De ella se saca el dato con <code>getItemAtPosition()</code>.</td></tr>
+          <tr><td class="mono">View view</td><td>La fila concreta que se ha pulsado.</td></tr>
+          <tr><td class="mono">int i</td><td>La <strong>posición</strong> elegida, empezando por 0.</td></tr>
+          <tr><td class="mono">long l</td><td>El identificador de la fila. Con un <code>ArrayAdapter</code> coincide con la posición.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="box clave"><span class="box-label">Se ejecuta nada más abrir la aplicación</span><p>En cuanto le pones el adaptador, el spinner selecciona su primer elemento, y eso ya cuenta como una selección: <code>onItemSelected()</code> se ejecuta sin que el usuario haya tocado nada. Por eso, al arrancar, aparece el mensaje «Mi provincia es: Granada». No es un fallo: es cómo funciona.</p></div>
+      <p>El segundo método, <code>onNothingSelected()</code>, solo se llama si el adaptador se queda sin elementos. Con una lista fija como esta no llega a ejecutarse nunca, pero la interfaz obliga a escribirlo.</p>
+      <h3 id="s2-6"><span class="sn">2.6</span>Toast: un mensaje que se va solo</h3>
+      <p>Un <code>Toast</code> es un aviso breve que aparece sobre la pantalla y desaparece pasados unos segundos. No interrumpe al usuario ni tiene botones: sirve para confirmar algo, no para preguntar.</p>
+      <div class="code"><div class="code-bar">La forma de crearlo</div>
+<pre><code class="lang-java">Toast.makeText(this, &quot;Mi provincia es: Granada&quot;, Toast.LENGTH_LONG).show();</code></pre></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Parte</th><th>Qué significa</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">this</td><td>El contexto, es decir, la actividad desde la que se lanza.</td></tr>
+          <tr><td class="mono">Toast.LENGTH_LONG</td><td>Cuánto dura: unos 3,5 segundos. La otra opción es <code>LENGTH_SHORT</code>, unos 2.</td></tr>
+          <tr><td class="mono">.show()</td><td>Lo muestra. <strong>Sin esta llamada no aparece nada</strong>: <code>makeText()</code> solo lo prepara.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios aparecen numerados del 1 al 7. Síguelos en ese orden.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1</span>Declarar el spinner</h3>
+      <p>Como atributo de la clase, fuera de los métodos, para poder usarlo desde <code>onCreate()</code> y desde el listener.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private Spinner spinner;</code></pre></div>
+      <h3 id="s3-2"><span class="sn">TODO 2</span>Inicializar el spinner</h3>
+      <p>Después de <code>setContentView()</code>, igual que en el tema anterior: <code>findViewById()</code> busca la vista en el layout ya cargado.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">this.spinner = (Spinner) findViewById(R.id.spinner);</code></pre></div>
+      <h3 id="s3-3"><span class="sn">TODO 3</span>Crear el adaptador</h3>
+      <p><code>createFromResource()</code> es un atajo para cuando los datos ya están en un <code>string-array</code>: construye el adaptador con los tres ingredientes del apartado 2.2.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">ArrayAdapter adaptador = ArrayAdapter.createFromResource(
+        this,                                  // el contexto
+        R.array.provincias,                    // los datos
+        android.R.layout.simple_spinner_item); // el diseño de la fila cerrada</code></pre></div>
+      <div class="box conocer"><span class="box-label">El aviso de Android Studio</span><p><code>ArrayAdapter</code> es una clase genérica, así que escribirla sin indicar el tipo deja un subrayado amarillo («raw use of parameterized class»). Lo correcto es <code>ArrayAdapter&lt;CharSequence&gt;</code>, que es justo lo que devuelve <code>createFromResource()</code>. Lo tienes en el apartado «Para practicar».</p></div>
+      <h3 id="s3-4"><span class="sn">TODO 4</span>El diseño de la lista desplegada</h3>
+      <p>El adaptador ya sabe pintar la fila cerrada; esto le dice cómo pintar cada fila cuando la lista se abre (apartado 2.4).</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">adaptador.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);</code></pre></div>
+      <h3 id="s3-5"><span class="sn">TODO 5</span>Asignar el adaptador al spinner</h3>
+      <p>Hasta aquí el adaptador y la vista no se conocían. Con <code>setAdapter()</code> se unen y el desplegable ya muestra las provincias.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">this.spinner.setAdapter(adaptador);</code></pre></div>
+      <h3 id="s3-6"><span class="sn">TODO 6</span>El listener de selección</h3>
+      <p>Una clase anónima, como los listeners del botón, pero implementando los dos métodos de la interfaz (apartado 2.5).</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">this.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+    @Override
+    public void onItemSelected(AdapterView&lt;?&gt; adapterView, View view, int i, long l) {
+        String provincia = (String) adapterView.getItemAtPosition(i);
+        myToast(&quot;Mi provincia es: &quot; + provincia);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView&lt;?&gt; adapterView) {
+        myToast(&quot;No has seleccionado nada&quot;);
+    }
+});</code></pre></div>
+      <h3 id="s3-7"><span class="sn">TODO 7</span>El método que muestra el mensaje</h3>
+      <p>Los dos métodos del listener necesitan lanzar un <code>Toast</code>, así que se escribe una vez en un método propio y se llama desde los dos. Es el mismo criterio que usarás siempre: lo que se repite, a un método.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">public void myToast(String msg) {
+    Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+}</code></pre></div>
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>El layout</h2></div>
+
+      <p>Dos vistas dentro de un <code>ConstraintLayout</code>: el título y el desplegable.</p>
+      <div class="code"><div class="code-bar">res/layout/activity_main.xml</div>
+<pre><code class="lang-xml">&lt;Spinner
+    android:id=&quot;@+id/spinner&quot;
+    android:layout_width=&quot;275dp&quot;
+    android:layout_height=&quot;54dp&quot;
+    app:layout_constraintBottom_toBottomOf=&quot;parent&quot;
+    app:layout_constraintEnd_toEndOf=&quot;parent&quot;
+    app:layout_constraintStart_toStartOf=&quot;parent&quot;
+    app:layout_constraintTop_toTopOf=&quot;parent&quot; /&gt;
+
+&lt;TextView
+    android:id=&quot;@+id/txtViewTitle&quot;
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:text=&quot;PROVINCIAS&quot;
+    android:textSize=&quot;24sp&quot;
+    android:textStyle=&quot;bold&quot;
+    app:layout_constraintBottom_toTopOf=&quot;@+id/spinner&quot;
+    ... /&gt;</code></pre></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Atributo</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">android:layout_width="275dp"</td><td>Ancho fijo en <code>dp</code>, que es una medida independiente de la densidad de la pantalla: ocupa lo mismo en un móvil que en una tableta.</td></tr>
+          <tr><td class="mono">android:textSize="24sp"</td><td>El tamaño del texto va en <code>sp</code>, no en <code>dp</code>: así respeta el tamaño de letra que el usuario haya elegido en los ajustes del sistema.</td></tr>
+          <tr><td class="mono">…constraintBottom_toTopOf="@+id/spinner"</td><td>Coloca el título justo encima del desplegable.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="box conocer"><span class="box-label">El Spinner no lleva android:text</span><p>No tiene sentido darle un texto en el XML: lo que muestra viene del adaptador, desde el código. En el editor de diseño verás «Item 1, Item 2…»: es solo una vista previa de Android Studio.</p></div>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+
+      <ol class="steps">
+        <li>Ejecuta la aplicación (<strong>Run</strong>). Nada más abrirse ya aparece el mensaje «Mi provincia es: Granada», porque el spinner selecciona solo su primer elemento (apartado 2.5).</li>
+        <li>Toca el desplegable: se abre con las ocho provincias.</li>
+        <li>Elige otra: el desplegable la muestra y sale el mensaje con su nombre.</li>
+        <li>Vuelve a elegir <strong>la misma</strong> que ya estaba: no sale ningún mensaje. Solo avisa cuando la selección <em>cambia</em>.</li>
+        <li>Gira el móvil o el emulador: la actividad se crea de nuevo, así que el spinner vuelve a Granada y el mensaje aparece otra vez.</li>
+      </ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr><td>El desplegable aparece vacío</td><td>Falta <code>setAdapter()</code>, o el <code>string-array</code> está vacío o con otro nombre.</td></tr>
+          <tr><td>La aplicación se cierra con <code>NullPointerException</code></td><td><code>findViewById()</code> está antes de <code>setContentView()</code>, o el id no coincide con el del layout.</td></tr>
+          <tr><td><em>Cannot resolve symbol 'simple_spinner_item'</em></td><td>Se ha escrito <code>R.layout</code> en vez de <code>android.R.layout</code>: ese diseño es de Android, no del proyecto (apartado 2.4).</td></tr>
+          <tr><td>Al abrir la lista, las filas se ven mal o cortadas</td><td>Falta <code>setDropDownViewResource()</code>: sin él, la lista desplegada usa el diseño de la fila cerrada.</td></tr>
+          <tr><td>Sale el mensaje nada más abrir la aplicación</td><td>Es lo normal, no un fallo. En «Para practicar» tienes cómo evitarlo.</td></tr>
+          <tr><td>El <code>Toast</code> no aparece</td><td>Falta <code>.show()</code> al final: <code>makeText()</code> solo lo crea.</td></tr>
+          <tr><td><code>ClassCastException</code> en <code>(String) adapterView.getItemAtPosition(i)</code></td><td>Los elementos de un <code>string-array</code> son <code>CharSequence</code>. Aquí el <em>cast</em> funciona porque de hecho son <code>String</code>, pero con otros datos podría fallar; es más seguro <code>.toString()</code>.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+
+      <p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_2_2_Spinner</code>.</p>
+      <ol class="steps">
+        <li>Escribe el adaptador con su tipo, <code>ArrayAdapter&lt;CharSequence&gt;</code>, y comprueba que desaparece el aviso amarillo.</li>
+        <li>Pasa el texto «PROVINCIAS» del layout a <code>strings.xml</code>, y el «Mi provincia es: » del código también.</li>
+        <li>Haz que el mensaje no salga al abrir la aplicación: guarda un <code>boolean primeraVez = true</code> y, en <code>onItemSelected()</code>, si vale <code>true</code>, ponlo a <code>false</code> y sal del método sin mostrar nada.</li>
+        <li>Añade un <code>TextView</code> debajo del desplegable que muestre la provincia elegida, en lugar del <code>Toast</code> (o además de él).</li>
+        <li>Crea un segundo <code>string-array</code> con los municipios de una provincia y un segundo spinner que los muestre.</li>
+        <li>Cambia el origen de los datos: en vez de <code>createFromResource()</code>, construye el adaptador desde un <code>String[]</code> creado en el código, con <code>new ArrayAdapter&lt;&gt;(this, android.R.layout.simple_spinner_item, provincias)</code>.</li>
+      </ol>
+    </section>
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+</body>
+</html>
