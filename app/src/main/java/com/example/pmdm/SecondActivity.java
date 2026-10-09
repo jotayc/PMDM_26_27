@@ -77,6 +77,7 @@ public class SecondActivity extends AppCompatActivity {
                     setResult(Activity.RESULT_OK,returnIntent);
 
                     //Todo 20: Finalizamos la actividad para devolver el resultado.
+                    //Todo -> en ese momento se ejecuta el callback del lanzador en MainActivity
                     finish();
                 }
 
