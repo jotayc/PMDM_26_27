@@ -12,7 +12,9 @@
   /* ---------- Piezas propias de esta página ---------- */
   :root{ --sim: #6D3FD8; --sim-soft: #EFE9FC; --create: #E8710A; --bind: #0E8A4B; --pool: #56655D; }
   .legend{ display: grid; gap: 6px; margin: 18px 0 0; padding: 12px 16px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; font-size: 14px; }
-  .legend span{ display: inline-flex; align-items: center; gap: 8px; }
+  .legend > div{ display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: start; }
+  .legend > div i{ margin-top: 4px; }
+  .legend code{ white-space: nowrap; }
   .legend i{ width: 14px; height: 14px; border-radius: 4px; display: inline-block; flex: none; }
 
   .sim{ margin: 24px 0 28px; border-radius: var(--radius); background: var(--sim-soft); border: 1px solid #D9CCF7; overflow: hidden; }
@@ -102,6 +104,12 @@
   .q label:hover{ background: var(--bg); }
   .q label.right{ background: #E2F4EA; } .q label.wrong{ background: #FCE8E6; }
   .q .fb{ font-size: 14px; color: var(--muted); margin: 4px 10px 0; min-height: 1em; }
+  @media (max-width: 700px){
+    main figure{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    main figure svg{ min-width: 660px; }
+    main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+    .row .vh{ font-size: 9px; }
+  }
   @media (max-width: 600px){
     .phone{ margin: 0 auto; }
     .bar-line{ grid-template-columns: 1fr 64px; }
@@ -128,11 +136,11 @@
       <p class="lede">Una lista de películas, cada una con su cartel, su título y una descripción. Parece sencillo, pero detrás hay varias piezas que colaboran y una idea que ahorra muchísima memoria: <strong>reciclar las filas</strong>. Aquí vas a ver cada pieza por separado y después la lista funcionando por dentro.</p>
       <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
       <div class="legend" aria-label="Qué significa cada color">
-        <span><i style="background:#0E8A4B"></i>Verde: lo que hay que retener y las llamadas a <code>onBindViewHolder()</code>.</span>
-        <span><i style="background:#E8710A"></i>Naranja: las llamadas a <code>onCreateViewHolder()</code>, cuando se crea una fila nueva.</span>
-        <span><i style="background:#6D3FD8"></i>Violeta: simuladores; se manejan con los botones.</span>
-        <span><i style="background:#1A73E8"></i>Azul: lo que debes conocer aunque no se use en la rama.</span>
-        <span><i style="background:#B26A00"></i>Ámbar: un consejo para no equivocarte.</span>
+        <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener y las llamadas a <code>onBindViewHolder()</code>.</span></div>
+        <div><i style="background:#E8710A"></i><span>Naranja: las llamadas a <code>onCreateViewHolder()</code>, cuando se crea una fila nueva.</span></div>
+        <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones.</span></div>
+        <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
+        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
       </div>
     </div></header>
 
