@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.4.1 · El lanzador de resultados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.4.1 · Lanzador</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_4_1_registerForActivity.html" aria-current="page">UD 2.4.1 · El lanzador de resultados</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">La ida y la vuelta</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">El lanzador</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">Por qué es un atributo</a></li><li class="sub"><a href="#s2-4" data-nav data-target="s2-4">El callback</a></li><li class="sub"><a href="#s2-5" data-nav data-target="s2-5">Preparar el resultado</a></li><li class="sub"><a href="#s2-6" data-nav data-target="s2-6">El código de resultado</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 2</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 3</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 4</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 5-6</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 7-10</a></li><li class="sub"><a href="#s3-7" data-nav data-target="s3-7">TODO 11</a></li><li class="sub"><a href="#s3-8" data-nav data-target="s3-8">TODO 12</a></li><li class="sub"><a href="#s3-9" data-nav data-target="s3-9">TODO 13-15</a></li><li class="sub"><a href="#s3-10" data-nav data-target="s3-10">TODO 16</a></li><li class="sub"><a href="#s3-11" data-nav data-target="s3-11">TODO 17-19</a></li><li class="sub"><a href="#s3-12" data-nav data-target="s3-12">TODO 20</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Los layouts</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_4_1_registerForActivity</p>
+      <h1>El lanzador de resultados</h1>
+      <p class="lede">Dos pantallas: la primera abre la segunda, en la segunda escribes un texto y, al cerrarla, ese texto aparece en la primera. Con esta rama verás la forma actual de recoger lo que devuelve una actividad: un lanzador registrado con <code>registerForActivityResult()</code>.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h14"/><path d="M14 4l4 4-4 4"/><path d="M20 16H6"/><path d="M10 12l-4 4 4 4"/></svg><b>Ida y vuelta</b><span>Abrir una actividad esperando que devuelva un dato al cerrarse.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19l14-14"/><path d="M9 5h10v10"/></svg><b>El lanzador</b><span>El objeto que abre la segunda actividad y sabe qué hacer con su respuesta.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg><b>El contrato</b><span>Qué tipo de petición se hace: aquí, abrir una actividad y esperar su resultado.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg><b>El callback</b><span>El código que se ejecuta cuando llega la respuesta.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg><b>setResult()</b><span>Dejar preparado lo que se devuelve: un código y una intención con los datos.</span></div><div class="tile "><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M9 9l6 6M15 9l-6 6"/></svg><b>finish()</b><span>Cerrar la segunda actividad, que es cuando se entrega el resultado.</span></div></div>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>La ida y la vuelta</h3>
+      <p>Con <code>startActivity()</code> se abre otra pantalla y ahí acaba la relación: la primera no se entera de lo que pase en la segunda. Cuando la segunda tiene que <strong>devolver algo</strong> —un texto escrito, una opción elegida— hay que abrirla de otra manera, dejando dicho de antemano qué hacer con la respuesta.</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="MainActivity abre SecondActivity con secondLauncher.launch(i). SecondActivity prepara el resultado con setResult y se cierra con finish. Android ejecuta entonces el callback del lanzador en MainActivity.">
+  <defs><marker id="rl1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="40" width="190" height="130" rx="14" fill="#E2F4EA"/>
+  <text x="95" y="76" text-anchor="middle" font-size="14" font-weight="700" fill="#0A5C33">MainActivity</text>
+  <text x="95" y="106" text-anchor="middle" font-size="12" fill="#0A5C33">abre la segunda</text>
+  <text x="95" y="126" text-anchor="middle" font-size="12" fill="#0A5C33">con su lanzador</text>
+  <rect x="530" y="40" width="190" height="130" rx="14" fill="#E2F4EA"/>
+  <text x="625" y="76" text-anchor="middle" font-size="14" font-weight="700" fill="#0A5C33">SecondActivity</text>
+  <text x="625" y="106" text-anchor="middle" font-size="12" fill="#0A5C33">prepara el resultado</text>
+  <text x="625" y="126" text-anchor="middle" font-size="12" fill="#0A5C33">y se cierra</text>
+  <g stroke="#56655D" stroke-width="2">
+    <line x1="196" y1="80" x2="524" y2="80" marker-end="url(#rl1)"/>
+    <line x1="524" y1="132" x2="196" y2="132" marker-end="url(#rl1)"/>
+  </g>
+  <text x="360" y="54" text-anchor="middle" font-size="11.5" font-weight="700" fill="#56655D">1. La ida</text>
+  <text x="360" y="72" text-anchor="middle" font-size="11" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">secondLauncher.launch(i)</text>
+  <text x="360" y="150" text-anchor="middle" font-size="11" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">setResult(RESULT_OK, returnIntent)</text>
+  <text x="360" y="166" text-anchor="middle" font-size="11" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">finish()</text>
+  <text x="360" y="184" text-anchor="middle" font-size="11.5" font-weight="700" fill="#56655D">2. La vuelta</text>
+  <text x="0" y="212" font-size="11.5" font-weight="700" fill="#56655D">3. La recogida</text>
+  <text x="0" y="232" font-size="11" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">onActivityResult(ActivityResult result)</text>
+  <text x="330" y="232" font-size="12" fill="#56655D">el callback del lanzador, al cerrarse la segunda</text>
+</svg>
+<figcaption>Tres momentos: la primera actividad pide, la segunda contesta al cerrarse y Android entrega la respuesta al callback del lanzador.</figcaption>
+</figure>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Pantalla</th><th>Clase</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td>Primera</td><td class="mono">MainActivity.java</td><td>Abre la segunda con un saludo y, cuando vuelve, muestra el texto que le han devuelto.</td></tr>
+          <tr><td>Segunda</td><td class="mono">SecondActivity.java</td><td>Muestra el saludo, deja escribir un texto y lo devuelve al pulsar <em>Finalizar</em>.</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 id="s2-2"><span class="sn">2.2</span>El lanzador</h3>
+      <p>Para abrir una actividad esperando respuesta se usa un <strong>lanzador</strong>, un objeto de tipo <code>ActivityResultLauncher&lt;Intent&gt;</code>. El <code>&lt;Intent&gt;</code> dice qué se le entrega al lanzarlo: una intención, como a <code>startActivity()</code>. El lanzador no se crea con <code>new</code>: se pide a la actividad con <code>registerForActivityResult()</code>, que recibe dos cosas.</p>
+      <figure>
+<svg viewBox="0 0 720 300" role="img" aria-label="El contrato, StartActivityForResult, dice qué se pide. El callback, un ActivityResultCallback, dice qué hacer cuando llegue el resultado. Los dos se pasan a registerForActivityResult, que devuelve el lanzador secondLauncher, de tipo ActivityResultLauncher de Intent. El lanzador se usa con launch(i).">
+  <defs><marker id="rl2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="0" width="340" height="86" rx="14" fill="#E2F4EA"/>
+  <text x="20" y="26" font-size="13" font-weight="700" fill="#0A5C33">1. El contrato</text>
+  <text x="20" y="48" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">StartActivityForResult()</text>
+  <text x="20" y="70" font-size="11.5" fill="#0A5C33">qué se pide: abrir una actividad con un Intent</text>
+  <rect x="380" y="0" width="340" height="86" rx="14" fill="#E2F4EA"/>
+  <text x="400" y="26" font-size="13" font-weight="700" fill="#0A5C33">2. El callback</text>
+  <text x="400" y="48" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">ActivityResultCallback&lt;ActivityResult&gt;</text>
+  <text x="400" y="70" font-size="11.5" fill="#0A5C33">qué hacer cuando llegue el resultado</text>
+  <rect x="160" y="130" width="400" height="50" rx="12" fill="#F0F3F1"/>
+  <text x="360" y="160" text-anchor="middle" font-size="12.5" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">registerForActivityResult(contrato, callback)</text>
+  <rect x="160" y="224" width="400" height="70" rx="14" fill="#0E8A4B"/>
+  <text x="360" y="252" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">secondLauncher</text>
+  <text x="360" y="274" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">ActivityResultLauncher&lt;Intent&gt;</text>
+  <g stroke="#56655D" stroke-width="2">
+    <line x1="170" y1="90" x2="290" y2="126" marker-end="url(#rl2)"/>
+    <line x1="550" y1="90" x2="430" y2="126" marker-end="url(#rl2)"/>
+    <line x1="360" y1="182" x2="360" y2="220" marker-end="url(#rl2)"/>
+  </g>
+  <text x="372" y="206" font-size="11.5" fill="#56655D">devuelve el lanzador</text>
+  <text x="580" y="252" font-size="12" fill="#56655D">se usa con</text>
+  <text x="580" y="272" font-size="12" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">launch(i)</text>
+</svg>
+<figcaption>Al registrar el lanzador se dice qué se pide y qué se hará con la respuesta. Después solo queda lanzarlo.</figcaption>
+</figure>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Parámetro</th><th>Qué es</th><th>En esta rama</th></tr></thead>
+        <tbody>
+          <tr><td>El contrato</td><td>Qué tipo de petición se hace: qué se le da al lanzador y qué se recibe de vuelta.</td><td><code>new ActivityResultContracts.StartActivityForResult()</code>: se le da un <code>Intent</code> y devuelve un <code>ActivityResult</code>.</td></tr>
+          <tr><td>El callback</td><td>El código que se ejecutará cuando llegue la respuesta.</td><td>Una clase anónima <code>ActivityResultCallback&lt;ActivityResult&gt;</code> con su método <code>onActivityResult()</code>.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="box clave"><span class="box-label">Cada lanzador recibe solo su respuesta</span><p>Si una actividad abre varias pantallas esperando resultado, crea un lanzador para cada una, y cada respuesta llega directamente al callback de su lanzador. Por eso no hace falta ningún número para saber quién contesta.</p></div>
+      <div class="box conocer"><span class="box-label">Hay más contratos</span><p><code>StartActivityForResult</code> es uno de varios. Hay otros para pedir un permiso o elegir una imagen de la galería, y el lanzador se usa igual con todos: se registra con su contrato y su callback, y se lanza con <code>launch()</code>.</p></div>
+
+      <h3 id="s2-3"><span class="sn">2.3</span>Por qué es un atributo</h3>
+      <p>El lanzador tiene que estar registrado <strong>antes de que la actividad se muestre</strong>. Lo habitual, y lo que hace la rama, es crearlo como atributo de la clase, inicializado en la misma línea en la que se declara: así se registra en cuanto se crea la actividad, siempre y en el mismo orden.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">public class MainActivity extends AppCompatActivity {
+
+    private final ActivityResultLauncher&lt;Intent&gt; secondLauncher = registerForActivityResult(
+            contrato,
+            callback);
+
+    ...
+}</code></pre></div>
+      <div class="box consejo"><span class="box-label">Nunca dentro de onClick()</span><p>Cuando se pulsa el botón, la actividad ya está en pantalla y es tarde para registrar: la aplicación se cierra con una <code>IllegalStateException</code>. Se registra una vez, como atributo, y en el <code>onClick()</code> solo se lanza. Además, como atributo se puede usar desde cualquier método de la actividad, no solo desde <code>onCreate()</code>.</p></div>
+
+      <h3 id="s2-4"><span class="sn">2.4</span>El callback</h3>
+      <p>El callback se escribe como una <strong>clase anónima</strong>, igual que el <code>OnClickListener</code> de un botón: se crea un objeto de la interfaz <code>ActivityResultCallback&lt;ActivityResult&gt;</code> y se escribe su único método, <code>onActivityResult()</code>. Recibe un objeto <code>ActivityResult</code> con las dos cosas que trae la respuesta:</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Método</th><th>Qué pregunta responde</th><th>En esta rama</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">result.getResultCode()</td><td>¿Trae una respuesta válida?</td><td><code>RESULT_OK</code> o <code>RESULT_CANCELED</code>.</td></tr>
+          <tr><td class="mono">result.getData()</td><td>¿Qué trae?</td><td>La intención con el texto, o <code>null</code> si se canceló.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="box clave"><span class="box-label">El callback no se ejecuta al lanzar</span><p><code>launch()</code> abre la segunda actividad y termina enseguida; la primera se queda debajo, en la pila. El código del callback se ejecuta <strong>más tarde</strong>, cuando la segunda se cierra. Por eso no tiene sentido leer el resultado en la línea siguiente a <code>launch()</code>.</p></div>
+
+      <h3 id="s2-5"><span class="sn">2.5</span>Preparar el resultado</h3>
+      <p>La segunda actividad no llama a la primera ni vuelve a abrirla. Lo que hace es <strong>dejar preparada la respuesta</strong> con <code>setResult()</code> y cerrarse. Los datos viajan, como a la ida, dentro de una intención, pero esta vez una intención vacía: no lleva destino, solo extras.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">Intent returnIntent = new Intent();          // sin destino: solo transporta datos
+returnIntent.putExtra(RESULT_ID, msg);
+setResult(Activity.RESULT_OK, returnIntent);
+finish();</code></pre></div>
+      <div class="box conocer"><span class="box-label">setResult() no envía nada todavía</span><p>Solo guarda la respuesta. La entrega se produce cuando la actividad <strong>termina</strong>, y por eso detrás va siempre <code>finish()</code>. Si se llama a <code>setResult()</code> y la actividad sigue abierta, la primera no recibe nada hasta que se cierre.</p></div>
+
+      <h3 id="s2-6"><span class="sn">2.6</span>El código de resultado</h3>
+      <p>El primer parámetro de <code>setResult()</code> es el <strong>código de resultado</strong> (<em>result code</em>): dice si la respuesta es buena. Son dos constantes de la clase <code>Activity</code>, y es lo que devuelve <code>result.getResultCode()</code> en el callback.</p>
+      <figure>
+<svg viewBox="0 0 720 210" role="img" aria-label="Si en SecondActivity se pulsa Finalizar con un texto escrito, al callback le llega RESULT_OK y una intención con el texto. Si se vuelve con el botón Atrás, llega RESULT_CANCELED y getData() vale null.">
+  <defs><marker id="rl3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="70" width="170" height="70" rx="14" fill="#E2F4EA"/>
+  <text x="85" y="101" text-anchor="middle" font-size="14" font-weight="700" fill="#0A5C33">SecondActivity</text>
+  <text x="85" y="122" text-anchor="middle" font-size="12" fill="#0A5C33">se cierra</text>
+  <rect x="330" y="10" width="390" height="76" rx="14" fill="#0E8A4B"/>
+  <text x="350" y="42" font-size="13" font-weight="700" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">RESULT_OK</text>
+  <text x="350" y="66" font-size="12" fill="#fff">getData() trae el texto: MainActivity lo muestra</text>
+  <rect x="330" y="124" width="390" height="76" rx="14" fill="#C9D3CD"/>
+  <text x="350" y="156" font-size="13" font-weight="700" fill="#3B463F" font-family="'JetBrains Mono', Consolas, monospace">RESULT_CANCELED</text>
+  <text x="350" y="180" font-size="12" fill="#3B463F">getData() vale null: MainActivity no cambia nada</text>
+  <g stroke="#56655D" stroke-width="2">
+    <line x1="176" y1="92" x2="324" y2="52" marker-end="url(#rl3)"/>
+    <line x1="176" y1="118" x2="324" y2="158" marker-end="url(#rl3)"/>
+  </g>
+  <text x="180" y="44" font-size="11.5" fill="#56655D">Finalizar, con texto</text>
+  <text x="180" y="176" font-size="11.5" fill="#56655D">botón Atrás</text>
+</svg>
+<figcaption>Las dos formas de volver. Si nadie llama a <code>setResult()</code>, Android contesta por su cuenta con <code>RESULT_CANCELED</code>.</figcaption>
+</figure>
+      <div class="box saber"><span class="box-label">Si ves startActivityForResult()</span><p>En código antiguo verás la forma clásica: la actividad se abre con <code>startActivityForResult(intent, código)</code> y todas las respuestas llegan a un único método <code>onActivityResult()</code> de la actividad, donde un número, el código de petición, dice quién contesta. Android Studio muestra esos métodos tachados porque están obsoletos. La segunda actividad se escribe igual en las dos formas: <code>setResult()</code> y <code>finish()</code> no cambian.</p></div>
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 20. Los once primeros están en <code>MainActivity</code>, la pantalla que pide el resultado; del 12 al 20, en <code>SecondActivity</code>, la que lo devuelve. Del 2 al 6 todo forma parte de una sola instrucción, la que crea el lanzador.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1</span>Los objetos</h3>
+      <p>Las dos vistas de la primera pantalla: el texto donde aparecerá la respuesta y el botón.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">TextView txtVwMsg;
+Button btnMain;</code></pre></div>
+      <h3 id="s3-2"><span class="sn">TODO 2</span>El lanzador</h3>
+      <p>Un atributo más, pero inicializado en la propia declaración con <code>registerForActivityResult()</code>. Es <code>final</code> porque no se vuelve a asignar nunca. Fíjate en el paréntesis que se abre al final: los dos parámetros ocupan los TODO 3 y 4.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private final ActivityResultLauncher&lt;Intent&gt; secondLauncher = registerForActivityResult(</code></pre></div>
+      <h3 id="s3-3"><span class="sn">TODO 3</span>El contrato</h3>
+      <p>Primer parámetro: la petición consiste en abrir una actividad con una intención y recibir su resultado.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">        new ActivityResultContracts.StartActivityForResult(),</code></pre></div>
+      <h3 id="s3-4"><span class="sn">TODO 4</span>El callback</h3>
+      <p>Segundo parámetro: una clase anónima con el método que recibirá la respuesta. Al final se cierran las llaves de la clase y el paréntesis de <code>registerForActivityResult(</code>, con su punto y coma.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">        new ActivityResultCallback&lt;ActivityResult&gt;() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                ...
+            }
+        });</code></pre></div>
+      <h3 id="s3-5"><span class="sn">TODO 5-6</span>Comprobar y usar la respuesta</h3>
+      <p>Dentro de <code>onActivityResult()</code>: si la respuesta es válida y trae intención, se saca el texto y se muestra.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">if (result.getResultCode() == RESULT_OK &amp;&amp; result.getData() != null) {
+    String msg = result.getData().getStringExtra(RESULT_ID);
+    txtVwMsg.setText(msg);
+}</code></pre></div>
+      <div class="box clave"><span class="box-label">Por qué se comprueban las dos cosas</span><p>Si se vuelve con el botón Atrás, <code>getData()</code> devuelve <code>null</code>, y <code>getData().getStringExtra()</code> cerraría la aplicación con un <code>NullPointerException</code>. Comprobar <code>RESULT_OK</code> y que haya intención es lo que lo evita.</p></div>
+      <h3 id="s3-6"><span class="sn">TODO 7-10</span>La pantalla, el botón y la ida</h3>
+      <p>Ya en <code>onCreate()</code>: se carga el layout, se buscan las vistas y el botón recibe un <code>OnClickListener</code>. Dentro de su <code>onClick()</code> se prepara la intención de ida, con un saludo como extra para que la segunda pantalla tenga algo que mostrar.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">setContentView(R.layout.activity_main);
+
+txtVwMsg = (TextView) findViewById(R.id.txtVw_main);
+btnMain = (Button) findViewById(R.id.btn_main);
+
+btnMain.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent i = new Intent(MainActivity.this, SecondActivity.class);
+        i.putExtra(INFO_ID, &quot;Hola desde MainActivity&quot;);
+        ...
+    }
+});</code></pre></div>
+      <h3 id="s3-7"><span class="sn">TODO 11</span>Lanzar</h3>
+      <p>La intención no se entrega a <code>startActivity()</code>, sino al lanzador. La respuesta llegará al callback del TODO 4 cuando la segunda actividad se cierre.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">secondLauncher.launch(i);</code></pre></div>
+      <h3 id="s3-8"><span class="sn">TODO 12</span>Los nombres de los datos</h3>
+      <p>Dos constantes en <code>SecondActivity</code>: el nombre del dato que llega y el del que se devuelve. <code>MainActivity</code> las usa con un <em>import estático</em>, así que las dos clases comparten exactamente los mismos nombres.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java y, arriba del todo, MainActivity.java</div>
+<pre><code class="lang-java">public static final String INFO_ID = &quot;INFO&quot;;
+public static final String RESULT_ID = &quot;result&quot;;
+
+import static com.example.pmdm.SecondActivity.INFO_ID;
+import static com.example.pmdm.SecondActivity.RESULT_ID;</code></pre></div>
+      <h3 id="s3-9"><span class="sn">TODO 13-15</span>La segunda pantalla y el saludo recibido</h3>
+      <p>Sus tres vistas, y la lectura del extra que venía en la intención de ida.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">txtVwSec    = (TextView) findViewById(R.id.txtVw_scnd);
+btnSec      = (Button) findViewById(R.id.btn_fin_scnd);
+editText    = (EditText) findViewById(R.id.edTxt_scnd);
+
+Intent i = getIntent();
+
+String msg = i.getStringExtra(INFO_ID);
+txtVwSec.setText(msg);</code></pre></div>
+      <h3 id="s3-10"><span class="sn">TODO 16</span>Leer lo que se ha escrito</h3>
+      <p>Al pulsar <em>Finalizar</em> se lee el campo. <code>getText()</code> devuelve un <code>Editable</code>, así que se convierte con <code>toString()</code>. Si está vacío, no se hace nada: la pantalla sigue abierta.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">String msg = editText.getText().toString();
+if (!msg.isEmpty()) {
+    ...
+}</code></pre></div>
+      <h3 id="s3-11"><span class="sn">TODO 17-19</span>La intención de vuelta y setResult()</h3>
+      <p>Una intención vacía, el texto dentro como extra, y las dos cosas entregadas a <code>setResult()</code> junto con el código de resultado.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">Intent returnIntent = new Intent();
+
+returnIntent.putExtra(RESULT_ID, msg);
+
+setResult(Activity.RESULT_OK, returnIntent);</code></pre></div>
+      <h3 id="s3-12"><span class="sn">TODO 20</span>Cerrar para entregar</h3>
+      <p><code>finish()</code> quita esta actividad de la pila. En ese momento Android ejecuta el callback del lanzador en la primera, con lo que se dejó preparado.</p>
+      <div class="code"><div class="code-bar">SecondActivity.java</div>
+<pre><code class="lang-java">finish();</code></pre></div>
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>Los layouts</h2></div>
+
+      <p>El de la primera pantalla tiene el texto donde aparecerá la respuesta y el botón que abre la segunda:</p>
+      <div class="code"><div class="code-bar">res/layout/activity_main.xml</div>
+<pre><code class="lang-xml">&lt;TextView
+    android:id=&quot;@+id/txtVw_main&quot;
+    android:text=&quot;Esperando mensaje de SecondActivity&quot;
+    android:textSize=&quot;20sp&quot;
+    ... /&gt;
+
+&lt;Button
+    android:id=&quot;@+id/btn_main&quot;
+    android:text=&quot;Ir a Second Activity&quot;
+    ... /&gt;</code></pre></div>
+      <p>El de la segunda, el texto que llega, el campo donde se escribe la respuesta y el botón que la devuelve:</p>
+      <div class="code"><div class="code-bar">res/layout/activity_second.xml</div>
+<pre><code class="lang-xml">&lt;TextView
+    android:id=&quot;@+id/txtVw_scnd&quot;
+    android:text=&quot;Información desde main activity &quot;
+    ... /&gt;
+
+&lt;EditText
+    android:id=&quot;@+id/edTxt_scnd&quot;
+    android:hint=&quot;Texto para main activity&quot;
+    android:inputType=&quot;textPersonName&quot;
+    android:minHeight=&quot;48dp&quot;
+    ... /&gt;
+
+&lt;Button
+    android:id=&quot;@+id/btn_fin_scnd&quot;
+    android:text=&quot;Finalizar&quot;
+    ... /&gt;</code></pre></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Atributo</th><th>Qué hace</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">android:hint</td><td>El texto gris que se ve cuando el campo está vacío. No es su contenido: <code>getText()</code> devuelve una cadena vacía, no el <em>hint</em>.</td></tr>
+          <tr><td class="mono">android:minHeight</td><td>Altura mínima del campo. 48dp es el tamaño mínimo recomendado para algo que se toca con el dedo.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="box conocer"><span class="box-label">Los textos de los TextView se reemplazan</span><p>«Esperando mensaje de SecondActivity» se ve hasta que llega una respuesta válida. «Información desde main activity» solo se ve en el editor de diseño: al ejecutarse, <code>setText()</code> lo sustituye por el saludo recibido.</p></div>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+
+      <ol class="steps">
+        <li>Ejecuta la aplicación (<strong>Run</strong>). Verás «Esperando mensaje de SecondActivity» y el botón.</li>
+        <li>Pulsa el botón: se abre la segunda pantalla con «Hola desde MainActivity» arriba.</li>
+        <li>Escribe algo y pulsa <strong>Finalizar</strong>: vuelves a la primera, y el texto de arriba es ahora lo que has escrito.</li>
+        <li>Abre otra vez la segunda y vuelve con el botón <strong>Atrás</strong> del móvil, sin pulsar <em>Finalizar</em>: el texto de la primera <em>no cambia</em>. Ha llegado <code>RESULT_CANCELED</code>.</li>
+        <li>Abre la segunda, deja el campo <strong>vacío</strong> y pulsa <em>Finalizar</em>: no ocurre nada, porque el <code>if</code> no deja devolver un texto vacío.</li>
+        <li>Pon un punto de interrupción en la línea de <code>secondLauncher.launch(i)</code> y otro en la primera línea del callback, y ejecuta en modo depuración: comprueba que el segundo no se detiene justo después del primero, sino al cerrarse la segunda pantalla, y qué valen <code>result.getResultCode()</code> y <code>result.getData()</code> al volver de las dos maneras.</li>
+      </ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+        <tbody>
+          <tr><td>La aplicación se cierra al pulsar el botón, con <code>IllegalStateException</code></td><td>El lanzador se ha registrado dentro del <code>onClick()</code>, cuando la actividad ya estaba en pantalla. Se registra como atributo (apartado 2.3).</td></tr>
+          <tr><td>La aplicación se cierra al volver con el botón Atrás, con <code>NullPointerException</code></td><td>Se ha leído <code>result.getData()</code> sin comprobar antes el código de resultado y que no sea <code>null</code> (TODO 5-6).</td></tr>
+          <tr><td>Se vuelve a la primera pantalla y el texto no cambia nunca</td><td>La segunda actividad se abrió con <code>startActivity(i)</code> en lugar de <code>secondLauncher.launch(i)</code>: el callback no llega a ejecutarse.</td></tr>
+          <tr><td>Se pulsa <em>Finalizar</em> y la segunda pantalla no se cierra</td><td>Falta <code>finish()</code> después de <code>setResult()</code>, o el campo está vacío.</td></tr>
+          <tr><td>Llega <code>RESULT_OK</code> pero el texto aparece vacío</td><td>El nombre del extra no coincide al guardarlo y al leerlo. Con la constante <code>RESULT_ID</code> compartida no puede pasar; sí ocurre si se escribe el nombre a mano en cada sitio.</td></tr>
+          <tr><td>Llega siempre <code>RESULT_CANCELED</code></td><td><code>setResult()</code> se llama después de <code>finish()</code>, o no se llama.</td></tr>
+          <tr><td>La primera pantalla se abre de nuevo, encima, en lugar de volver</td><td>La segunda ha usado <code>startActivity()</code> hacia <code>MainActivity</code> para «volver». Se vuelve cerrando, con <code>finish()</code>.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+
+      <p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_2_4_1_registerForActivity</code>.</p>
+      <ol class="steps">
+        <li>Pasa a <code>strings.xml</code> los textos de los dos layouts y el saludo que envía <code>MainActivity</code>.</li>
+        <li>Añade a la segunda pantalla un botón «Cancelar» que llame a <code>setResult(Activity.RESULT_CANCELED)</code> y a <code>finish()</code>.</li>
+        <li>En el callback, cuando llegue <code>RESULT_CANCELED</code>, muestra un <code>Toast</code> que diga «No se ha recibido ningún texto».</li>
+        <li>Si el campo está vacío al pulsar <em>Finalizar</em>, avisa con un <code>Toast</code> en lugar de no hacer nada.</li>
+        <li>Devuelve un segundo dato, el número de caracteres del texto, y recógelo con <code>getIntExtra()</code>.</li>
+        <li>Crea una tercera actividad que también devuelva un texto, con un segundo botón y <strong>su propio lanzador</strong>. Comprueba que cada respuesta llega a su callback sin necesidad de ningún número.</li>
+        <li>Escribe el callback como una lambda, como en el apartado 9.4 de los <a href="UD02_Interfaz_Usuario.html">apuntes de la UD2</a>. Comprueba que la aplicación hace exactamente lo mismo.</li>
+      </ol>
+    </section>
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+</body>
+</html>

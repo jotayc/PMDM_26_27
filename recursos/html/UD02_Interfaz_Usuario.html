@@ -191,6 +191,11 @@
     .hero svg{ max-width: 180px; }
   }
   :not(pre) > code{ overflow-wrap: anywhere; }
+  @media (max-width: 700px){
+    main figure{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    main figure svg{ min-width: 660px; }
+    main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+  }
   .pages{ list-style: none; margin: 0 0 18px; padding: 0 0 14px; border-bottom: 1px solid var(--rule); }
   .pages a{ display: block; padding: 6px 12px; border-radius: 999px; font-size: 13.5px; color: var(--muted); text-decoration: none; }
   .pages a:hover{ background: var(--bg); }
@@ -205,7 +210,7 @@
       <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
       <div class="brand-text"><b>UD2 · La interfaz de usuario</b><span>PMDM · 2º DAM</span></div>
     </div>
-    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html" aria-current="page">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_4_ActivityForResult.html">UD 2.4 · Resultado de una actividad</a></li></ul>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html" aria-current="page">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_4_1_registerForActivity.html">UD 2.4.1 · El lanzador de resultados</a></li></ul>
     <ul class="navlist">
       <li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>La interfaz de usuario</a></li>
       <li class="sub"><a href="#s1-1" data-nav data-target="s1-1">La pantalla de Android</a></li>
@@ -2397,8 +2402,8 @@ if (bundle != null) {
       <p>En la actividad principal, en lugar de abrir la segunda con <code>startActivity()</code>, se registra un
         <strong>lanzador</strong> con <code>registerForActivityResult()</code>. Recibe dos cosas: qué tipo de resultado
         se espera (<code>StartActivityForResult</code>: el de otra actividad) y el código que se ejecutará cuando llegue
-        el resultado. El lanzador se crea como atributo de la clase, porque debe registrarse antes de que la actividad
-        se muestre:</p>
+        el resultado. Tiene que registrarse antes de que la actividad se muestre, y lo habitual es
+        crearlo como atributo de la clase:</p>
       <div class="code">
         <div class="code-bar">MainActivity.java</div>
 <pre><code class="lang-java">public class MainActivity extends AppCompatActivity {
