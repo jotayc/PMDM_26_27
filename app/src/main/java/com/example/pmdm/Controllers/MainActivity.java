@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pmdm.Adapters.RecyclerAdapter;
+import com.example.pmdm.Adapters.PeliculaAdapter;
 
 import com.example.pmdm.Models.Pelicula;
 import com.example.pmdm.R;
@@ -29,10 +29,10 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    //Todo 1: Se declaran los tipos de datos RecyclerView, que engloba la lista, y RecyclerAdapter, que enlazará los datos
-    //Todo -> con cada elemento de la lista. En este caso RecyclerAdapter es una clase que debemos implementar nosotros.
+    //Todo 1: Se declaran los tipos de datos RecyclerView, que engloba la lista, y PeliculaAdapter, que enlazará los datos
+    //Todo -> con cada elemento de la lista. En este caso PeliculaAdapter es una clase que debemos implementar nosotros.
     RecyclerView recyclerView;
-    RecyclerAdapter recAdapter;
+    PeliculaAdapter recAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         //Todo -> a este último la lista de películas (TODO 10)
         recyclerView = (RecyclerView) findViewById(R.id.recView);
 
-        recAdapter = new RecyclerAdapter(getListMovie());
+        recAdapter = new PeliculaAdapter(getListMovie());
 
         //Todo 11: La clase LayoutManager se encarga de gestionar la disposición de los elementos
         //Todo -> de la lista dentro del RecyclerView. Existen diferentes opciones, como GridLayoutManager,

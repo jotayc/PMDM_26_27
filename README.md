@@ -34,11 +34,11 @@ apuntes.
 | TODO | Fichero | Qué explica |
 |---|---|---|
 | 1 | `Controllers/MainActivity.java` | Declarar el RecyclerView y el adaptador |
-| 2-3 | `Adapters/RecyclerAdapter.java` | La clase ViewHolder y su constructor |
-| 4 | `Adapters/RecyclerAdapter.java` | La clase del adaptador |
-| 5-6 | `Adapters/RecyclerAdapter.java` | `onCreateViewHolder()` y el inflado de la fila |
-| 7 | `Adapters/RecyclerAdapter.java` | `onBindViewHolder()`: rellenar una fila |
-| 8 | `Adapters/RecyclerAdapter.java` | `getItemCount()` |
+| 2-3 | `Adapters/PeliculaAdapter.java` | La clase ViewHolder y su constructor |
+| 4 | `Adapters/PeliculaAdapter.java` | La clase del adaptador |
+| 5-6 | `Adapters/PeliculaAdapter.java` | `onCreateViewHolder()` y el inflado de la fila |
+| 7 | `Adapters/PeliculaAdapter.java` | `onBindViewHolder()`: rellenar una fila |
+| 8 | `Adapters/PeliculaAdapter.java` | `getItemCount()` |
 | 9 | `Controllers/MainActivity.java` | Inicializar el RecyclerView y el adaptador |
 | 10 | `Controllers/MainActivity.java` | El método que fabrica los datos |
 | 11-12 | `Controllers/MainActivity.java` | El LayoutManager y unir las piezas |

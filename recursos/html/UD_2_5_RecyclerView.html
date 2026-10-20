@@ -95,6 +95,11 @@
   .stepper .dots i{ width: 10px; height: 10px; border-radius: 50%; background: #D9CCF7; }
   .stepper .dots i.on{ background: var(--sim); }
 
+  /* Código que no se hace */
+  .code.mal{ box-shadow: inset 0 0 0 2px #C5221F; }
+  .code.mal .code-bar{ background: #C5221F; color: #fff; }
+  .code.mal .code-bar::before{ background: #fff; }
+
   /* Comprobaciones */
   .quiz{ background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 18px; margin: 18px 0; }
   .quiz > b{ display: block; margin-bottom: 8px; color: var(--green-deep); font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
@@ -141,6 +146,7 @@
         <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones.</span></div>
         <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
         <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
+        <div><i style="background:#C5221F"></i><span>Rojo: lo que no se hace, solo para entender el problema.</span></div>
       </div>
     </div></header>
 
@@ -219,7 +225,7 @@
   <text x="75" y="92" text-anchor="middle" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">List&lt;Pelicula&gt;</text>
   <text x="75" y="114" text-anchor="middle" font-size="11.5" fill="#0A5C33">qué hay que mostrar</text>
   <rect x="218" y="20" width="200" height="136" rx="14" fill="#6D3FD8"/>
-  <text x="318" y="48" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">RecyclerAdapter</text>
+  <text x="318" y="48" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">PeliculaAdapter</text>
   <text x="318" y="68" text-anchor="middle" font-size="11.5" fill="#fff">el intermediario</text>
   <g font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">
     <text x="234" y="96">getItemCount()</text>
@@ -343,10 +349,26 @@
     <!-- ===================================================== 6 -->
     <section class="chapter" id="s6">
       <div class="chapter-head"><span class="chapter-num">6</span><h2>El ViewHolder: una fila con sus vistas a mano</h2></div>
-      <p>Para rellenar una fila hay que llegar a su imagen y a sus dos textos, y eso se hace con <code>findViewById()</code>. El problema es que buscar vistas cuesta tiempo, y en una lista que se desplaza habría que hacerlo cada vez que entra una fila.</p>
-      <p>El <strong>ViewHolder</strong> (literalmente, «el que sostiene las vistas») resuelve eso: es un objeto que acompaña a cada fila y que guarda, ya encontradas, las referencias a sus vistas. Se buscan <strong>una sola vez</strong>, al crear la fila. Después, por muchas veces que se recicle, solo hay que usar esas referencias.</p>
+      <p>Para rellenar una fila hay que llegar a su imagen y a sus dos textos. Antes de ver qué es un ViewHolder, mira qué pasaría sin él: así se entiende el problema que resuelve.</p>
+
+      <h3 id="s6-1"><span class="sn">6.1</span>Rellenar una fila sin ViewHolder</h3>
+      <p>Cada vez que una fila entra en la pantalla con otra película, habría que buscar de nuevo sus tres vistas con <code>findViewById()</code> y después ponerles los datos:</p>
+      <div class="code mal"><div class="code-bar">Así NO se hace · solo para ver el problema</div>
+<pre><code class="lang-java">// fila: la vista de una fila que va a mostrar otra película
+ImageView img    = (ImageView) fila.findViewById(R.id.img_item);
+TextView  titulo = (TextView)  fila.findViewById(R.id.txt_item_tittle);
+TextView  desc   = (TextView)  fila.findViewById(R.id.txt_item_desc);
+
+titulo.setText(pelicula.getTitulo());
+desc.setText(pelicula.getDescripcion());
+img.setImageResource(pelicula.getImagenId());</code></pre></div>
+      <p>Funcionaría, pero <code>findViewById()</code> no es gratis: recorre las vistas de la fila hasta dar con la que tiene ese <code>id</code>. Y la fila es <strong>siempre la misma</strong>, porque se recicla: su imagen y sus textos no cambian de sitio, solo lo que muestran. Si desplazas una lista de 1000 películas hasta el final, se harían unas <strong>3000 búsquedas</strong> para encontrar, una y otra vez, las mismas vistas de las mismas pocas filas.</p>
+
+      <h3 id="s6-2"><span class="sn">6.2</span>La idea: buscar una vez y guardarlo</h3>
+      <div class="box clave"><span class="box-label">Qué es un ViewHolder</span><p>Un objeto que acompaña a cada fila y guarda en sus atributos las vistas de esa fila, ya encontradas. Se buscan <strong>una sola vez</strong>, cuando se crea la fila. Después, cada vez que la fila se recicla, se usan esos atributos sin buscar nada.</p></div>
+      <div class="box conocer"><span class="box-label">Como un acceso directo</span><p>Un programa que usas a diario no lo buscas cada vez carpeta por carpeta: lo buscas una vez y te pones un acceso directo en el escritorio. El ViewHolder son los accesos directos de una fila a su imagen y a sus dos textos. El nombre lo dice: <em>view holder</em>, «el que sostiene las vistas».</p></div>
       <figure>
-<svg viewBox="0 0 720 230" role="img" aria-label="A la izquierda, la vista de una fila (itemView) con una imagen y dos textos. Tres flechas con findViewById llevan de cada vista a un atributo del objeto RecyclerHolder: imgPelicula, txtViewTitle y txtViewDesc.">
+<svg viewBox="0 0 720 230" role="img" aria-label="A la izquierda, la vista de una fila (itemView) con una imagen y dos textos. Tres flechas con findViewById llevan de cada vista a un atributo del objeto ViewHolder: imgPelicula, txtViewTitle y txtViewDesc.">
   <defs><marker id="rv3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
   <text x="0" y="16" font-size="12" font-weight="700" fill="#56655D">itemView: la fila ya creada</text>
   <rect x="0" y="28" width="250" height="180" rx="14" fill="#fff" stroke="#C9D3CD" stroke-width="1.5"/>
@@ -357,7 +379,7 @@
   <rect x="100" y="104" width="136" height="80" rx="8" fill="#F0F3F1"/>
   <text x="168" y="148" text-anchor="middle" font-size="11.5" fill="#17211C">descripción</text>
   <rect x="470" y="28" width="250" height="180" rx="14" fill="#6D3FD8"/>
-  <text x="595" y="54" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">RecyclerHolder</text>
+  <text x="595" y="54" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">ViewHolder</text>
   <g font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">
     <rect x="486" y="68" width="218" height="30" rx="7" fill="#fff" fill-opacity="0.18"/><text x="498" y="88">imgPelicula</text>
     <rect x="486" y="110" width="218" height="30" rx="7" fill="#fff" fill-opacity="0.18"/><text x="498" y="130">txtViewTitle</text>
@@ -372,13 +394,35 @@
 </svg>
 <figcaption>El ViewHolder busca las vistas de su fila al crearse y se las queda. Así, al reciclar la fila, no hay que volver a buscarlas.</figcaption>
 </figure>
-      <div class="code"><div class="code-bar">Adapters/RecyclerAdapter.java · TODO 2 y 3</div>
-<pre><code class="lang-java">public class RecyclerHolder extends RecyclerView.ViewHolder {
+
+      <div class="sim" id="simHolder">
+        <div class="sim-head"><b>Con y sin ViewHolder</b><span>cuenta las búsquedas</span></div>
+        <div class="sim-body">
+          <p>Una lista de 1000 películas en una pantalla donde caben 4 filas. Abre la pantalla, desplaza y compara cuántas veces se llama a <code>findViewById()</code> de cada forma.</p>
+          <div class="btns">
+            <button class="btn" type="button" id="hoOpen">Abrir la pantalla</button>
+            <button class="btn ghost" type="button" id="hoDown" disabled>Desplazar una fila</button>
+            <button class="btn ghost" type="button" id="hoTen" disabled>Desplazar diez</button>
+            <button class="btn ghost" type="button" id="hoEnd" disabled>Hasta el final</button>
+          </div>
+          <p style="margin:6px 0 0">Filas creadas: <b id="hoMade">0</b> · Veces rellenadas: <b id="hoBound">0</b></p>
+          <div class="bars">
+            <div class="bar-line"><span>Sin ViewHolder</span><div class="bar"><i id="hoSinBar" style="background:#C5221F;width:0"></i></div><b id="hoSin">0</b></div>
+            <div class="bar-line"><span>Con ViewHolder</span><div class="bar"><i id="hoConBar" style="background:#0E8A4B;width:0"></i></div><b id="hoCon">0</b></div>
+          </div>
+          <div class="why" id="hoWhy">Pulsa «Abrir la pantalla».</div>
+        </div>
+      </div>
+
+      <h3 id="s6-3"><span class="sn">6.3</span>El ViewHolder en el código</h3>
+      <p>En la rama es una clase que se llama <code>ViewHolder</code>, el nombre que se usa siempre, y está escrita <strong>dentro</strong> del adaptador (es una clase interna), porque solo el adaptador la usa. Hereda de <code>RecyclerView.ViewHolder</code>, tiene un atributo por cada vista de la fila, y su constructor las busca:</p>
+      <div class="code"><div class="code-bar">Adapters/PeliculaAdapter.java · TODO 2 y 3</div>
+<pre><code class="lang-java">public class ViewHolder extends RecyclerView.ViewHolder {
     ImageView imgPelicula;
     TextView  txtViewTitle;
     TextView  txtViewDesc;
 
-    public RecyclerHolder(@NonNull View itemView) {
+    public ViewHolder(@NonNull View itemView) {
         super(itemView);
         imgPelicula  = (ImageView) itemView.findViewById(R.id.img_item);
         txtViewTitle = (TextView)  itemView.findViewById(R.id.txt_item_tittle);
@@ -386,18 +430,32 @@
     }
 }</code></pre></div>
       <div class="box clave"><span class="box-label">itemView.findViewById, no findViewById a secas</span><p>En una actividad escribías <code>findViewById()</code> y buscaba en toda la pantalla. Aquí cada fila es un trozo de pantalla distinto, y hay que buscar <strong>dentro de esa fila</strong>: por eso se llama sobre <code>itemView</code>, la vista de la fila que recibe el constructor. Todas las filas tienen un <code>img_item</code>; lo que importa es el de esta.</p></div>
-      <p>La clase está escrita <strong>dentro</strong> del adaptador (es una clase interna), porque solo el adaptador la usa.</p>
+      <p>Desde fuera del adaptador, su nombre completo es <code>PeliculaAdapter.ViewHolder</code>. Lo verás así en la cabecera del adaptador, en el apartado siguiente.</p>
+      <div class="quiz" data-quiz>
+        <b>Comprueba</b>
+        <div class="q" data-ok="0"><p>¿Cuándo busca el ViewHolder las vistas de su fila con <code>findViewById()</code>?</p>
+          <label><input type="radio" name="q5"> Una sola vez, al crearse la fila</label>
+          <label><input type="radio" name="q5"> Cada vez que se rellena con otra película</label>
+          <label><input type="radio" name="q5"> Cada vez que la fila sale de la pantalla</label>
+          <div class="fb" data-fb="Las busca su constructor, al crearse la fila. Cuando la fila se recicla, se usan los atributos que ya tiene."></div></div>
+        <div class="q" data-ok="1"><p>Una fila se recicla para mostrar otra película. ¿Qué cambia en ella?</p>
+          <label><input type="radio" name="q6"> Se crean de nuevo su imagen y sus textos</label>
+          <label><input type="radio" name="q6"> Solo lo que muestran sus vistas</label>
+          <label><input type="radio" name="q6"> Recibe un ViewHolder nuevo y vacío</label>
+          <div class="fb" data-fb="Las vistas de la fila son siempre las mismas: por eso el ViewHolder puede guardarlas. onBindViewHolder() solo cambia lo que muestran."></div></div>
+        <button class="btn" type="button" data-check>Comprobar</button>
+      </div>
     </section>
 
     <!-- ===================================================== 7 -->
     <section class="chapter" id="s7">
       <div class="chapter-head"><span class="chapter-num">7</span><h2>El adaptador: tres preguntas que le hace la lista</h2></div>
       <p>El adaptador hereda de <code>RecyclerView.Adapter</code> y le dice entre los signos <code>&lt; &gt;</code> qué ViewHolder usa. Recibe la lista de películas en su constructor y la guarda.</p>
-      <div class="code"><div class="code-bar">Adapters/RecyclerAdapter.java · TODO 4</div>
-<pre><code class="lang-java">public class RecyclerAdapter extends RecyclerView.Adapter&lt;RecyclerAdapter.RecyclerHolder&gt; {
+      <div class="code"><div class="code-bar">Adapters/PeliculaAdapter.java · TODO 4</div>
+<pre><code class="lang-java">public class PeliculaAdapter extends RecyclerView.Adapter&lt;PeliculaAdapter.ViewHolder&gt; {
     List&lt;Pelicula&gt; listMovies;
 
-    public RecyclerAdapter(List&lt;Pelicula&gt; listMovies) {
+    public PeliculaAdapter(List&lt;Pelicula&gt; listMovies) {
         this.listMovies = listMovies;
     }
     ...
@@ -413,7 +471,7 @@
       </table></div>
 
       <h3 id="s7-1"><span class="sn">7.1</span>getItemCount(): cuántos hay</h3>
-      <div class="code"><div class="code-bar">Adapters/RecyclerAdapter.java · TODO 8</div>
+      <div class="code"><div class="code-bar">Adapters/PeliculaAdapter.java · TODO 8</div>
 <pre><code class="lang-java">@Override
 public int getItemCount() {
     return listMovies.size();
@@ -422,14 +480,14 @@ public int getItemCount() {
 
       <h3 id="s7-2"><span class="sn">7.2</span>onCreateViewHolder(): fabricar una fila</h3>
       <p>Convierte el molde XML en una fila de verdad y le pone su ViewHolder. A convertir un XML en objetos <code>View</code> se le llama <strong>inflar</strong>.</p>
-      <div class="code"><div class="code-bar">Adapters/RecyclerAdapter.java · TODO 5 y 6</div>
+      <div class="code"><div class="code-bar">Adapters/PeliculaAdapter.java · TODO 5 y 6</div>
 <pre><code class="lang-java">@NonNull
 @Override
-public RecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.custom_item_list, parent, false);
-    RecyclerHolder recyclerHolder = new RecyclerHolder(view);
-    return recyclerHolder;
+    ViewHolder viewHolder = new ViewHolder(view);
+    return viewHolder;
 }</code></pre></div>
 
       <div class="sim stepper" id="simInflate">
@@ -451,7 +509,7 @@ public RecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType
             <div class="box consejo"><span class="box-label">Si pones true</span><p>La aplicación se cierra con un error, porque la fila acabaría metida en la lista dos veces: una por <code>inflate()</code> y otra por el RecyclerView.</p></div>
           </div>
           <div class="stage">
-            <p><strong>4. Se envuelve en un ViewHolder.</strong> <code>new RecyclerHolder(view)</code> busca en esa fila sus tres vistas y se las guarda (apartado 6). El método devuelve el ViewHolder, y el RecyclerView se queda con él para siempre: a partir de ahora lo irá reciclando.</p>
+            <p><strong>4. Se envuelve en un ViewHolder.</strong> <code>new ViewHolder(view)</code> busca en esa fila sus tres vistas y se las guarda (apartado 6). El método devuelve el ViewHolder, y el RecyclerView se queda con él para siempre: a partir de ahora lo irá reciclando.</p>
           </div>
           <div class="btns"><button class="btn ghost" type="button" id="infPrev">Anterior</button><button class="btn" type="button" id="infNext">Siguiente</button></div>
         </div>
@@ -459,9 +517,9 @@ public RecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType
 
       <h3 id="s7-3"><span class="sn">7.3</span>onBindViewHolder(): rellenar una fila</h3>
       <p>Recibe una fila (su ViewHolder) y una posición, y pone en la fila los datos de la película que está en esa posición de la lista. Como el ViewHolder ya tiene las vistas a mano, rellenar es inmediato:</p>
-      <div class="code"><div class="code-bar">Adapters/RecyclerAdapter.java · TODO 7</div>
+      <div class="code"><div class="code-bar">Adapters/PeliculaAdapter.java · TODO 7</div>
 <pre><code class="lang-java">@Override
-public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
+public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     Pelicula pelicula = listMovies.get(position);
     holder.txtViewDesc.setText(pelicula.getDescripcion());
     holder.txtViewTitle.setText(pelicula.getTitulo());
@@ -536,11 +594,11 @@ public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
       <p>Con el modelo, el molde, el ViewHolder y el adaptador hechos, la actividad solo tiene que juntar las piezas. Son cuatro líneas, pero cada una hace falta:</p>
       <div class="code"><div class="code-bar">Controllers/MainActivity.java · TODO 1, 9, 11 y 12</div>
 <pre><code class="lang-java">RecyclerView recyclerView;
-RecyclerAdapter recAdapter;
+PeliculaAdapter recAdapter;
 
 // dentro de onCreate(), después de setContentView()
 recyclerView = (RecyclerView) findViewById(R.id.recView);
-recAdapter = new RecyclerAdapter(getListMovie());
+recAdapter = new PeliculaAdapter(getListMovie());
 
 LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
@@ -586,7 +644,7 @@ recyclerView.setLayoutManager(layoutManager);</code></pre></div>
       <h3 id="s9-1"><span class="sn">9.1</span>Cada pieza en su paquete</h3>
       <p>En esta rama las clases están repartidas en tres paquetes. No es obligatorio, pero ordena el proyecto según lo que hace cada clase:</p>
       <figure>
-<svg viewBox="0 0 720 170" role="img" aria-label="Tres carpetas: Models con Pelicula.java, que son los datos; Adapters con RecyclerAdapter.java, que une datos y vista; y Controllers con MainActivity.java, que controla la pantalla. Los layouts XML, en res/layout, son la vista.">
+<svg viewBox="0 0 720 170" role="img" aria-label="Tres carpetas: Models con Pelicula.java, que son los datos; Adapters con PeliculaAdapter.java, que une datos y vista; y Controllers con MainActivity.java, que controla la pantalla. Los layouts XML, en res/layout, son la vista.">
   <g>
     <path d="M0 30 h60 l12 12 h96 v100 h-168 z" fill="#E2F4EA"/>
     <text x="84" y="70" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A5C33">Models</text>
@@ -596,7 +654,7 @@ recyclerView.setLayoutManager(layoutManager);</code></pre></div>
   <g>
     <path d="M184 30 h60 l12 12 h96 v100 h-168 z" fill="#EFE9FC"/>
     <text x="268" y="70" text-anchor="middle" font-size="13.5" font-weight="700" fill="#4B2A99">Adapters</text>
-    <text x="268" y="94" text-anchor="middle" font-size="11.5" fill="#4B2A99" font-family="'JetBrains Mono', Consolas, monospace">RecyclerAdapter.java</text>
+    <text x="268" y="94" text-anchor="middle" font-size="11.5" fill="#4B2A99" font-family="'JetBrains Mono', Consolas, monospace">PeliculaAdapter.java</text>
     <text x="268" y="120" text-anchor="middle" font-size="11.5" fill="#4B2A99">une datos y vista</text>
   </g>
   <g>
@@ -625,11 +683,11 @@ recyclerView.setLayoutManager(layoutManager);</code></pre></div>
         <thead><tr><th>TODO</th><th>Fichero</th><th>Qué explica</th><th>Aquí</th></tr></thead>
         <tbody>
           <tr><td>1</td><td class="mono">MainActivity.java</td><td>Declarar el RecyclerView y el adaptador</td><td>Apartado 9</td></tr>
-          <tr><td>2-3</td><td class="mono">RecyclerAdapter.java</td><td>La clase ViewHolder y su constructor</td><td>Apartado 6</td></tr>
-          <tr><td>4</td><td class="mono">RecyclerAdapter.java</td><td>La clase del adaptador y su constructor</td><td>Apartado 7</td></tr>
-          <tr><td>5-6</td><td class="mono">RecyclerAdapter.java</td><td><code>onCreateViewHolder()</code> y el inflado</td><td>Apartado 7.2</td></tr>
-          <tr><td>7</td><td class="mono">RecyclerAdapter.java</td><td><code>onBindViewHolder()</code></td><td>Apartado 7.3</td></tr>
-          <tr><td>8</td><td class="mono">RecyclerAdapter.java</td><td><code>getItemCount()</code></td><td>Apartado 7.1</td></tr>
+          <tr><td>2-3</td><td class="mono">PeliculaAdapter.java</td><td>La clase ViewHolder y su constructor</td><td>Apartado 6</td></tr>
+          <tr><td>4</td><td class="mono">PeliculaAdapter.java</td><td>La clase del adaptador y su constructor</td><td>Apartado 7</td></tr>
+          <tr><td>5-6</td><td class="mono">PeliculaAdapter.java</td><td><code>onCreateViewHolder()</code> y el inflado</td><td>Apartado 7.2</td></tr>
+          <tr><td>7</td><td class="mono">PeliculaAdapter.java</td><td><code>onBindViewHolder()</code></td><td>Apartado 7.3</td></tr>
+          <tr><td>8</td><td class="mono">PeliculaAdapter.java</td><td><code>getItemCount()</code></td><td>Apartado 7.1</td></tr>
           <tr><td>9</td><td class="mono">MainActivity.java</td><td>Inicializar el RecyclerView y el adaptador</td><td>Apartado 9</td></tr>
           <tr><td>10</td><td class="mono">MainActivity.java</td><td>El método que fabrica los datos</td><td>Apartado 4</td></tr>
           <tr><td>11</td><td class="mono">MainActivity.java</td><td>El LayoutManager</td><td>Apartado 9</td></tr>
@@ -725,8 +783,8 @@ recyclerView.setLayoutManager(layoutManager);</code></pre></div>
     var P = [
       ["Pelicula", "El modelo", "Una clase Java normal con los datos de un elemento: título, descripción y el número de su imagen. No sabe nada de pantallas.", "Models/Pelicula.java", "Una ficha del menú del restaurante."],
       ["custom_item_list.xml", "El molde de la fila", "El layout que dice cómo es una fila: imagen a la izquierda, título y descripción a la derecha. Se diseña una vez y de él salen todas las filas.", "res/layout/custom_item_list.xml", "La forma del plato."],
-      ["RecyclerHolder", "El ViewHolder", "Acompaña a cada fila y guarda, ya buscadas, las referencias a su imagen y sus dos textos. Así rellenar una fila es inmediato.", "Clase interna de RecyclerAdapter", "Un plato concreto, fregado y listo para reutilizar."],
-      ["RecyclerAdapter", "El adaptador", "Une los datos con las filas: dice cuántos elementos hay, fabrica filas cuando faltan y rellena cada fila con los datos de una posición.", "Adapters/RecyclerAdapter.java", "La cocina: sabe qué hay que servir y qué va en cada plato."],
+      ["ViewHolder", "Los accesos de una fila", "Acompaña a cada fila y guarda sus accesos directos a la imagen y a los dos textos, ya buscados. Así rellenar una fila es inmediato.", "Clase interna de PeliculaAdapter", "Un plato concreto, fregado y listo para reutilizar."],
+      ["PeliculaAdapter", "El adaptador", "Une los datos con las filas: dice cuántos elementos hay, fabrica filas cuando faltan y rellena cada fila con los datos de una posición.", "Adapters/PeliculaAdapter.java", "La cocina: sabe qué hay que servir y qué va en cada plato."],
       ["RecyclerView", "La lista", "La vista que se ve en pantalla. Pide filas al adaptador, las coloca con ayuda del LayoutManager y recicla las que salen.", "res/layout/activity_main.xml (recView)", "La mesa, donde solo caben unos cuantos platos."],
       ["LinearLayoutManager", "El LayoutManager", "Decide cómo se colocan las filas: una debajo de otra, una al lado de otra o en rejilla. Cambiarlo no obliga a tocar nada más.", "Se crea en MainActivity.java", "El camarero que decide cómo poner los platos."]
     ];
@@ -743,6 +801,41 @@ recyclerView.setLayoutManager(layoutManager);</code></pre></div>
       });
       box.appendChild(b);
     });
+  })();
+
+  /* ---------- 2b. Con y sin ViewHolder ---------- */
+  (function(){
+    var N = 1000, VIS = 4, BUSCA = 3;   // películas, filas que caben, vistas por fila
+    var off = 0, made = 0, bound = 0, sin = 0, con = 0, open = false;
+    function draw(){
+      var max = Math.max(sin, con, 1);
+      $("hoMade").textContent = made; $("hoBound").textContent = bound;
+      $("hoSin").textContent = sin.toLocaleString("es-ES"); $("hoCon").textContent = con.toLocaleString("es-ES");
+      $("hoSinBar").style.width = (sin / max * 100) + "%"; $("hoConBar").style.width = (con / max * 100) + "%";
+      var fin = off >= N - VIS;
+      $("hoDown").disabled = !open || fin; $("hoTen").disabled = !open || fin; $("hoEnd").disabled = !open || fin;
+    }
+    function bajar(k){
+      var paso = Math.min(k, N - VIS - off);
+      if(!open || paso <= 0) return;
+      off += paso; bound += paso; sin += paso * BUSCA;
+      $("hoWhy").innerHTML = (off === 1 ? "Ha entrado 1 película nueva" : "Han entrado " + off + " películas nuevas") + ", siempre en las mismas " + made + " filas recicladas. " +
+        "<b style='color:#C5221F'>Sin ViewHolder</b>, cada fila que entra vuelve a buscar sus " + BUSCA + " vistas. " +
+        "<b style='color:#0E8A4B'>Con ViewHolder</b> siguen siendo " + con + ": las filas recicladas usan los accesos que ya tenían." +
+        (off >= N - VIS ? " Has llegado al final de la lista." : "");
+      draw();
+    }
+    $("hoOpen").addEventListener("click", function(){
+      open = true; off = 0; made = VIS; bound = VIS; sin = VIS * BUSCA; con = VIS * BUSCA;
+      $("hoOpen").textContent = "Volver a empezar";
+      $("hoWhy").innerHTML = "Se han creado " + made + " filas y cada una ha buscado sus " + BUSCA + " vistas: " + sin + " búsquedas de las dos formas. Ahora desplaza.";
+      draw();
+    });
+    $("hoDown").addEventListener("click", function(){ bajar(1); });
+    $("hoTen").addEventListener("click", function(){ bajar(10); });
+    $("hoEnd").addEventListener("click", function(){ bajar(N); });
+    window.__ho = {state: function(){ return {off: off, made: made, bound: bound, sin: sin, con: con}; }};
+    draw();
   })();
 
   /* ---------- 3. Del molde a la fila ---------- */
