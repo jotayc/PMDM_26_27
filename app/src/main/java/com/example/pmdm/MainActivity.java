@@ -8,25 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ActionMode;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 /**
- * Actividad: Menus contextuales
+ * Actividad: Menús contextuales
  * @author JC
- * @version 0.1
+ * @version 0.2
  *
- * Explica el uso de :
+ * Explica el uso de:
  *
- * 1- Menu contextual flotante
+ * 1- Menú contextual flotante
  *
  */
 public class MainActivity extends AppCompatActivity {
@@ -45,22 +38,23 @@ public class MainActivity extends AppCompatActivity {
         btn_floating = (Button)   findViewById(R.id.btn_floating);
         btn_action = (Button)   findViewById(R.id.btn_action);
 
-        //Todo 1. Debemos registrar la vista donde queremos que aparezca el menu contextual
+        //Todo 1: Se registra la vista donde queremos que aparezca el menú contextual.
+        //Todo -> A partir de aquí, una pulsación larga sobre ella abre el menú
         registerForContextMenu(btn_floating);
     }
 
-    //Todo 2. Sobrecargamos el metodo onCreateContextMenu para crear la vista del
-    // menu a partir de nuestro xml.
+    //Todo 2: Se sobrescribe el método onCreateContextMenu, al que Android llama cuando hay que
+    //Todo -> crear el menú. Recibe el menú vacío y la vista que se ha pulsado
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
+        //Todo 3: Se crean las opciones a partir del XML y se le pone un título al menú
         getMenuInflater().inflate(R.menu.floating_menu,menu);
         menu.setHeaderTitle("Menu flotante");
     }
 
-    //Todo 3. Sobrecargamos el metodo onContextItemSelected para manejar los eventos
-    // que se produzcan al ser pulsados
+    //Todo 4: Se sobrescribe el método onContextItemSelected para responder a las opciones del menú
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
@@ -72,9 +66,11 @@ public class MainActivity extends AppCompatActivity {
             btn_floating.setBackgroundColor(Color.RED);
         }
 
+        //Todo 5: Devolver true indica que la opción ya está atendida
         return true;
     }
 
+    //Todo 6: Se llama cuando el menú se cierra, tanto si se ha elegido una opción como si no
     @Override
     public void onContextMenuClosed(@NonNull Menu menu) {
         myToast("Menu cerrado");

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.9 · Menú contextual flotante</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+<style>
+  /* ---------- Piezas propias de esta página ---------- */
+  :root{ --sim: #6D3FD8; --sim-soft: #EFE9FC; }
+  .legend{ display: grid; gap: 6px; margin: 18px 0 0; padding: 12px 16px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; font-size: 14px; }
+  .legend > div{ display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: start; }
+  .legend > div i{ margin-top: 4px; width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .legend code{ white-space: nowrap; }
+  .sim{ margin: 24px 0 28px; border-radius: var(--radius); background: var(--sim-soft); border: 1px solid #D9CCF7; overflow: hidden; }
+  .sim-head{ background: var(--sim); color: #fff; padding: 12px 18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .sim-head b{ font-family: var(--font-head); font-size: 17px; }
+  .sim-head span{ font-size: 13.5px; opacity: .9; }
+  .sim-body{ padding: 16px 18px 18px; }
+  .sim-body > p{ margin-top: 0; }
+  .sim-row{ display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+  .btns{ display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .btn{ font: 600 14px var(--font-body); border: 0; border-radius: 999px; padding: 9px 16px; background: var(--sim); color: #fff; cursor: pointer; }
+  .btn.ghost{ background: #fff; color: var(--sim); box-shadow: inset 0 0 0 1.5px var(--sim); }
+  .btn:disabled{ opacity: .4; cursor: default; }
+  .phone{ width: 248px; flex: none; background: #1D1B20; border-radius: 28px; padding: 12px 10px 16px; }
+  .phone-bar{ height: 18px; display: flex; justify-content: center; }
+  .phone-bar::before{ content: ""; width: 54px; height: 6px; border-radius: 3px; background: #3A3740; }
+  .screen{ position: relative; height: 330px; background: #fff; border-radius: 6px; overflow: hidden; transition: background .2s; touch-action: manipulation; }
+  .appbar{ height: 40px; background: #6200EE; color: #fff; font: 600 13px var(--font-body); display: flex; align-items: center; gap: 4px; padding: 0 4px 0 10px; }
+  .appbar .ttl{ flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appbar.modo{ background: #37343D; }
+  .appbar button{ border: 0; background: none; color: #fff; font: 600 12px var(--font-body); padding: 6px 5px; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
+  .appbar button:hover{ background: rgba(255,255,255,.16); }
+  .swatch{ width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(255,255,255,.75); display: inline-block; flex: none; }
+  .canvas{ position: absolute; inset: 40px 0 0; display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; align-content: center; padding: 10px; }
+  .droid{ font: 600 11.5px var(--font-body); text-transform: uppercase; letter-spacing: .03em; border: 0; border-radius: 6px; background: #6200EE; color: #fff; padding: 9px 9px; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .toast{ position: absolute; left: 12px; right: 12px; bottom: 26px; background: #3C3940; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 12px; border-radius: 16px; text-align: center; z-index: 5; pointer-events: none; }
+  .snack{ position: absolute; left: 8px; right: 8px; bottom: 8px; background: #323036; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 10px; border-radius: 5px; display: flex; gap: 8px; align-items: center; z-index: 4; }
+  .snack span{ flex: 1; }
+  .snack button{ border: 0; background: none; color: #03DAC5; font: 700 11.5px var(--font-body); text-transform: uppercase; cursor: pointer; padding: 4px; }
+  .scrimx{ position: absolute; inset: 0; background: rgba(0,0,0,.42); z-index: 6; display: grid; place-items: center; padding: 14px; }
+  .dialog{ background: #fff; border-radius: 6px; padding: 14px 14px 8px; width: 100%; box-shadow: 0 6px 22px rgba(0,0,0,.35); }
+  .dialog b{ display: block; font: 600 14px var(--font-body); margin-bottom: 8px; }
+  .dialog p{ margin: 0 0 10px; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+  .dialog .acts{ display: flex; justify-content: flex-end; gap: 6px; }
+  .dialog .acts button{ border: 0; background: none; color: #6200EE; font: 700 12px var(--font-body); text-transform: uppercase; padding: 6px 8px; cursor: pointer; }
+  .pop{ position: absolute; background: #fff; border-radius: 4px; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 7; min-width: 118px; padding: 4px 0; }
+  .pop button{ display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: none; font: 12.5px var(--font-body); color: var(--ink); text-align: left; padding: 8px 12px; cursor: pointer; }
+  .pop button:hover{ background: var(--bg); }
+  .pop .swatch{ border-color: rgba(0,0,0,.25); }
+  .pop .head{ font: 600 11.5px var(--font-body); color: var(--muted); padding: 6px 12px 4px; }
+  .panel{ flex: 1; min-width: 260px; }
+  .panel > *:first-child{ margin-top: 0; }
+  .log{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; height: 182px; overflow-y: auto; font: 12px/1.55 var(--font-mono); margin: 10px 0 0; list-style: none; }
+  .log li{ margin: 0; padding: 1px 0; overflow-wrap: anywhere; }
+  .log li.nota{ color: #9DA0A8; font-style: italic; }
+  .log li.met{ color: #6AAB73; }
+  .log li.acc{ color: #F4A35C; }
+  .why{ background: #fff; border-radius: 12px; padding: 10px 14px; margin-top: 10px; font-size: 14.5px; min-height: 48px; }
+  .estado{ display: inline-block; font: 600 12px var(--font-mono); background: #fff; border-radius: 8px; padding: 5px 9px; margin: 2px 0; }
+  .opts{ display: grid; gap: 6px; margin: 8px 0; }
+  .opts > div{ display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #fff; border-radius: 10px; padding: 5px 10px; font-size: 14px; }
+  .opts select{ font: 12px var(--font-mono); border: 1px solid #D9CCF7; border-radius: 6px; padding: 3px; background: #fff; color: var(--ink); }
+  @media (max-width: 700px){
+    main figure{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    main figure svg{ min-width: 660px; }
+    main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+  }
+  @media (max-width: 600px){ .phone{ margin: 0 auto; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.9 · Menú contextual flotante</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_9_floating_menu.html" aria-current="page">UD 2.9 · Menú contextual flotante</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Un menú para un elemento</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">El recorrido</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">Qué parte del XML se usa</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 2-3</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 4-5</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 6</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>El menú y el layout</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_9_floating_menu</p>
+      <h1>Menú contextual flotante</h1>
+      <p class="lede">Mantienes pulsado un botón y aparece junto al dedo un menú con opciones para ese botón. Con esta rama verás cómo se le dice a Android qué vista tiene menú y qué métodos se llaman al abrirlo, al elegir y al cerrarlo.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+      <div class="legend" role="group" aria-label="Qué significa cada color">
+        <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener.</span></div>
+        <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones. En su registro, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
+        <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
+        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
+      </div>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg><b>Registrar la vista</b><span>Decirle a Android qué vista tiene menú contextual.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M13 9a2 2 0 0 1 4 0v3"/><path d="M17 11a2 2 0 0 1 4 0v4a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-3l-3-5a2 2 0 0 1 3-2l2 2"/></svg><b>Pulsación larga</b><span>El gesto que abre el menú, junto al dedo.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="14" height="14" rx="2"/><path d="M3 15V5a2 2 0 0 1 2-2h10"/></svg><b>Crear y responder</b><span>Los dos métodos que crean las opciones y atienden la elegida.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg><b>Saber cuándo se cierra</b><span>Un tercer método que se llama siempre que el menú desaparece.</span></div></div><p>Al mantener pulsado el botón <em>Menu flotante</em> aparece una lista de colores, y al elegir uno, el botón cambia a ese color.</p>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>Un menú para un elemento concreto</h3>
+      <p>Un <strong>menú contextual</strong> ofrece opciones sobre un elemento de la pantalla, no sobre la pantalla entera. Se abre al mantener pulsado ese elemento, y lo llamamos <strong>flotante</strong> porque aparece sobre la pantalla, junto al dedo, como una pequeña ventana.</p>
+      <p>Mientras no se mantiene pulsado, el menú no se ve ni ocupa sitio.</p>
+      <h3 id="s2-2"><span class="sn">2.2</span>El recorrido, paso a paso</h3>
+      <p>Tu código solo da una orden: registrar la vista. Todo lo demás lo inicia Android, que va llamando a los métodos que has escrito según lo que hace el usuario.</p>
+      <figure>
+<svg viewBox="0 0 720 262" role="img" aria-label="En onCreate se registra el botón. Al mantenerlo pulsado, Android llama a onCreateContextMenu, que crea las opciones. Al elegir una, Android llama a onContextItemSelected. Al cerrarse el menú, con opción o sin ella, llama a onContextMenuClosed.">
+  <defs><marker id="fm1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <g font-size="12" font-weight="700" fill="#56655D"><text x="4" y="18">Tu código, una vez</text><text x="186" y="18">El usuario mantiene pulsado</text><text x="372" y="18">El usuario elige</text><text x="558" y="18">El menú se cierra</text></g>
+  <rect x="0" y="34" width="162" height="120" rx="14" fill="#E2F4EA"/>
+  <text x="81" y="82" text-anchor="middle" font-size="11" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">registerFor</text>
+  <text x="81" y="100" text-anchor="middle" font-size="11" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">ContextMenu(boton)</text>
+  <rect x="186" y="34" width="162" height="120" rx="14" fill="#0E8A4B"/>
+  <text x="267" y="82" text-anchor="middle" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onCreate</text>
+  <text x="267" y="100" text-anchor="middle" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">ContextMenu()</text>
+  <rect x="372" y="34" width="162" height="120" rx="14" fill="#0E8A4B"/>
+  <text x="453" y="82" text-anchor="middle" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onContext</text>
+  <text x="453" y="100" text-anchor="middle" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">ItemSelected()</text>
+  <rect x="558" y="34" width="162" height="120" rx="14" fill="#0E8A4B"/>
+  <text x="639" y="82" text-anchor="middle" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onContext</text>
+  <text x="639" y="100" text-anchor="middle" font-size="11" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">MenuClosed()</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#fm1)">
+    <line x1="164" y1="94" x2="184" y2="94"/>
+    <line x1="350" y1="94" x2="370" y2="94"/>
+    <line x1="536" y1="94" x2="556" y2="94"/>
+  </g>
+  <path d="M267 158 V190 H639 V158" fill="none" stroke="#56655D" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#fm1)"/>
+  <text x="453" y="210" text-anchor="middle" font-size="12" fill="#56655D">si toca fuera, no se elige nada y el menú se cierra igual</text>
+  <text x="360" y="246" text-anchor="middle" font-size="12.5" fill="#17211C">Los tres métodos verdes los llama Android: tú solo los escribes.</text>
+</svg>
+<figcaption>El recorrido completo de un menú contextual. El registro se hace una vez; el resto se repite cada vez que se abre.</figcaption>
+</figure>
+      <div class="sim" id="simFlot">
+        <div class="sim-head"><b>Abre el menú contextual</b><span>mira qué métodos se llaman</span></div>
+        <div class="sim-body">
+          <p>Mantén pulsado <em>Menu flotante</em> en el móvil o usa el botón de la derecha. Prueba también a quitar el registro. El aspecto es aproximado.</p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="flScreen">
+              <div class="appbar"><span class="ttl">MainActivity</span></div>
+              <div class="canvas"><button class="droid" id="flBtn" type="button">Menu flotante</button><button class="droid" id="flOtro" type="button">Action Menu</button></div>
+            </div></div>
+            <div class="panel">
+              <div class="btns"><button class="btn" id="flLargo" type="button">Pulsación larga</button><button class="btn ghost" id="flReg" type="button" aria-pressed="true">Quitar el registro</button></div>
+              <span class="estado" id="flEstado">registerForContextMenu(btn_floating): sí</span>
+              <div class="why" id="flWhy">El botón está registrado: una pulsación larga abrirá el menú.</div>
+              <ul class="log" id="flLog" aria-label="Registro de llamadas"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap"><table>
+<thead><tr><th>Método</th><th>Cuándo lo llama Android</th><th>Para qué</th></tr></thead>
+<tbody>
+<tr><td class="mono">onCreateContextMenu()</td><td>Cada vez que se abre el menú</td><td>Crear las opciones a partir del XML.</td></tr>
+<tr><td class="mono">onContextItemSelected()</td><td>Al elegir una opción</td><td>Hacer lo que corresponda.</td></tr>
+<tr><td class="mono">onContextMenuClosed()</td><td>Al cerrarse, se haya elegido o no</td><td>Reaccionar al cierre. Es opcional.</td></tr>
+</tbody>
+</table></div>
+      <div class="box clave"><span class="box-label">Sin registro no hay menú, y tampoco hay error</span><p>Si olvidas <code>registerForContextMenu()</code>, todo compila y la aplicación funciona, pero la pulsación larga no hace nada. Es lo primero que hay que mirar cuando el menú no aparece.</p></div>
+      <h3 id="s2-3"><span class="sn">2.3</span>Qué parte del XML se usa</h3>
+      <p>El menú se define en <code>res/menu/floating_menu.xml</code> con elementos <code>&lt;item&gt;</code>. No todo lo que admite un <code>&lt;item&gt;</code> tiene efecto aquí:</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Atributo</th><th>En un menú flotante</th></tr></thead>
+<tbody>
+<tr><td class="mono">android:id</td><td>Sí: sirve para saber qué opción se ha pulsado.</td></tr>
+<tr><td class="mono">android:title</td><td>Sí: es el texto de la opción.</td></tr>
+<tr><td class="mono">android:icon</td><td>No se ve: las opciones aparecen solo con su texto.</td></tr>
+<tr><td class="mono">app:showAsAction</td><td>No tiene efecto: indica cómo colocar una opción en una barra, y aquí no hay barra.</td></tr>
+</tbody>
+</table></div>
+      <div class="box conocer"><span class="box-label">Por qué están en este XML</span><p>El fichero lleva iconos y <code>app:showAsAction</code>, aunque no cambien nada. Al ejecutar la aplicación comprobarás que solo se ven los textos. Es un buen ejemplo de que un atributo puede ser correcto y no tener ningún efecto en ese tipo de menú.</p></div>
+
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 6, y todos están en <code>MainActivity</code>.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1</span>Registrar la vista</h3>
+      <p>Una sola línea en <code>onCreate()</code>, con la vista que tendrá el menú.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">registerForContextMenu(btn_floating);</code></pre></div>
+      <h3 id="s3-2"><span class="sn">TODO 2-3</span>Crear el menú</h3>
+      <p>El método es de la actividad, no de la vista, y Android le pasa el menú vacío y la vista que se ha pulsado. Se llena con un <em>inflater</em>, que crea las opciones a partir del XML. El título del menú se pone desde el código.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    super.onCreateContextMenu(menu, v, menuInfo);
+
+    getMenuInflater().inflate(R.menu.floating_menu,menu);
+    menu.setHeaderTitle(&quot;Menu flotante&quot;);
+}</code></pre></div>
+      <h3 id="s3-3"><span class="sn">TODO 4-5</span>Responder a la opción</h3>
+      <p>Se compara el id de la opción con los del XML, con <code>if</code>, y se cambia el color del botón. Devolver <code>true</code> indica que la opción ya está atendida.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public boolean onContextItemSelected(@NonNull MenuItem item) {
+    int itemId = item.getItemId();
+    if (itemId == R.id.fl_blue) {
+        btn_floating.setBackgroundColor(Color.BLUE);
+    } else if (itemId == R.id.fl_green) {
+        btn_floating.setBackgroundColor(Color.GREEN);
+    } else if (itemId == R.id.fl_red) {
+        btn_floating.setBackgroundColor(Color.RED);
+    }
+
+    return true;
+}</code></pre></div>
+      <h3 id="s3-4"><span class="sn">TODO 6</span>Saber que se ha cerrado</h3>
+      <p>Este método es opcional. Aquí muestra un Toast, y así puedes comprobar que se llama tanto si eliges una opción como si tocas fuera.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public void onContextMenuClosed(@NonNull Menu menu) {
+    myToast(&quot;Menu cerrado&quot;);
+}</code></pre></div>
+
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>El menú y el layout</h2></div>
+<p>El fichero del menú, en la carpeta <code>res/menu/</code>:</p>
+      <div class="code"><div class="code-bar">res/menu/floating_menu.xml</div>
+<pre><code class="lang-xml">&lt;menu xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;item
+        android:id=&quot;@+id/fl_blue&quot;
+        android:icon=&quot;@drawable/color_blue&quot;
+        android:title=&quot;Azul&quot;
+        app:showAsAction=&quot;ifRoom|withText&quot; /&gt;
+    &lt;item
+        android:id=&quot;@+id/fl_green&quot;
+        android:icon=&quot;@drawable/color_green&quot;
+        android:title=&quot;Verde&quot;
+        app:showAsAction=&quot;never&quot; /&gt;
+    &lt;item
+        android:id=&quot;@+id/fl_red&quot;
+        android:icon=&quot;@drawable/color_red&quot;
+        android:title=&quot;Rojo&quot; /&gt;
+&lt;/menu&gt;</code></pre></div>
+      <p>El layout tiene dos botones, <code>btn_floating</code> y <code>btn_action</code>.</p>
+      <div class="box conocer"><span class="box-label">El botón Action Menu no hace nada en esta rama</span><p>Solo tiene un menú el botón que se ha registrado. El otro botón y el fichero <code>action_menu.xml</code> pertenecen al menú de acción, que es otro tipo de menú y se trabaja en la rama <code>UD_2_8_action_menu</code>.</p></div>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+<ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>) y haz un clic corto en <strong>Menu flotante</strong>. No ocurre nada.</li><li>Ahora mantenlo pulsado. Aparece el menú junto al dedo, con su título y tres colores, sin iconos.</li><li>Elige <strong>Verde</strong>. El botón cambia de color y aparece el Toast «Menu cerrado».</li><li>Abre el menú otra vez y toca fuera. No cambia el color, pero el Toast aparece igualmente.</li><li>Mantén pulsado <strong>Action Menu</strong>. No ocurre nada: esa vista no está registrada.</li><li>Comenta la línea de <code>registerForContextMenu()</code> y vuelve a ejecutar. No hay ningún error, pero el menú ya no se abre.</li></ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>La pulsación larga no hace nada</td><td>Falta <code>registerForContextMenu()</code>, o se ha registrado otra vista.</td></tr>
+<tr><td>El menú aparece vacío</td><td>Falta <code>inflate()</code> en <code>onCreateContextMenu()</code>.</td></tr>
+<tr><td>Las opciones no hacen nada</td><td>Se ha escrito <code>onOptionsItemSelected()</code>, que es el de la barra de app. El del menú contextual es <code>onContextItemSelected()</code>.</td></tr>
+<tr><td>Al usar <code>R.id...</code> en un <code>switch</code> no compila</td><td>Los id de los recursos no son constantes: se comparan con <code>if</code>.</td></tr>
+<tr><td>Los iconos del XML no se ven</td><td>Es lo esperado en este menú (apartado 2.3).</td></tr>
+<tr><td><code>@Override</code> marca error en el método</td><td>El nombre o los parámetros no coinciden con los del método original. Deja que lo genere Android Studio: <em>Code → Override Methods</em>.</td></tr>
+</tbody>
+</table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+<p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_2_9</code>.</p>
+      <ol class="steps">
+        <li>Pasa a <code>strings.xml</code> los títulos de las opciones y el título del menú.</li>
+        <li>Añade una cuarta opción que devuelva el botón a su color original.</li>
+        <li>Quita los atributos que no tienen efecto en este menú y comprueba que todo sigue igual.</li>
+        <li>Registra también <code>btn_action</code>. Observa que los dos botones abren el mismo menú, pero solo cambia de color uno.</li>
+        <li>Usa el parámetro <code>v</code> de <code>onCreateContextMenu()</code> para que cada botón tenga un título distinto (<code>v.getId()</code>).</li>
+        <li>Haz que la opción elegida cambie el color del botón que se pulsó, sea cual sea. Necesitarás guardar esa vista en un atributo.</li>
+      </ol>
+    </section>
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+<script>
+(function(){
+"use strict";
+
+function $(id){ return document.getElementById(id); }
+function registro(id){
+  var ul = $(id);
+  function add(texto, clase){ var li = document.createElement("li"); li.textContent = texto; if(clase) li.className = clase; ul.appendChild(li); ul.scrollTop = ul.scrollHeight; }
+  return { met: function(t){ add(t, "met"); }, acc: function(t){ add(t, "acc"); }, nota: function(t){ add(t, "nota"); }, limpiar: function(){ ul.innerHTML = ""; } };
+}
+function pulsacionLarga(boton, alLargo, alCorto){
+  var temporizador = null, disparado = false;
+  boton.addEventListener("pointerdown", function(){ disparado = false; temporizador = setTimeout(function(){ disparado = true; alLargo(); }, 500); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(function(evento){ boton.addEventListener(evento, function(){ clearTimeout(temporizador); }); });
+  boton.addEventListener("click", function(){ if(!disparado && alCorto) alCorto(); });
+  boton.addEventListener("contextmenu", function(ev){ ev.preventDefault(); });
+}
+
+
+var log = registro("flLog"), pantalla = $("flScreen"), boton = $("flBtn"), registrado = true, fondo = null, tmToast = null;
+var COLORES = {Azul: "#0000FF", Verde: "#00FF00", Rojo: "#FF0000"};
+function aviso(texto){
+  var viejo = pantalla.querySelector(".toast"); if(viejo) viejo.remove();
+  clearTimeout(tmToast);
+  var el = document.createElement("div"); el.className = "toast"; el.textContent = texto; pantalla.appendChild(el);
+  tmToast = setTimeout(function(){ el.remove(); }, 2000);
+}
+function cerrar(){
+  fondo.remove(); fondo = null;
+  log.met("onContextMenuClosed(menu)");
+  log.acc('myToast("Menu cerrado")');
+  aviso("Menu cerrado");
+}
+function abrir(){
+  if(fondo) return;
+  if(!registrado){
+    log.nota("Pulsación larga: el botón no está registrado, no ocurre nada.");
+    $("flWhy").innerHTML = "Sin <code>registerForContextMenu()</code> Android no sabe que esta vista tiene menú, y no da ningún error: simplemente, no pasa nada.";
+    return;
+  }
+  log.met("onCreateContextMenu(menu, btn_floating, menuInfo)");
+  log.acc("inflate(R.menu.floating_menu, menu)");
+  fondo = document.createElement("div");
+  fondo.style.cssText = "position:absolute;inset:0;z-index:6";
+  var html = '<div class="pop" style="left:60px;top:176px"><div class="head">Menu flotante</div>';
+  Object.keys(COLORES).forEach(function(nombre){ html += '<button type="button" data-c="' + nombre + '">' + nombre + '</button>'; });
+  fondo.innerHTML = html + '</div>';
+  pantalla.appendChild(fondo);
+  $("flWhy").innerHTML = "El menú sale junto al dedo. Elige una opción o toca fuera de él.";
+  fondo.addEventListener("click", function(ev){
+    var nombre = ev.target.getAttribute("data-c");
+    if(nombre){
+      log.met("onContextItemSelected(" + nombre + ")");
+      log.acc("btn_floating.setBackgroundColor(" + nombre + ")");
+      boton.style.background = COLORES[nombre];
+      boton.style.color = nombre === "Verde" ? "#17211C" : "#fff";
+      cerrar();
+      $("flWhy").innerHTML = "Primero se responde a la opción y después se cierra el menú: por eso se ve el Toast.";
+    } else if(ev.target === fondo){
+      log.nota("Toque fuera del menú: no se elige ninguna opción.");
+      cerrar();
+      $("flWhy").innerHTML = "<code>onContextItemSelected()</code> no se ha llamado, pero <code>onContextMenuClosed()</code> sí: se llama siempre que el menú se cierra.";
+    }
+  });
+}
+pulsacionLarga(boton, abrir, function(){
+  log.nota("Clic corto: el menú no se abre.");
+  $("flWhy").innerHTML = "Un clic corto no abre el menú contextual: hace falta mantener pulsado.";
+});
+$("flLargo").addEventListener("click", abrir);
+$("flReg").addEventListener("click", function(){
+  registrado = !registrado;
+  this.textContent = registrado ? "Quitar el registro" : "Volver a registrar";
+  this.setAttribute("aria-pressed", registrado ? "true" : "false");
+  $("flEstado").textContent = "registerForContextMenu(btn_floating): " + (registrado ? "sí" : "no");
+  $("flWhy").innerHTML = registrado ? "El botón está registrado: una pulsación larga abrirá el menú." : "Sin registro. Prueba ahora la pulsación larga.";
+});
+pulsacionLarga($("flOtro"), function(){
+  log.nota("Pulsación larga en Action Menu: esta vista no está registrada.");
+  $("flWhy").innerHTML = "El registro es por vista. Este botón no está registrado, así que no tiene menú.";
+});
+
+})();
+</script>
+</body>
+</html>
