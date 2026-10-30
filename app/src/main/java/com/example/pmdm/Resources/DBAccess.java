@@ -9,10 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+//Todo 1. Se hereda de SQLiteOpenHelper, la clase que crea la base de datos y la mantiene al día
 public class DBAccess extends SQLiteOpenHelper {
-
-    //Todo 1. Extendemos la clase con SQLiteOpenHelper para tener acceso a los métodos que gestiona
-    //todo-> la base de datos.
 
     //Database name
     private static final String DB_NAME = "db_dam";
@@ -20,7 +18,7 @@ public class DBAccess extends SQLiteOpenHelper {
     //Table name
     private static final String DB_TABLE_NAME = "db_ciudades";
 
-    //Database version must be >= 1
+    //Todo 2. La versión debe ser >= 1. Se sube cada vez que cambia la estructura de las tablas
     private static final int DB_VERSION = 3;
 
     //Columns
@@ -30,193 +28,143 @@ public class DBAccess extends SQLiteOpenHelper {
 
     private static final String SURFACE_COLUMN = "surface";
 
-    //Application Context
-    private Context mContext;
-
-
-
-
     /**
-     * Constructor de la base de datos, si no existe la base de datos la crea, sino se conecta.
-     *  En el caso de que se hiciese una actualización y se cambiase la versión,
-     *  el constructor llamaría al método onUpgrade para actualizar los cambios de la base de datos.
+     * Constructor de la base de datos. Crearlo no abre nada todavía: la base de datos se crea o se
+     * actualiza la primera vez que se pide acceso a ella.
      * @param context Contexto de la aplicación
      */
     public DBAccess(Context context) {
+        //Todo 3. Se le indica a la clase padre el nombre y la versión de la base de datos
         super(context, DB_NAME, null, DB_VERSION);
-
-        mContext = context;
-
     }
 
-    //Todo 2. Sobrecargamos onCreate, encargado de crear las tablas asociadas a la base de datos.
+    //Todo 4. Se sobrescribe onCreate, que solo se ejecuta si la base de datos no existe todavía.
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //Todo 2.1 Cada modificación que hagamos en la estructura de la tabla ya sea, añadir, modificar
-        //todo -> o eliminar columnas, esto debemos reflejarlo tanto en el método onCreate, para los
-        //todo -> que nuevos usuarios, ya se creen la BD en su última versión. Como en el onUpgrade,
-        //todo -> para que los usuarios que tengan la aplicación puedan actualizar su base de datos
-        //todo -> desde la última versión que tiene CADA USUARIO hasta la última versión de la BBDD que exista.
+        //Todo 5. Tiene que crear las tablas en su última versión, porque lo ejecutan los usuarios
+        //Todo -> nuevos. Los comentarios enseñan cómo era en las versiones anteriores
 
         // Version 1
-        //String CREATE_USER_TABLE = "CREATE TABLE " +DB_TABLE_NAME+ "("
-        //        +CITY_COLUMN+ " TEXT)";
+        //String CREATE_USER_TABLE = "CREATE TABLE " + DB_TABLE_NAME + "("
+        //        + CITY_COLUMN + " TEXT)";
 
-        //Version 2
-        /*String CREATE_USER_TABLE = "CREATE TABLE " +DB_TABLE_NAME+ "("
-                +CITY_COLUMN+ " TEXT,
-                " + POBLATION_COLUMN + " INTEGER")";*/
+        // Version 2
+        //String CREATE_USER_TABLE = "CREATE TABLE " + DB_TABLE_NAME + "("
+        //        + CITY_COLUMN + " TEXT,"
+        //        + POBLATION_COLUMN + " INTEGER)";
 
-        //Version 3
+        // Version 3
         String CREATE_USER_TABLE =  "CREATE TABLE " +DB_TABLE_NAME+ "("
                 +CITY_COLUMN+ " TEXT,"
                  + POBLATION_COLUMN + " INTEGER,"
                 + SURFACE_COLUMN + " REAL" + ")";
 
-        //Todo 2.1. Lanzamos la consulta con execSQL
-
-
+        //Todo 6. execSQL ejecuta una sentencia SQL que no devuelve resultados
         sqLiteDatabase.execSQL(CREATE_USER_TABLE);
 
-
-        // Los mensajes LOG sirven para que el programación, durante el desarrollo pueda recibir mensajes
-        // tecnicos sobre el funcionamiento del programa sin que el usuario las pueda ver.
-        // Estos mensajes aparecen en la pestaña Logcat de Android studio.
-        Log("Tablas creadas");
-
+        // Los mensajes de Log sirven para que el programador, durante el desarrollo, pueda recibir
+        // mensajes técnicos sobre el funcionamiento del programa sin que el usuario los vea.
+        // Aparecen en la pestaña Logcat de Android Studio.
+        Log.d("DB", "Tablas creadas");
     }
 
-    // Todo 3. Sobrecargamos onUpgrade, encargado de actualizar la base de datos y las tablas asociadas.
-
+    //Todo 7. Se sobrescribe onUpgrade, que se ejecuta si la versión instalada es menor que DB_VERSION
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        Log.d("DB", "onUpgrade desde la versión " + oldVersion);
 
-
-        Log("onUpadre");
-        Log("oldversion -> "+oldVersion);
-
-        //Todo 3.1. En el caso de que hagamos algun cambio en la base de datos es necesario controlar
-        //todo -> la versión de la BBDD que tiene el usuario e ir modificandola desde esta
-        //todo -> en adelante. Ejemplo:
-        //todo -> Usuario 1: versión de BD 1
+        //Todo 8. Cada usuario puede venir de una versión distinta. Por eso el switch empieza en la
+        //Todo -> que tiene y NO lleva break: sigue por los case siguientes hasta la última versión.
+        //Todo -> Quien tiene la versión 1 pasa por los dos case; quien tiene la 2, solo por el segundo
         switch(oldVersion){
             case 1:
                 sqLiteDatabase.execSQL("ALTER TABLE " + DB_TABLE_NAME  +" ADD COLUMN " + POBLATION_COLUMN +" INTEGER");
-                Log.i("DB", "BBDD Actualizada a la versión 2");
+                Log.i("DB", "BBDD actualizada a la versión 2");
             case 2:
                 sqLiteDatabase.execSQL("ALTER TABLE " + DB_TABLE_NAME  +" ADD COLUMN " + SURFACE_COLUMN +" REAL");
-                Log.i("DB", "BBDD Actualizada a la versión 3");
-            /*case 3:
-                sqLiteDatabase.execSQL("ALTER TABLE "+ DB_TABLE_NAME   +" ADD COLUMN gentilicio TEXT");
-                Log.i("DB", "BBDD Actualizada a la versión 3");*/
-
+                Log.i("DB", "BBDD actualizada a la versión 3");
         }
-
-
-
     }
-
 
     public void getVersionDB(){
-        Log(Integer.toString(this.getReadableDatabase().getVersion()));
+        Log.d("DB", "Versión de la base de datos: " + this.getReadableDatabase().getVersion());
     }
 
-    //Todo 4. Creamos un método para insertar un dato en la BD.
+    //Todo 9. Método para insertar una fila. Devuelve el número de fila, o -1 si ha fallado
     public long insert(String city, int poblation, float superficie){
 
-        //Todo 4.1. Pedimos acceso de escritura en la base de datos.
+        //Todo 10. Se pide acceso de escritura a la base de datos
         SQLiteDatabase db = this.getWritableDatabase();
         long result = -1;
 
-        // Contenedor clave,valor -> columna, valor de entrada registro
+        //Todo 11. ContentValues guarda los datos como pares columna-valor
         ContentValues values = new ContentValues();
 
         values.put(CITY_COLUMN, city);
         values.put(POBLATION_COLUMN, poblation);
         values.put(SURFACE_COLUMN, superficie);
 
-        //Todo 4.2. Insertamos a través del método insert, cuyos parametro son:
-        //todo -> nombre de la tabla
-        //todo -> nullColumnHack permite indicar si hay una columna cuyo valor pueda ser nulo.
-        //todo -> valores asociados a la inserción.
-
+        //Todo 12. Parámetros de insert: la tabla; una columna que pueda quedar a null si values
+        //Todo -> viniese vacío (aquí no hace falta); y los valores
         result = db.insert(DB_TABLE_NAME,null,values);
 
-        //Se cierra la conexión de la base de datos
+        //Todo 13. Al terminar se cierra la conexión
         db.close();
 
         return result;
-
     }
 
-    //Todo 5. Creamos un método para recuperar datos en la BD.
+    //Todo 14. Método para recuperar datos: aquí, la primera ciudad de la tabla
     public String getFirstCity(){
 
         String result = null;
 
-        //Todo 5.1. Pedimos acceso de lectura de la BD.
+        //Todo 15. Se pide acceso de lectura
         SQLiteDatabase db = this.getReadableDatabase();
 
-        //Todo 5.2. Realizamos la consulta a través del método 'query', cuyo significado de los
-        // todo-> parámetros tenemos en los apuntes. Este método devuelve un cursor que nos
-        // todo-> permite recorrer las tuplas del resultado.
+        //Todo 16. Las columnas que se quieren. Los cinco null de query son las partes opcionales
+        //Todo -> de la consulta: WHERE, sus argumentos, GROUP BY, HAVING y ORDER BY
         String[] cols = new String[]{ CITY_COLUMN };
 
-
-
-        //Un cursor es un tipo de dato que se mueve entre los registros devueltos por una consulta de una base de datos.
-        Cursor c = db.query(DB_TABLE_NAME,cols,null,null,null,null,null);
-        if(c.moveToFirst()) {
-            //Todo 5.4. Cogemos el valor referente a la posicion de la columna
-            String city = c.getString(0);
-            result = city;
+        //Todo 17. Un cursor es un objeto que se mueve por las filas que devuelve una consulta.
+        //Todo -> Empieza antes de la primera: moveToFirst la alcanza, o devuelve false si no hay filas
+        Cursor cursor = db.query(DB_TABLE_NAME,cols,null,null,null,null,null);
+        if(cursor.moveToFirst()) {
+            //Todo 18. Se lee la columna por su posición dentro de cols, empezando en 0
+            result = cursor.getString(0);
         }
 
-        //Todo 5.5. Cerramos el cursor
-        if(c != null) {
-            c.close();
-        }
-
-        //Todo 5.6. Cerramos la base de datos.
+        //Todo 19. Al terminar se cierran el cursor y la base de datos, en ese orden
+        cursor.close();
         db.close();
 
         return result;
-
     }
 
 
-    //Todo 6. Ejemplo de acceso a base de datos con argumentos
+    //Todo 20. Método para recuperar todas las filas. No se usa en la pantalla: es para practicar
     public ArrayList<String> getAllCities(){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<String> resultCities = new ArrayList<>();
 
         String[] cols = new String[]{ CITY_COLUMN };
 
-        //String selection = "city=? AND poblation>?"; // -> el caracter interrogación será sustituido por los valores del array 'args' en orden de aparición
-        //String[] args = new String[]{"jerez", "100"};
+        //Para filtrar, cada ? se sustituye por los valores del array, en orden de aparición:
+        //String selection = CITY_COLUMN + "=? AND " + POBLATION_COLUMN + ">?";
+        //String[] args = new String[]{"Jerez", "100"};
 
-        //Un cursor es un tipo de dato que se mueve entre los registros devueltos por una consulta de una base de datos.
-        Cursor c = db.query(DB_TABLE_NAME,cols,null,null,null,null,null);
+        Cursor cursor = db.query(DB_TABLE_NAME,cols,null,null,null,null,null);
 
-        //Todo 6.1. Movemos el iterador al primer elemento (si existe devuelve true sino false)
-        if(c.moveToFirst()){
-
+        //Todo 21. Se va al primer elemento y, mientras haya más, se avanza con moveToNext
+        if(cursor.moveToFirst()){
             do{
-                //Todo 6.2. Cogemos el valor referente a la posicion de la columna
-                String city = c.getString(0);
-
-                resultCities.add(city);
-            }while(c.moveToNext()); //Todo 6.3. Mientras exista siguientes registros el cursor va iterando sobre ellos
+                resultCities.add(cursor.getString(0));
+            }while(cursor.moveToNext());
         }
+
+        cursor.close();
+        db.close();
 
         return resultCities;
     }
-
-
-    public void Log(String msg){
-        Log.d("DB", msg);
-    }
-
-
-
 }

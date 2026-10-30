@@ -16,12 +16,12 @@ import com.example.pmdm.Resources.DBAccess;
  * Actividad SQLite En esta actividad se explica una versión simplificada de cómo funcionan las bases
  * de datos SQLite en Android.
  * @author JC
- * @version 0.2
+ * @version 0.3
  *
  *  CONSIDERACIONES PREVIAS:
  *   1. El diseño de las tablas no es correcto, puesto que faltaría una clave primaria en la tabla 'ciudades'
  *   2. El funcionamiento de este ejemplo no está completo (no se muestra toda la información de las tablas de la BBDD)
- *   3. Por simplificación en la explicación, este ejemplo, no sigue el patrón MVC (Habría que crearse la clase 'City' o 'Ciudad')
+ *   3. Por simplificación en la explicación, este ejemplo no sigue el patrón MVC (Habría que crearse la clase 'City' o 'Ciudad')
  *
  */
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
         mTvView         = (TextView) findViewById(R.id.txtVw);
 
+        //Todo 22. Se crea el objeto que da acceso a la base de datos. Al pedir la versión se abre:
+        //Todo -> es ahí cuando Android ejecuta onCreate u onUpgrade, si hace falta
         mDB = new DBAccess(this);
         mDB.getVersionDB();
 
@@ -55,14 +57,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String city = mEtCity.getText().toString();
+                String textoPobl = mEtPobl.getText().toString();
+                String textoSurf = mEtSurf.getText().toString();
 
-                int pobl    = Integer.parseInt(mEtPobl.getText().toString());
-                float surf   = Float.valueOf(mEtSurf.getText().toString());
+                //Todo 23. Convertir un texto vacío en número cierra la aplicación: primero se comprueba
+                if(city.isEmpty() || textoPobl.isEmpty() || textoSurf.isEmpty()){
+                    myToast("Rellena los tres campos");
+                    return;
+                }
 
+                int pobl    = Integer.parseInt(textoPobl);
+                float surf   = Float.parseFloat(textoSurf);
+
+                //Todo 24. insert devuelve -1 si la fila no se ha podido guardar
                 if(mDB.insert(city, pobl, surf) != -1){
-                    Toast("Ciudad insertada correctamente");
+                    myToast("Ciudad insertada correctamente");
                 }else{
-                    Toast("Error! Ciudad no insertada. Comprueba LogCat");
+                    myToast("Error! Ciudad no insertada. Comprueba Logcat");
                 }
             }
         });
@@ -70,12 +81,13 @@ public class MainActivity extends AppCompatActivity {
         mBtnMostrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Todo 25. getFirstCity devuelve null si la tabla está vacía
                 String ciudad = mDB.getFirstCity();
 
                 if(ciudad != null){
                     mTvView.setText(ciudad);
                 }else{
-                    Toast("Problema al recuperar la ciudad");
+                    myToast("Problema al recuperar la ciudad");
                 }
 
             }
@@ -83,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void Toast(String msg){
+    public void myToast(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }
