@@ -9,12 +9,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Actividad: Toast, AlertDialog y Snackbar
  * @author JC
- * @version 0.2
+ * @version 0.3
  *
  * Explica el uso de:
  *
@@ -100,8 +101,9 @@ public class MainActivity extends AppCompatActivity {
      * @return Devuelve el objeto AlertDialog
      */
     public AlertDialog createAlertDialog(String titulo, String mensaje){
-        //Todo 9: Se crea un 'builder' o constructor que ayuda a configurar el cuadro de diálogo
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        //Todo 9: Se crea un 'builder' o constructor que ayuda a configurar el cuadro de diálogo.
+        //Todo -> El de Material Design aplica además el estilo del tema de la aplicación
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
 
         //Todo 10: El builder recibe todas las configuraciones antes de crear el diálogo.
         //Todo -> En este ejemplo, el mensaje y el título
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Todo 12: Con todo configurado, se crea el AlertDialog y se devuelve.
+        //Todo 12: Con todo configurado, se crea el diálogo, que es un AlertDialog, y se devuelve.
         //Todo -> Crearlo no lo muestra: de eso se encarga el show() del TODO 4
         return builder.create();
     }

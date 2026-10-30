@@ -136,6 +136,7 @@
       <div class="box conocer"><span class="box-label">El nombre de la rama</span><p>Se llama «notificaciones» porque notifican algo al usuario <em>dentro de la aplicación</em>. Las notificaciones que aparecen en la barra de estado del móvil, aunque la aplicación esté cerrada, son otra cosa y no se ven aquí.</p></div>
       <h3 id="s2-2"><span class="sn">2.2</span>El builder del diálogo</h3>
       <p>Un <code>AlertDialog</code> tiene muchas partes opcionales: título, mensaje, hasta tres botones… En lugar de un constructor con decenas de parámetros, se usa un <strong>builder</strong>, un objeto auxiliar al que se le va indicando cada parte.</p>
+      <p>Esta aplicación usa <code>MaterialAlertDialogBuilder</code>, el builder de la biblioteca de Material Design. Es una clase hija de <code>AlertDialog.Builder</code>: tiene sus mismos métodos y, además, aplica al diálogo el estilo del tema de la aplicación.</p>
       <figure>
 <svg viewBox="0 0 720 210" role="img" aria-label="El builder recibe el título y el mensaje, después los dos botones. Con create se obtiene el AlertDialog y con show aparece en pantalla.">
   <defs><marker id="nt1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
@@ -161,6 +162,7 @@
 </svg>
 <figcaption>Un builder es como rellenar un pedido: primero marcas lo que quieres y al final lo encargas. <code>create()</code> lo fabrica y <code>show()</code> lo pone en pantalla.</figcaption>
 </figure>
+      <div class="box conocer"><span class="box-label">El builder es de Material, el diálogo sigue siendo un AlertDialog</span><p>Lo que fabrica <code>create()</code> es un <code>AlertDialog</code>. Por eso el código usa los dos nombres: <code>MaterialAlertDialogBuilder</code> para construirlo y <code>AlertDialog</code> para guardarlo y mostrarlo. En código de otros proyectos verás también <code>AlertDialog.Builder</code>: se programa igual.</p></div>
       <p>Fíjate en esta línea de la aplicación:</p>
       <div class="code"><div class="code-bar">MainActivity.java</div>
 <pre><code class="lang-java">builder.setMessage(mensaje)
@@ -204,9 +206,9 @@
 <pre><code class="lang-java">AlertDialog alertDialog = createAlertDialog(&quot;Mi titulo&quot;, &quot;Esto es un mensaje de alerta&quot;);
 alertDialog.show();</code></pre></div>
       <h3 id="s3-4"><span class="sn">TODO 9-10</span>El builder</h3>
-      <p>Dentro de <code>createAlertDialog()</code>, se crea el builder con su contexto y se le indican el mensaje y el título que han llegado como parámetros.</p>
+      <p>Dentro de <code>createAlertDialog()</code>, se crea el builder con su contexto y se le indican el mensaje y el título que han llegado como parámetros. Fíjate en el import: la clase está en <code>com.google.android.material.dialog</code>.</p>
       <div class="code"><div class="code-bar">MainActivity.java</div>
-<pre><code class="lang-java">AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+<pre><code class="lang-java">MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
 
 builder.setMessage(mensaje)
         .setTitle(titulo);</code></pre></div>
@@ -220,7 +222,7 @@ builder.setMessage(mensaje)
     }
 });</code></pre></div>
       <h3 id="s3-6"><span class="sn">TODO 12</span>Crear el diálogo</h3>
-      <p><code>create()</code> fabrica el <code>AlertDialog</code> con todo lo indicado y el método lo devuelve. Todavía no se ve: lo muestra el <code>show()</code> del TODO 4.</p>
+      <p><code>create()</code> fabrica el <code>AlertDialog</code> con todo lo indicado y el método lo devuelve, por eso su tipo de retorno es <code>AlertDialog</code>. Todavía no se ve: lo muestra el <code>show()</code> del TODO 4.</p>
       <h3 id="s3-7"><span class="sn">TODO 5-7</span>El Snackbar</h3>
       <p>El tercer botón hace todo en su listener. El Snackbar se crea con <code>make()</code>, que recibe una vista de la pantalla, el mensaje y la duración.</p>
       <div class="code"><div class="code-bar">MainActivity.java</div>
@@ -274,7 +276,7 @@ snackbar.show();</code></pre></div>
         <li>Pasa a <code>strings.xml</code> todos los textos: botones, título, mensaje y avisos.</li>
         <li>Añade al diálogo un tercer botón, con <code>setNeutralButton()</code>, que muestre su propio Toast.</li>
         <li>Haz que el diálogo no se pueda cerrar tocando fuera, con <code>setCancelable(false)</code>. Comprueba qué ocurre también con el botón Atrás.</li>
-        <li>Cambia <code>AlertDialog.Builder</code> por <code>MaterialAlertDialogBuilder</code>, el que usa la teoría de la UD2. Los métodos son los mismos: observa qué cambia en el aspecto.</li>
+        <li>Crea un segundo diálogo sin mensaje que deje elegir un color de una lista, con <code>setItems()</code>, y muestra el color elegido en un Toast. Lo tienes explicado en la teoría de la UD2.</li>
         <li>Crea un método para el Snackbar, como los que hay para el Toast y el diálogo, que reciba el mensaje y la vista.</li>
         <li>Añade un contador que suba al pulsar SnackBar y baje al pulsar Deshacer, y muestra su valor en un <code>TextView</code>.</li>
       </ol>
