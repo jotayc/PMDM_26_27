@@ -6,33 +6,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 /**
- * Actividad: Menus contextuales
+ * Actividad: Menú de acción
  *
  * @author JC
- * @version 0.1
+ * @version 0.2
  * <p>
- * Explica el uso de :
+ * Explica el uso de:
  * <p>
- * 1- Menu de acción
+ * 1- Menú de acción: la barra de opciones que sustituye a la barra de app mientras se actúa
+ *    sobre un elemento
  *
  *  Documentación -> https://developer.android.com/develop/ui/views/components/menus?hl=es-419#CAB
  */
 public class MainActivity extends AppCompatActivity {
 
-    private androidx.appcompat.view.ActionMode mActionMode;
+    //Todo 1: Guarda el modo de acción activo. Vale null mientras no hay ninguno abierto
+    private ActionMode mActionMode;
 
     private Button btn_floating;
     private Button btn_action;
@@ -47,16 +41,19 @@ public class MainActivity extends AppCompatActivity {
         btn_floating = (Button) findViewById(R.id.btn_floating);
         btn_action = (Button) findViewById(R.id.btn_action);
 
+        //Todo 2: El menú se abre con una pulsación larga, que tiene su propio listener
         btn_action.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                boolean res = false;
+                boolean atendida = false;
+                //Todo 3: Solo se abre si no hay ya uno abierto. startSupportActionMode() recibe
+                //Todo -> el objeto que responderá a lo que pase en el menú (TODO 4)
                 if (mActionMode == null) {
                     mActionMode = startSupportActionMode(mActionCallback);
-                    res = true;
+                    atendida = true;
                 }
 
-                return res;
+                return atendida;
             }
         });
 
@@ -64,15 +61,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Uso de la clase anónima Callback, como siempre, la clase anonima devuelve una instancia de
-     * una clase creada por java (nos da igual cuál). Dicha instancia es la encargada de implementar
-     * la interfaz. A diferencia de otras veces, en las que se resuelve en el propio método, por ejemplo
-     *  en setOnClickListener(new OnCliclister....), esta vez se ha guardado la instance en una variable
-     * mActionCallback por mejora de la legibilidad de código.
-     *
-     */
+    //Todo 4: Clase anónima, como en los listener, pero esta vez la instancia se guarda en un
+    //Todo -> atributo para que el código se lea mejor. Android llamará a sus cuatro métodos
     private ActionMode.Callback mActionCallback = new ActionMode.Callback() {
+        //Todo 5: Se llama al abrirse: se infla el menú del XML y se pone el título de la barra
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.action_menu, menu);
@@ -80,11 +72,14 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        //Todo 6: Se llama justo después y cada vez que se refresca. Sirve para cambiar opciones
+        //Todo -> sobre la marcha. Devuelve false porque aquí no se cambia nada
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return false;
         }
 
+        //Todo 7: Se llama al pulsar una opción, que llega como parámetro
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             int itemId = item.getItemId();
@@ -97,25 +92,16 @@ public class MainActivity extends AppCompatActivity {
                 btn_action.setBackgroundColor(Color.YELLOW);
             }
 
+            //Todo 8: Hecha la acción, se cierra el menú y vuelve la barra de app
             mode.finish();
             return true;
         }
 
+        //Todo 9: Se llama al cerrarse de cualquier forma: con finish(), con la flecha de la barra o
+        //Todo -> con Atrás. Se pone a null para que la siguiente pulsación larga pueda abrirlo
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;
         }
     };
-
-
-    /**
-     * Método que encapsula la acción Toast, evita tener que repetir código en los parámetros que
-     * nunca cambian, como puede ser la duración, el contexto o que se olvide llamar al método show()
-     *
-     * @param msg Mensaje a mostrar en el toast.
-     */
-    public void myToast(String msg) {
-
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-    }
 }

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.8 · Menú de acción</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+<style>
+  /* ---------- Piezas propias de esta página ---------- */
+  :root{ --sim: #6D3FD8; --sim-soft: #EFE9FC; }
+  .legend{ display: grid; gap: 6px; margin: 18px 0 0; padding: 12px 16px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; font-size: 14px; }
+  .legend > div{ display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: start; }
+  .legend > div i{ margin-top: 4px; width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .legend code{ white-space: nowrap; }
+  .sim{ margin: 24px 0 28px; border-radius: var(--radius); background: var(--sim-soft); border: 1px solid #D9CCF7; overflow: hidden; }
+  .sim-head{ background: var(--sim); color: #fff; padding: 12px 18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .sim-head b{ font-family: var(--font-head); font-size: 17px; }
+  .sim-head span{ font-size: 13.5px; opacity: .9; }
+  .sim-body{ padding: 16px 18px 18px; }
+  .sim-body > p{ margin-top: 0; }
+  .sim-row{ display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+  .btns{ display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .btn{ font: 600 14px var(--font-body); border: 0; border-radius: 999px; padding: 9px 16px; background: var(--sim); color: #fff; cursor: pointer; }
+  .btn.ghost{ background: #fff; color: var(--sim); box-shadow: inset 0 0 0 1.5px var(--sim); }
+  .btn:disabled{ opacity: .4; cursor: default; }
+  .phone{ width: 248px; flex: none; background: #1D1B20; border-radius: 28px; padding: 12px 10px 16px; }
+  .phone-bar{ height: 18px; display: flex; justify-content: center; }
+  .phone-bar::before{ content: ""; width: 54px; height: 6px; border-radius: 3px; background: #3A3740; }
+  .screen{ position: relative; height: 330px; background: #fff; border-radius: 6px; overflow: hidden; transition: background .2s; touch-action: manipulation; }
+  .appbar{ height: 40px; background: #6200EE; color: #fff; font: 600 13px var(--font-body); display: flex; align-items: center; gap: 4px; padding: 0 4px 0 10px; }
+  .appbar .ttl{ flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appbar.modo{ background: #37343D; }
+  .appbar button{ border: 0; background: none; color: #fff; font: 600 12px var(--font-body); padding: 6px 5px; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
+  .appbar button:hover{ background: rgba(255,255,255,.16); }
+  .swatch{ width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(255,255,255,.75); display: inline-block; flex: none; }
+  .canvas{ position: absolute; inset: 40px 0 0; display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; align-content: center; padding: 10px; }
+  .droid{ font: 600 11.5px var(--font-body); text-transform: uppercase; letter-spacing: .03em; border: 0; border-radius: 6px; background: #6200EE; color: #fff; padding: 9px 9px; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .toast{ position: absolute; left: 12px; right: 12px; bottom: 26px; background: #3C3940; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 12px; border-radius: 16px; text-align: center; z-index: 5; pointer-events: none; }
+  .snack{ position: absolute; left: 8px; right: 8px; bottom: 8px; background: #323036; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 10px; border-radius: 5px; display: flex; gap: 8px; align-items: center; z-index: 4; }
+  .snack span{ flex: 1; }
+  .snack button{ border: 0; background: none; color: #03DAC5; font: 700 11.5px var(--font-body); text-transform: uppercase; cursor: pointer; padding: 4px; }
+  .scrimx{ position: absolute; inset: 0; background: rgba(0,0,0,.42); z-index: 6; display: grid; place-items: center; padding: 14px; }
+  .dialog{ background: #fff; border-radius: 6px; padding: 14px 14px 8px; width: 100%; box-shadow: 0 6px 22px rgba(0,0,0,.35); }
+  .dialog b{ display: block; font: 600 14px var(--font-body); margin-bottom: 8px; }
+  .dialog p{ margin: 0 0 10px; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+  .dialog .acts{ display: flex; justify-content: flex-end; gap: 6px; }
+  .dialog .acts button{ border: 0; background: none; color: #6200EE; font: 700 12px var(--font-body); text-transform: uppercase; padding: 6px 8px; cursor: pointer; }
+  .pop{ position: absolute; background: #fff; border-radius: 4px; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 7; min-width: 118px; padding: 4px 0; }
+  .pop button{ display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: none; font: 12.5px var(--font-body); color: var(--ink); text-align: left; padding: 8px 12px; cursor: pointer; }
+  .pop button:hover{ background: var(--bg); }
+  .pop .swatch{ border-color: rgba(0,0,0,.25); }
+  .pop .head{ font: 600 11.5px var(--font-body); color: var(--muted); padding: 6px 12px 4px; }
+  .panel{ flex: 1; min-width: 260px; }
+  .panel > *:first-child{ margin-top: 0; }
+  .log{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; height: 182px; overflow-y: auto; font: 12px/1.55 var(--font-mono); margin: 10px 0 0; list-style: none; }
+  .log li{ margin: 0; padding: 1px 0; overflow-wrap: anywhere; }
+  .log li.nota{ color: #9DA0A8; font-style: italic; }
+  .log li.met{ color: #6AAB73; }
+  .log li.acc{ color: #F4A35C; }
+  .why{ background: #fff; border-radius: 12px; padding: 10px 14px; margin-top: 10px; font-size: 14.5px; min-height: 48px; }
+  .estado{ display: inline-block; font: 600 12px var(--font-mono); background: #fff; border-radius: 8px; padding: 5px 9px; margin: 2px 0; }
+  .opts{ display: grid; gap: 6px; margin: 8px 0; }
+  .opts > div{ display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #fff; border-radius: 10px; padding: 5px 10px; font-size: 14px; }
+  .opts select{ font: 12px var(--font-mono); border: 1px solid #D9CCF7; border-radius: 6px; padding: 3px; background: #fff; color: var(--ink); }
+  @media (max-width: 700px){
+    main figure{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    main figure svg{ min-width: 660px; }
+    main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+  }
+  @media (max-width: 600px){ .phone{ margin: 0 auto; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.8 · Menú de acción</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_8_action_menu.html" aria-current="page">UD 2.8 · Menú de acción</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Una barra temporal</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">La pulsación larga</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">El Callback</a></li><li class="sub"><a href="#s2-4" data-nav data-target="s2-4">Evitar abrirlo dos veces</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 2-3</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 4</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 5</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 6</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 7-8</a></li><li class="sub"><a href="#s3-7" data-nav data-target="s3-7">TODO 9</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>El menú y el layout</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_8_action_menu</p>
+      <h1>Menú de acción</h1>
+      <p class="lede">Mantienes pulsado un botón y la barra de arriba se transforma: ahora ofrece opciones para ese botón. Con esta rama verás cómo se abre esa barra temporal, qué métodos llama Android mientras está abierta y cómo se deja lista para la próxima vez.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+      <div class="legend" role="group" aria-label="Qué significa cada color">
+        <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener.</span></div>
+        <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones. En su registro, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
+        <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
+        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
+      </div>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><b>Una barra temporal</b><span>Un menú que sustituye a la barra de app mientras se actúa sobre un elemento.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M13 9a2 2 0 0 1 4 0v3"/><path d="M17 11a2 2 0 0 1 4 0v4a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-3l-3-5a2 2 0 0 1 3-2l2 2"/></svg><b>Pulsación larga</b><span>El listener para mantener pulsada una vista, y qué significa lo que devuelve.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg><b>El Callback</b><span>Un objeto con cuatro métodos a los que Android llama según lo que ocurre.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m5 5 14 14"/></svg><b>Controlar si está abierto</b><span>Un atributo que vale <code>null</code> mientras no hay ninguno abierto.</span></div></div><p>Al mantener pulsado el botón <em>Action Menu</em>, la barra de arriba cambia y ofrece tres colores. Al elegir uno, el botón cambia de color y la barra vuelve a ser la de siempre.</p>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>Una barra que aparece solo cuando hace falta</h3>
+      <p>Piensa en una aplicación de galería: mantienes pulsada una foto y, arriba, aparecen las opciones de compartir y borrar en lugar del título. Cuando terminas, la barra vuelve a ser la normal. Eso es un <strong>menú de acción</strong>: las opciones sobre un elemento ocupan durante un rato el sitio de la barra de app.</p>
+      <p>Android lo llama <em>modo de acción</em>, y por eso las clases y los métodos llevan <code>ActionMode</code> en su nombre.</p>
+      <div class="table-wrap"><table>
+<thead><tr><th></th><th>Menú de la barra</th><th>Menú de acción</th></tr></thead>
+<tbody>
+<tr><td><b>Sobre qué actúa</b></td><td>Toda la pantalla</td><td>Un elemento concreto</td></tr>
+<tr><td><b>Cuándo se ve</b></td><td>Siempre</td><td>Desde que se abre hasta que se cierra</td></tr>
+<tr><td><b>Cómo se abre</b></td><td>Está ahí desde el principio</td><td>Desde el código, normalmente con una pulsación larga</td></tr>
+</tbody>
+</table></div>
+      <h3 id="s2-2"><span class="sn">2.2</span>La pulsación larga</h3>
+      <p>Mantener pulsada una vista es un evento distinto del clic, con su propio listener: <code>View.OnLongClickListener</code>. La diferencia es que su método devuelve un valor.</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>onLongClick() devuelve</th><th>Significa</th></tr></thead>
+<tbody>
+<tr><td class="mono">true</td><td>La pulsación ya está atendida. Android no hace nada más con ella.</td></tr>
+<tr><td class="mono">false</td><td>No la he atendido. Android sigue como si este listener no existiera.</td></tr>
+</tbody>
+</table></div>
+      <h3 id="s2-3"><span class="sn">2.3</span>El Callback: quien responde</h3>
+      <p>Para abrir el menú se le pasa a Android un objeto de tipo <code>ActionMode.Callback</code>. Es una interfaz con cuatro métodos, y Android llama a cada uno cuando toca. Un <strong>callback</strong> es justo eso: código que escribes tú para que otro lo llame más tarde, igual que los listeners.</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Método</th><th>Cuándo lo llama Android</th><th>Para qué</th></tr></thead>
+<tbody>
+<tr><td class="mono">onCreateActionMode()</td><td>Al abrirse</td><td>Crear las opciones y poner el título.</td></tr>
+<tr><td class="mono">onPrepareActionMode()</td><td>Justo después, y cada vez que se refresca</td><td>Cambiar opciones sobre la marcha. Devuelve <code>true</code> si ha cambiado algo.</td></tr>
+<tr><td class="mono">onActionItemClicked()</td><td>Al pulsar una opción</td><td>Hacer lo que corresponda.</td></tr>
+<tr><td class="mono">onDestroyActionMode()</td><td>Al cerrarse</td><td>Dejarlo todo listo para la próxima vez.</td></tr>
+</tbody>
+</table></div>
+      <figure>
+<svg viewBox="0 0 720 300" role="img" aria-label="La pulsación larga llama a startSupportActionMode. Android llama a onCreateActionMode y a onPrepareActionMode y la barra de acción se ve en pantalla. Al pulsar una opción llama a onActionItemClicked, que termina con finish. Al cerrarse de cualquier forma llama a onDestroyActionMode, que pone mActionMode a null.">
+  <defs><marker id="am1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="20" width="200" height="70" rx="14" fill="#E2F4EA"/>
+  <text x="100" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#0A5C33">Pulsación larga</text>
+  <text x="100" y="70" text-anchor="middle" font-size="10.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">startSupportActionMode()</text>
+  <rect x="260" y="20" width="200" height="70" rx="14" fill="#0E8A4B"/>
+  <text x="360" y="50" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onCreateActionMode()</text>
+  <text x="360" y="72" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onPrepareActionMode()</text>
+  <rect x="520" y="20" width="200" height="70" rx="14" fill="#6D3FD8"/>
+  <text x="620" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Barra de acción</text>
+  <text x="620" y="72" text-anchor="middle" font-size="11.5" fill="#fff">visible en pantalla</text>
+  <rect x="520" y="130" width="200" height="70" rx="14" fill="#0E8A4B"/>
+  <text x="620" y="160" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onActionItemClicked()</text>
+  <text x="620" y="182" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">mode.finish()</text>
+  <rect x="260" y="130" width="200" height="70" rx="14" fill="#0E8A4B"/>
+  <text x="360" y="160" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onDestroyActionMode()</text>
+  <text x="360" y="182" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">mActionMode = null</text>
+  <rect x="0" y="130" width="200" height="70" rx="14" fill="#E2F4EA"/>
+  <text x="100" y="160" text-anchor="middle" font-size="13" font-weight="700" fill="#0A5C33">Vuelve la barra de app</text>
+  <text x="100" y="182" text-anchor="middle" font-size="11.5" fill="#0A5C33">se puede abrir otra vez</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#am1)">
+    <line x1="204" y1="55" x2="256" y2="55"/>
+    <line x1="464" y1="55" x2="516" y2="55"/>
+    <line x1="620" y1="94" x2="620" y2="126"/>
+    <line x1="516" y1="165" x2="464" y2="165"/>
+    <line x1="256" y1="165" x2="204" y2="165"/>
+  </g>
+  <path d="M560 94 V112 H420 V126" fill="none" stroke="#56655D" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#am1)"/>
+  <text x="490" y="106" text-anchor="middle" font-size="11" fill="#56655D">flecha o Atrás</text>
+  <text x="360" y="236" text-anchor="middle" font-size="12.5" fill="#17211C">En verde, los métodos del Callback: los llama Android, en este orden.</text>
+  <text x="360" y="260" text-anchor="middle" font-size="12" fill="#56655D">Con la flecha de la barra o con Atrás no se elige nada: se pasa directamente a onDestroyActionMode().</text>
+</svg>
+<figcaption>El recorrido de un menú de acción. Todas las salidas pasan por <code>onDestroyActionMode()</code>, por eso es ahí donde se deja todo listo para la próxima vez.</figcaption>
+</figure>
+      <div class="sim" id="simAccion">
+        <div class="sim-head"><b>Abre el menú de acción</b><span>mira qué métodos se llaman</span></div>
+        <div class="sim-body">
+          <p>Mantén pulsado <em>Action Menu</em> en el móvil o usa el botón de la derecha. Después prueba las distintas formas de cerrarlo. El aspecto es aproximado.</p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="amScreen">
+              <div class="appbar" id="amBar"></div>
+              <div class="canvas"><button class="droid" id="amOtro" type="button">Menu flotante</button><button class="droid" id="amBtn" type="button">Action Menu</button></div>
+            </div></div>
+            <div class="panel">
+              <div class="btns"><button class="btn" id="amLargo" type="button">Pulsación larga</button><button class="btn ghost" id="amAtras" type="button" disabled>Atrás del móvil</button></div>
+              <span class="estado" id="amEstado">mActionMode = null</span>
+              <div class="why" id="amWhy">No hay ningún menú de acción abierto.</div>
+              <ul class="log" id="amLog" aria-label="Registro de llamadas"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h3 id="s2-4"><span class="sn">2.4</span>Evitar abrirlo dos veces</h3>
+      <p><code>startSupportActionMode()</code> devuelve el modo de acción que se acaba de abrir. La actividad lo guarda en un atributo, <code>mActionMode</code>. Mirando si vale <code>null</code> sabe si hay uno abierto y, si lo hay, no abre otro.</p>
+      <div class="box clave"><span class="box-label">Abrir, guardar; cerrar, poner a null</span><p>Si <code>onDestroyActionMode()</code> no pusiera el atributo a <code>null</code>, seguiría pareciendo que hay uno abierto y el menú no volvería a abrirse nunca.</p></div>
+
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 9, y todos están en <code>MainActivity</code>.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1</span>Recordar si hay uno abierto</h3>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private ActionMode mActionMode;</code></pre></div>
+      <p>Como todo atributo de tipo objeto, empieza valiendo <code>null</code>.</p>
+      <h3 id="s3-2"><span class="sn">TODO 2-3</span>Abrirlo con una pulsación larga</h3>
+      <p>Si no hay ninguno abierto, se abre, se guarda y se indica que la pulsación está atendida.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">btn_action.setOnLongClickListener(new View.OnLongClickListener() {
+    @Override
+    public boolean onLongClick(View view) {
+        boolean atendida = false;
+        if (mActionMode == null) {
+            mActionMode = startSupportActionMode(mActionCallback);
+            atendida = true;
+        }
+
+        return atendida;
+    }
+});</code></pre></div>
+      <h3 id="s3-3"><span class="sn">TODO 4</span>El Callback en un atributo</h3>
+      <p>Es una clase anónima, como las de los listeners. Hasta ahora las escribías directamente como parámetro. Aquí es mucho más larga, así que se guarda la instancia en un atributo y el listener de arriba se lee mejor.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private ActionMode.Callback mActionCallback = new ActionMode.Callback() {
+    // los cuatro métodos
+};</code></pre></div>
+      <h3 id="s3-4"><span class="sn">TODO 5</span>Crear las opciones</h3>
+      <p>El inflater lo da el propio modo de acción. Devolver <code>true</code> es lo que hace que el menú se abra: con <code>false</code>, se cancela.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+    mode.getMenuInflater().inflate(R.menu.action_menu, menu);
+    mode.setTitle(&quot;Action Menu&quot;);
+    return true;
+}</code></pre></div>
+      <h3 id="s3-5"><span class="sn">TODO 6</span>Preparar</h3>
+      <p>Aquí no se cambia nada, así que devuelve <code>false</code>. Hay que escribirlo igualmente, porque una interfaz obliga a implementar todos sus métodos.</p>
+      <h3 id="s3-6"><span class="sn">TODO 7-8</span>Responder a la opción y cerrar</h3>
+      <p>Se compara el id de la opción con los del XML y se cambia el color. Con <code>mode.finish()</code> se cierra el menú: si no, seguiría abierto tras elegir.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+    int itemId = item.getItemId();
+
+    if (itemId == R.id.act_light_blue) {
+        btn_action.setBackgroundColor(Color.CYAN);
+    } else if (itemId == R.id.act_purple) {
+        btn_action.setBackgroundColor(Color.MAGENTA);
+    } else if (itemId == R.id.act_yellow) {
+        btn_action.setBackgroundColor(Color.YELLOW);
+    }
+
+    mode.finish();
+    return true;
+}</code></pre></div>
+      <h3 id="s3-7"><span class="sn">TODO 9</span>Dejarlo listo</h3>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public void onDestroyActionMode(ActionMode mode) {
+    mActionMode = null;
+}</code></pre></div>
+
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>El menú y el layout</h2></div>
+<p>El fichero del menú, en la carpeta <code>res/menu/</code>. Aquí sí hay una barra, así que los iconos y <code>app:showAsAction</code> tienen efecto.</p>
+      <div class="code"><div class="code-bar">res/menu/action_menu.xml</div>
+<pre><code class="lang-xml">&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
+    &lt;item
+        android:id=&quot;@+id/act_light_blue&quot;
+        android:icon=&quot;@drawable/fill_light_blue&quot;
+        android:title=&quot;Celeste&quot;
+        app:showAsAction=&quot;ifRoom|withText&quot; /&gt;
+    &lt;item
+        android:id=&quot;@+id/act_purple&quot;
+        android:icon=&quot;@drawable/fill_purple&quot;
+        android:title=&quot;Morado&quot;
+        app:showAsAction=&quot;ifRoom|withText&quot; /&gt;
+    &lt;item
+        android:id=&quot;@+id/act_yellow&quot;
+        android:icon=&quot;@drawable/fill_yellow&quot;
+        android:title=&quot;Amarillo&quot;
+        app:showAsAction=&quot;ifRoom|withText&quot; /&gt;
+&lt;/menu&gt;</code></pre></div>
+      <p>El layout tiene dos botones, <code>btn_action</code> y <code>btn_floating</code>.</p>
+      <div class="box conocer"><span class="box-label">El botón Menu flotante no hace nada en esta rama</span><p>No tiene ningún listener. Ese botón y el fichero <code>floating_menu.xml</code> pertenecen al menú contextual flotante, que es otro tipo de menú y se trabaja en la rama <code>UD_2_9_floating_menu</code>.</p></div>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+<ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>) y haz un clic corto en <strong>Action Menu</strong>. No ocurre nada: solo tiene listener para la pulsación larga.</li><li>Ahora mantenlo pulsado. La barra de app se cambia por la de acción, con el título «Action Menu», los iconos de color y una flecha a la izquierda.</li><li>Pulsa uno de los colores. El botón cambia y vuelve la barra de siempre.</li><li>Ábrelo otra vez y pulsa la flecha de la izquierda. Se cierra sin cambiar nada.</li><li>Ábrelo otra vez y pulsa <strong>Atrás</strong>. Se cierra el menú, no la aplicación.</li><li>Comenta la línea <code>mActionMode = null</code> y vuelve a ejecutar. Podrás abrir el menú una vez, pero ya no una segunda.</li></ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>El menú se abre una vez y ya no vuelve a abrirse</td><td>Falta poner <code>mActionMode = null</code> en <code>onDestroyActionMode()</code>.</td></tr>
+<tr><td>Al elegir una opción, el menú sigue abierto</td><td>Falta <code>mode.finish()</code> en <code>onActionItemClicked()</code>.</td></tr>
+<tr><td>El menú no se abre</td><td><code>onCreateActionMode()</code> devuelve <code>false</code>, o el listener está puesto en otro botón.</td></tr>
+<tr><td>La barra aparece sin opciones</td><td>Falta <code>inflate()</code> en <code>onCreateActionMode()</code>.</td></tr>
+<tr><td>No compila <code>startSupportActionMode()</code> con tu Callback</td><td>Se ha importado <code>android.view.ActionMode</code>. Con <code>AppCompatActivity</code> hay que usar <code>androidx.appcompat.view.ActionMode</code>.</td></tr>
+<tr><td>Los id no se pueden usar en un <code>switch</code></td><td>Los id de los recursos no son constantes: se comparan con <code>if</code>.</td></tr>
+</tbody>
+</table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+<p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_2_8</code>.</p>
+      <ol class="steps">
+        <li>Pasa a <code>strings.xml</code> los títulos de las opciones y el título de la barra.</li>
+        <li>Añade una cuarta opción que devuelva el botón a su color original.</li>
+        <li>Haz que el título de la barra indique el botón que lo ha abierto.</li>
+        <li>Añade un botón nuevo con su propia pulsación larga, que abra el mismo menú. Haz que la opción elegida cambie el color del botón que se pulsó.</li>
+        <li>Muestra en <code>onDestroyActionMode()</code> un Toast que diga si se ha elegido un color o se ha cerrado sin elegir.</li>
+        <li>Cambia <code>onLongClick()</code> para que abra el menú también con un clic corto. Piensa qué listener hace falta y por qué ya no devuelve nada.</li>
+      </ol>
+    </section>
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+<script>
+(function(){
+"use strict";
+
+function $(id){ return document.getElementById(id); }
+function registro(id){
+  var ul = $(id);
+  function add(texto, clase){ var li = document.createElement("li"); li.textContent = texto; if(clase) li.className = clase; ul.appendChild(li); ul.scrollTop = ul.scrollHeight; }
+  return { met: function(t){ add(t, "met"); }, acc: function(t){ add(t, "acc"); }, nota: function(t){ add(t, "nota"); }, limpiar: function(){ ul.innerHTML = ""; } };
+}
+function pulsacionLarga(boton, alLargo, alCorto){
+  var temporizador = null, disparado = false;
+  boton.addEventListener("pointerdown", function(){ disparado = false; temporizador = setTimeout(function(){ disparado = true; alLargo(); }, 500); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(function(evento){ boton.addEventListener(evento, function(){ clearTimeout(temporizador); }); });
+  boton.addEventListener("click", function(){ if(!disparado && alCorto) alCorto(); });
+  boton.addEventListener("contextmenu", function(ev){ ev.preventDefault(); });
+}
+
+
+var log = registro("amLog"), barra = $("amBar"), boton = $("amBtn"), activo = false;
+var OPCIONES = [{n: "Celeste", c: "#00FFFF", t: "#17211C", k: "CYAN"}, {n: "Morado", c: "#FF00FF", t: "#fff", k: "MAGENTA"}, {n: "Amarillo", c: "#FFFF00", t: "#17211C", k: "YELLOW"}];
+function barraApp(){
+  barra.className = "appbar";
+  barra.innerHTML = '<span class="ttl">MainActivity</span>';
+}
+function barraAccion(){
+  barra.className = "appbar modo";
+  var html = '<button type="button" data-fin="1" aria-label="Terminar">←</button><span class="ttl">Action Menu</span>';
+  OPCIONES.forEach(function(o, i){ html += '<button type="button" data-o="' + i + '" aria-label="' + o.n + '"><i class="swatch" style="background:' + o.c + '"></i></button>'; });
+  barra.innerHTML = html;
+}
+function destruir(){
+  log.met("onDestroyActionMode(mode)");
+  log.acc("mActionMode = null");
+  activo = false;
+  $("amEstado").textContent = "mActionMode = null";
+  $("amAtras").disabled = true;
+  barraApp();
+}
+function abrir(){
+  if(activo){
+    log.nota("Pulsación larga: mActionMode no es null, no se abre otro.");
+    $("amWhy").innerHTML = "El <code>if</code> lo impide: ya hay uno abierto y <code>onLongClick()</code> devuelve <code>false</code>.";
+    return;
+  }
+  log.acc("mActionMode = startSupportActionMode(mActionCallback)");
+  log.met("onCreateActionMode(mode, menu)");
+  log.acc("inflate(R.menu.action_menu, menu)");
+  log.met("onPrepareActionMode(mode, menu)");
+  activo = true;
+  $("amEstado").textContent = "mActionMode = (modo activo)";
+  $("amAtras").disabled = false;
+  barraAccion();
+  $("amWhy").innerHTML = "La barra de acción ha tapado a la barra de app. Elige un color, pulsa la flecha ← o usa Atrás. Prueba también otra pulsación larga.";
+}
+barra.addEventListener("click", function(ev){
+  var el = ev.target.closest("button"); if(!el) return;
+  if(el.getAttribute("data-fin")){
+    log.nota("Flecha de la barra: no se elige ninguna opción.");
+    destruir();
+    $("amWhy").innerHTML = "No se ha llamado a <code>onActionItemClicked()</code>, pero <code>onDestroyActionMode()</code> sí.";
+    return;
+  }
+  var o = OPCIONES[+el.getAttribute("data-o")];
+  log.met("onActionItemClicked(mode, " + o.n + ")");
+  log.acc("btn_action.setBackgroundColor(Color." + o.k + ")");
+  log.acc("mode.finish()");
+  boton.style.background = o.c; boton.style.color = o.t;
+  destruir();
+  $("amWhy").innerHTML = "<code>finish()</code> cierra el menú y eso provoca la llamada a <code>onDestroyActionMode()</code>.";
+});
+$("amAtras").addEventListener("click", function(){
+  log.nota("Botón Atrás: no se elige ninguna opción.");
+  destruir();
+  $("amWhy").innerHTML = "Atrás cierra el menú de acción, no la actividad. Y otra vez acaba en <code>onDestroyActionMode()</code>.";
+});
+pulsacionLarga(boton, abrir, function(){
+  log.nota("Clic corto: no hay OnClickListener, no ocurre nada.");
+  $("amWhy").innerHTML = "Un clic corto no hace nada: este botón solo tiene listener para la pulsación larga.";
+});
+$("amLargo").addEventListener("click", abrir);
+pulsacionLarga($("amOtro"), function(){
+  log.nota("Este botón no tiene listener: no ocurre nada.");
+  $("amWhy").innerHTML = "En esta rama, este botón no tiene ningún listener.";
+}, function(){
+  log.nota("Este botón no tiene listener: no ocurre nada.");
+});
+barraApp();
+
+})();
+</script>
+</body>
+</html>
