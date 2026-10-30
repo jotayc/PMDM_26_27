@@ -1,52 +1,40 @@
-# PMDM · Curso 2026-27
+# UD 3.1 · Preferencias
 
-**Programación Multimedia y Dispositivos Móviles · 2º DAM**
+Una pantalla de ajustes en la que se escribe un email que sigue ahí aunque cierres
+la aplicación. Verás cómo se describe en XML, cómo la construye un **fragmento** y
+cómo se lee el valor guardado con **SharedPreferences**.
 
-Este repositorio es el proyecto Android de todo el módulo. Cada **rama** es un
-tema, con sus apuntes en HTML y las explicaciones en los comentarios `TODO` del
-código. Esta rama, `main`, es la base del proyecto.
+## 📘 Apuntes
 
-![Android Studio](recursos/img/ventana_android_studio.svg)
-
-## 1. Clonar el proyecto
-
-Solo se hace una vez, al principio del curso:
-
-1. Copia la dirección de este repositorio: botón verde **Code** de esta página → pestaña *HTTPS*.
-2. En la pantalla de bienvenida de Android Studio pulsa **Clone Repository**
-   (con un proyecto abierto: *File → New → Project from Version Control*),
-   pega la dirección y elige una carpeta.
-3. Espera a que termine la sincronización de Gradle. Si te pide instalar una
-   plataforma del SDK, acepta.
-
-## 2. Abrir los apuntes
-
-Los apuntes están en la carpeta `recursos/html/` del proyecto y se abren **en el
-navegador desde tu copia local**. En GitHub solo verías su código.
-
-- **En Android Studio:** botón derecho sobre el fichero → *Open In → Browser*.
-- **En el explorador de Windows:** doble clic sobre el fichero.
-
-## 3. Índice
-
-| Apuntes | Fichero | Contenido |
+| Apuntes | Fichero | Para qué |
 |---|---|---|
-| 📌 **Cómo usar este repositorio** | [`recursos/html/como_usar.html`](recursos/html/como_usar.html) | Traer cada tema nuevo, estudiar una rama y normas para no tener conflictos con Git. |
-| 🧭 **Guía de Android Studio** | [`recursos/html/guia_android_studio.html`](recursos/html/guia_android_studio.html) | Partes del entorno, estructura del proyecto, ficheros clave, Gradle, ejecutar, Logcat, depurador y ciclo de vida. |
-| 📘 **UD1 · Introducción a Android** | [`recursos/html/UD01_Introduccion_Android.html`](recursos/html/UD01_Introduccion_Android.html) | Dispositivos móviles, tecnologías, arquitectura de Android, primer proyecto, despliegue y ciclo de vida. |
+| 📘 **UD 3.1 · Preferencias** | [`recursos/html/UD_3_1_Preferences.html`](recursos/html/UD_3_1_Preferences.html) | Lo de esta rama, explicado sobre su código: el XML, el fragmento, la transacción y la lectura por clave. Con un simulador del recorrido. |
+| 📗 **UD2 · La interfaz de usuario** | [`recursos/html/UD02_Interfaz_Usuario.html`](recursos/html/UD02_Interfaz_Usuario.html) | Para consultar lo que ya has visto. |
 
-Estos tres apuntes están en todas las ramas. Cada rama añade los suyos, que
-encontrarás en el `README.md` de esa rama.
+Ábrelos en el navegador desde tu copia del proyecto: en Android Studio, botón
+derecho sobre el fichero → *Open In → Browser* (en GitHub solo se ve su código).
+Dentro de cada uno, arriba del índice lateral, tienes los enlaces al resto de
+apuntes.
 
-## 4. Versiones del proyecto
+## Qué repasar de la UD2 para este tema
 
-| | |
+| Apartado de la UD2 | Por qué ahora |
 |---|---|
-| Lenguaje | Java, con diseño de pantallas en XML |
-| Android mínimo (`minSdk`) | 28 (Android 9) |
-| Compilación (`compileSdk`) | 37 (Android 17) |
-| Comportamiento (`targetSdk`) | 36 (Android 16) |
-| Gradle / plugin de Android | 9.6 / 9.4 |
+| **Fragmentos** | Qué es un fragmento y qué es una transacción. |
+| **Actividades e intenciones** | La intención que abre los ajustes y la pila de actividades. |
 
-No hace falta instalar nada aparte de Android Studio: Gradle y el SDK necesario
-se descargan solos al abrir el proyecto.
+## Dónde está en el código
+
+| TODO | Fichero | Qué explica |
+|---|---|---|
+| 1 | `controllers/MainActivity.java` | Abrir la pantalla de ajustes |
+| 2-3 | `fragments/SettingsFragment.java` | El fragmento que construye la pantalla |
+| 4-5 | `controllers/SettingActivity.java` | Colocar el fragmento con una transacción |
+| 6-7 | `controllers/SettingActivity.java` | La flecha de volver |
+| 8 | `controllers/MainActivity.java` | Por qué se carga en `onResume()` |
+| 9-11 | `controllers/MainActivity.java` | Leer el valor por su clave |
+| — | `res/xml/root_preferences.xml` | Las preferencias |
+| — | `app/build.gradle` | La biblioteca de preferencias |
+
+La ventana **TODO** de Android Studio (*View → Tool Windows → TODO*) los lista
+todos: un clic en uno te lleva a su línea.
