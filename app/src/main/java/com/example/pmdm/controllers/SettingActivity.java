@@ -18,31 +18,32 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        //Todo 2 ( Ver Punto 1 en la clase SettingsFragment): Este metodo se encarga de introducir
-        // el fragment ya creado en el contenedor de la vista padre (activity_setting.xml)
+        //Todo 4. El fragmento de los TODO 2 y 3 se coloca dentro de esta actividad. Una transacción
+        //Todo -> agrupa los cambios de fragmentos y commit() los aplica
+        //Todo 5. replace() recibe el contenedor, que es la vista raíz de activity_setting.xml, y el
+        //Todo -> fragmento que se muestra en él
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.setting_container, new SettingsFragment())   //Todo 2.1 Es en esta línea donde se reemplaza el contenedor por una instancia de la clase SettingFragment
-                .commit();                                                  //Todo --> cuya clase construye las preferencias como se ha comentado en el punto 1.
+                .replace(R.id.setting_container, new SettingsFragment())
+                .commit();
 
-        //Todo 3. Esto es opcional, pero se puede activar el icono de "Volver"(flecha atrás) para
-        // ello debemos de acceder al action bar creado por Android por defecto.
+        //Todo 6. Esto es opcional: se activa la flecha de volver en la barra de app.
+        //Todo -> getSupportActionBar() puede devolver null si el tema no tiene barra
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
-            actionBar.setDisplayHomeAsUpEnabled(true); //Todo 3.1 si existe (no es nulo) mostramos el botón hacia atrás.
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
 
     }
 
-    //Todo 3.2 Para que tenga efecto al pulsar el icono debemos implementar qué debe hacer cuando el usuario
-    // lo pulse.
+    //Todo 7. La flecha llega como cualquier opción del menú, con el id android.R.id.home.
+    //Todo -> Al pulsarla se hace lo mismo que con el botón Atrás del móvil
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:  //Todo 3.3. Este sería el acceso al recurso del botón volver
-                getOnBackPressedDispatcher().onBackPressed();     //Todo 3.4 Este sería el método que tiene Android para volver hacia la ventana anterior.
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

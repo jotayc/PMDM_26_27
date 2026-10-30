@@ -18,14 +18,14 @@ import com.example.pmdm.R;
  * las configuraciones de usuario a través de la API propia de Android.
  *
  * @author JC
- * @version 0.1
+ * @version 0.2
  *
  *  Consideraciones previas:
  *
  *    1 - El diseño de la configuración debe estar en la carpeta res/xml
- *    2 - Se debe importar la biblioteca preferences añadiendo a gradle la instrucción
- *          implementation 'androidx.preference:preference:1.1.1'
- *    3 - Consultar la guia oficial https://developer.android.com/guide/topics/ui/settings?hl=es-419
+ *    2 - Se debe importar la biblioteca preference, que en este proyecto está añadida en
+ *        app/build.gradle con la línea: implementation libs.preference
+ *    3 - Consultar la guía oficial https://developer.android.com/guide/topics/ui/settings?hl=es-419
  *
  */
 public class MainActivity extends AppCompatActivity {
@@ -44,10 +44,8 @@ public class MainActivity extends AppCompatActivity {
         mPrefBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Todo 0. Se debe crear la actividad que contendrá la funcionalidad de la
-                // configuración. En este caso se ha creado la actividad SettingActivity y su
-                // layout, activity_setting.xml
-
+                //Todo 1. La pantalla de preferencias es una actividad más, con su clase y su layout
+                //Todo -> (SettingActivity y activity_setting.xml), y se abre con una intención
                 Intent i = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(i);
             }
@@ -57,25 +55,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Todo 5. Recordad que esto es solo un ejemplo y que al ponerlo en el método onCreate solo se va a
-        //  precargar al inicio de la aplicación. Ustedes deberéis cargarlo en el método que creáis
-        //  oportuno según las necesidades de vuestra aplicación.
+        //Todo 8. Se cargan aquí, y no en onCreate, porque onResume también se ejecuta al volver de la
+        //Todo -> pantalla de preferencias. Así el texto se actualiza con lo que acaba de escribir
+        //Todo -> el usuario. En tu aplicación, cárgalas en el método que necesites
         loadPreferences();
     }
 
 
     public void loadPreferences(){
 
-        //Todo 4. Una vez creado todo, solo debemos de preocuparnos de acceder a la información,
-        // ya  que Android se encarga del almacenamiento de los datos que introduce el usuario en
-        // la ventana de preferencias.
+        //Todo 9. Guardar no es trabajo nuestro: Android almacena lo que el usuario introduce en la
+        //Todo -> pantalla de preferencias. Aquí solo hay que leerlo
 
-        //Todo 4.1 Utilizamos PreferenceManager para obtener las preferencias compartidas de nuestra
-        // aplicación. TENEIS QUE TENER EN CUENTA QUE ESTE ES EL MISMO PARA TODA LA APP (PATRÓN SINGLETON)
-
-
+        //Todo 10. PreferenceManager da acceso a las preferencias compartidas. Son las mismas para
+        //Todo -> toda la aplicación: cualquier actividad que las pida leerá los mismos datos
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        // Todo 4.2 Una vez tenemos acceso a las preferencias compartidas, solo debemos acceder mediante la clave para obtener su valor
+
+        //Todo 11. Se lee por la clave, la misma de android:key en el XML. El segundo parámetro es
+        //Todo -> el valor que se devuelve si esa clave todavía no tiene ningún valor guardado
         String emailText = sharedPreferences.getString("emailPreference","Valor por defecto");
         txtView.setText(emailText);
     }

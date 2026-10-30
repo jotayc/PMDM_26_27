@@ -13,7 +13,7 @@
         android:theme="@style/Theme.PMDM">
         <activity
             android:name=".controllers.SettingActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".controllers.MainActivity"
             android:exported="true"
