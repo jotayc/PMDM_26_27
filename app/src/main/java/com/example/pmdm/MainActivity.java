@@ -11,23 +11,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
- * Actividad Menu simple
+ * Actividad Menú simple
  * @author JC
- * @version 0.2
+ * @version 0.3
  *
- *  En esta rama se explicará los conceptos:
- *  1- Crear un menu simple e intercatuar con los items que lo componen.
+ *  En esta rama se explicará cómo:
+ *  1- Crear un menú simple e interactuar con los item que lo componen.
  *
  *  Consideraciones previas:
- *   1.Se debe crear una carpeta nueva en res/menu
- *   2.Dentro de esta, se crea un xml cuyo elemento raiz es <menu></menu>
- *   3. Importante el atributo android:showAsAction cuyo fin es indicar cómo se debe mostrar los item
- *      en el menu. Existen diferentes formas que podéis verlo en la documentación oficial
+ *   1. Se debe crear una carpeta nueva en res/menu
+ *   2. Dentro de esta, se crea un xml cuyo elemento raíz es <menu></menu>
+ *   3. Importante el atributo app:showAsAction, cuyo fin es indicar cómo se debe mostrar cada item
+ *      en la barra. Existen diferentes formas que podéis ver en la documentación oficial
  *      https://developer.android.com/guide/topics/resources/menu-resource?hl=es-419
  *
  */
 public class MainActivity extends AppCompatActivity {
 
+    //Todo 1: El layout al que se le cambia el fondo y el color elegido, que empieza siendo blanco
     private ConstraintLayout constraintLayout;
     int selectedColor = Color.WHITE;
 
@@ -37,27 +38,29 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        //Todo 2: La vista raíz del layout también se obtiene por su id
         constraintLayout = (ConstraintLayout) findViewById(R.id.root_const_lay);
 
     }
 
-    //Todo 1. Se sobreescribe el metodo onCreateOptionsMenu para indicar que nuestra app tendra
-    // un menu personalizado.
+    //Todo 3: Se sobrescribe el método onCreateOptionsMenu para indicar que la app tiene un menú propio.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //Todo 1.1 Se usa un inflater para construir la vista y se pasa el menu por defecto para
-        // que Android se encargue de colocarlo en la vista
+        //Todo 4: El inflater construye las opciones a partir del XML y las añade al menú que
+        //Todo -> recibe el método. Android se encarga de colocarlas en la barra
         getMenuInflater().inflate(R.menu.simple_menu,menu);
 
         return true;
     }
 
-    //Todo 2. Se sobreescribe el metodo onOptionsItemSelected para manejar las selecciones a través
-    // de los diferentes item del menu.
+    //Todo 5: Se sobrescribe el método onOptionsItemSelected, al que Android llama cuando se pulsa
+    //Todo -> una opción del menú, y que la recibe como parámetro
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        //Todo 6: Se compara el id de la opción pulsada con los id del XML
         int itemId = item.getItemId();
 
+        //Todo 7: Pulsar un color solo lo guarda: el fondo todavía no cambia
         if (itemId == R.id.item_blue) {
             selectedColor = Color.BLUE;
             myToast("Azul seleccionado");
@@ -68,9 +71,11 @@ public class MainActivity extends AppCompatActivity {
             selectedColor = Color.RED;
             myToast("Rojo seleccionado");
         } else if (itemId == R.id.item_apply) {
+            //Todo 8: Pulsar Aplicar usa el color guardado
             constraintLayout.setBackgroundColor(selectedColor);
         }
 
+        //Todo 9: Devolver true indica que la opción ya está atendida
         return true;
     }
 

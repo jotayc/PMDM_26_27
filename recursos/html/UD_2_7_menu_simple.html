@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.7 · Menú simple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+<style>
+  /* ---------- Piezas propias de esta página ---------- */
+  :root{ --sim: #6D3FD8; --sim-soft: #EFE9FC; }
+  .legend{ display: grid; gap: 6px; margin: 18px 0 0; padding: 12px 16px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; font-size: 14px; }
+  .legend > div{ display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: start; }
+  .legend > div i{ margin-top: 4px; width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .legend code{ white-space: nowrap; }
+  .sim{ margin: 24px 0 28px; border-radius: var(--radius); background: var(--sim-soft); border: 1px solid #D9CCF7; overflow: hidden; }
+  .sim-head{ background: var(--sim); color: #fff; padding: 12px 18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .sim-head b{ font-family: var(--font-head); font-size: 17px; }
+  .sim-head span{ font-size: 13.5px; opacity: .9; }
+  .sim-body{ padding: 16px 18px 18px; }
+  .sim-body > p{ margin-top: 0; }
+  .sim-row{ display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+  .btns{ display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .btn{ font: 600 14px var(--font-body); border: 0; border-radius: 999px; padding: 9px 16px; background: var(--sim); color: #fff; cursor: pointer; }
+  .btn.ghost{ background: #fff; color: var(--sim); box-shadow: inset 0 0 0 1.5px var(--sim); }
+  .btn:disabled{ opacity: .4; cursor: default; }
+  .phone{ width: 248px; flex: none; background: #1D1B20; border-radius: 28px; padding: 12px 10px 16px; }
+  .phone-bar{ height: 18px; display: flex; justify-content: center; }
+  .phone-bar::before{ content: ""; width: 54px; height: 6px; border-radius: 3px; background: #3A3740; }
+  .screen{ position: relative; height: 330px; background: #fff; border-radius: 6px; overflow: hidden; transition: background .2s; touch-action: manipulation; }
+  .appbar{ height: 40px; background: #6200EE; color: #fff; font: 600 13px var(--font-body); display: flex; align-items: center; gap: 4px; padding: 0 4px 0 10px; }
+  .appbar .ttl{ flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appbar.modo{ background: #37343D; }
+  .appbar button{ border: 0; background: none; color: #fff; font: 600 12px var(--font-body); padding: 6px 5px; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
+  .appbar button:hover{ background: rgba(255,255,255,.16); }
+  .swatch{ width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(255,255,255,.75); display: inline-block; flex: none; }
+  .canvas{ position: absolute; inset: 40px 0 0; display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; align-content: center; padding: 10px; }
+  .droid{ font: 600 11.5px var(--font-body); text-transform: uppercase; letter-spacing: .03em; border: 0; border-radius: 6px; background: #6200EE; color: #fff; padding: 9px 9px; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .toast{ position: absolute; left: 12px; right: 12px; bottom: 26px; background: #3C3940; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 12px; border-radius: 16px; text-align: center; z-index: 5; pointer-events: none; }
+  .snack{ position: absolute; left: 8px; right: 8px; bottom: 8px; background: #323036; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 10px; border-radius: 5px; display: flex; gap: 8px; align-items: center; z-index: 4; }
+  .snack span{ flex: 1; }
+  .snack button{ border: 0; background: none; color: #03DAC5; font: 700 11.5px var(--font-body); text-transform: uppercase; cursor: pointer; padding: 4px; }
+  .scrimx{ position: absolute; inset: 0; background: rgba(0,0,0,.42); z-index: 6; display: grid; place-items: center; padding: 14px; }
+  .dialog{ background: #fff; border-radius: 6px; padding: 14px 14px 8px; width: 100%; box-shadow: 0 6px 22px rgba(0,0,0,.35); }
+  .dialog b{ display: block; font: 600 14px var(--font-body); margin-bottom: 8px; }
+  .dialog p{ margin: 0 0 10px; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+  .dialog .acts{ display: flex; justify-content: flex-end; gap: 6px; }
+  .dialog .acts button{ border: 0; background: none; color: #6200EE; font: 700 12px var(--font-body); text-transform: uppercase; padding: 6px 8px; cursor: pointer; }
+  .pop{ position: absolute; background: #fff; border-radius: 4px; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 7; min-width: 118px; padding: 4px 0; }
+  .pop button{ display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: none; font: 12.5px var(--font-body); color: var(--ink); text-align: left; padding: 8px 12px; cursor: pointer; }
+  .pop button:hover{ background: var(--bg); }
+  .pop .swatch{ border-color: rgba(0,0,0,.25); }
+  .pop .head{ font: 600 11.5px var(--font-body); color: var(--muted); padding: 6px 12px 4px; }
+  .panel{ flex: 1; min-width: 260px; }
+  .panel > *:first-child{ margin-top: 0; }
+  .log{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; height: 182px; overflow-y: auto; font: 12px/1.55 var(--font-mono); margin: 10px 0 0; list-style: none; }
+  .log li{ margin: 0; padding: 1px 0; overflow-wrap: anywhere; }
+  .log li.nota{ color: #9DA0A8; font-style: italic; }
+  .log li.met{ color: #6AAB73; }
+  .log li.acc{ color: #F4A35C; }
+  .why{ background: #fff; border-radius: 12px; padding: 10px 14px; margin-top: 10px; font-size: 14.5px; min-height: 48px; }
+  .estado{ display: inline-block; font: 600 12px var(--font-mono); background: #fff; border-radius: 8px; padding: 5px 9px; margin: 2px 0; }
+  .opts{ display: grid; gap: 6px; margin: 8px 0; }
+  .opts > div{ display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #fff; border-radius: 10px; padding: 5px 10px; font-size: 14px; }
+  .opts select{ font: 12px var(--font-mono); border: 1px solid #D9CCF7; border-radius: 6px; padding: 3px; background: #fff; color: var(--ink); }
+  @media (max-width: 700px){
+    main figure{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    main figure svg{ min-width: 660px; }
+    main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+  }
+  @media (max-width: 600px){ .phone{ margin: 0 auto; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.7 · Menú simple</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_7_menu_simple.html" aria-current="page">UD 2.7 · Menú simple</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">La barra de app</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">El menú en XML</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">Inflar el menú</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1-2</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 3-4</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 5-6</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 7-8</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 9</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>El menú y el layout</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_7_menu_simple</p>
+      <h1>Menú simple</h1>
+      <p class="lede">Tres colores y una opción de aplicar en la barra de arriba de la aplicación. Con esta rama verás cómo se describe un menú en XML, cómo llega hasta la barra y cómo se responde cuando se pulsa una opción.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+      <div class="legend" role="group" aria-label="Qué significa cada color">
+        <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener.</span></div>
+        <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones. En su registro, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
+        <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
+        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
+      </div>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 2 12l6 6"/><path d="m16 6 6 6-6 6"/></svg><b>El menú en XML</b><span>Un fichero en <code>res/menu/</code> con una entrada por opción.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><b>La barra de app</b><span>Dónde se colocan las opciones y qué es el menú de desbordamiento.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg><b>Inflar el menú</b><span>Cómo se convierte el XML en opciones de verdad.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M13 9a2 2 0 0 1 4 0v3"/><path d="M17 11a2 2 0 0 1 4 0v4a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-3l-3-5a2 2 0 0 1 3-2l2 2"/></svg><b>Responder a una opción</b><span>El método que se ejecuta al pulsar cualquiera de ellas.</span></div></div><p>En la barra de arriba hay tres colores y una opción <em>Aplicar</em>. Pulsar un color lo deja elegido; pulsar <em>Aplicar</em> pinta el fondo de la pantalla con ese color.</p>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>La barra de app y sus opciones</h3>
+      <p>La <strong>barra de app</strong> es la franja superior de la pantalla, con el título. Además, puede mostrar opciones: unas se ven directamente en la barra, normalmente como un icono, y otras se guardan en el <strong>menú de desbordamiento</strong>, los tres puntos verticales.</p>
+      <p>Esta aplicación no tiene que añadir la barra a su layout, porque su tema ya la incluye. Basta con decirle qué opciones debe mostrar.</p>
+      <h3 id="s2-2"><span class="sn">2.2</span>El menú se describe en XML</h3>
+      <p>Igual que un layout describe una pantalla, un fichero de menú describe unas opciones. Va en su propia carpeta, <code>res/menu/</code>, y su elemento raíz es <code>&lt;menu&gt;</code>, con un <code>&lt;item&gt;</code> por opción.</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Atributo</th><th>Qué hace</th></tr></thead>
+<tbody>
+<tr><td class="mono">android:id</td><td>Identifica la opción: es lo que se compara en Java para saber cuál se ha pulsado.</td></tr>
+<tr><td class="mono">android:title</td><td>El texto de la opción.</td></tr>
+<tr><td class="mono">android:icon</td><td>El icono que se ve cuando la opción está en la barra.</td></tr>
+<tr><td class="mono">android:orderInCategory</td><td>Un número para ordenarlas: la menor va primero.</td></tr>
+<tr><td class="mono">app:showAsAction</td><td>Si la opción se muestra en la barra o en el menú de desbordamiento.</td></tr>
+</tbody>
+</table></div>
+      <div class="table-wrap"><table>
+<thead><tr><th>Valor de app:showAsAction</th><th>Dónde aparece</th></tr></thead>
+<tbody>
+<tr><td class="mono">ifRoom</td><td>En la barra si hay sitio; si no, en el menú de desbordamiento.</td></tr>
+<tr><td class="mono">never</td><td>Siempre en el menú de desbordamiento.</td></tr>
+<tr><td class="mono">always</td><td>Siempre en la barra. Úsalo con moderación, porque el espacio es limitado.</td></tr>
+<tr><td class="mono">withText</td><td>Se combina con otro valor (<code>ifRoom|withText</code>) y pide mostrar también el texto si hay sitio.</td></tr>
+</tbody>
+</table></div>
+      <div class="box clave"><span class="box-label">ifRoom depende de la pantalla</span><p>Las cuatro opciones de esta rama llevan <code>ifRoom</code>, pero no siempre se ven igual. En un móvil en vertical suelen caber dos, y las otras quedan en el menú de desbordamiento. Al girarlo, la barra es más ancha y caben todas.</p></div>
+      <div class="box consejo"><span class="box-label">app:, no android:</span><p>Se escribe <code>app:showAsAction</code>, con el espacio de nombres <code>app</code>. Con <code>android:showAsAction</code> compila, pero en esta actividad no tiene efecto, y la opción acaba en el menú de desbordamiento.</p></div>
+      <h3 id="s2-3"><span class="sn">2.3</span>Inflar: del XML a las opciones</h3>
+      <p><strong>Inflar</strong> significa leer un fichero XML y crear los objetos que describe. La actividad no sabe nada del menú hasta que lo infla, y lo hace en un método que Android llama por sí solo.</p>
+      <figure>
+<svg viewBox="0 0 720 240" role="img" aria-label="El fichero simple_menu.xml describe cuatro opciones. Android llama a onCreateOptionsMenu, que lo infla y crea las opciones en la barra de app. Al pulsar una, Android llama a onOptionsItemSelected y le pasa la opción pulsada.">
+  <defs><marker id="sm1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="30" width="180" height="130" rx="14" fill="#E2F4EA"/>
+  <text x="90" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">simple_menu.xml</text>
+  <text x="90" y="86" text-anchor="middle" font-size="12" fill="#0A5C33">describe las opciones:</text>
+  <text x="90" y="106" text-anchor="middle" font-size="12" fill="#0A5C33">texto, icono, id</text>
+  <text x="90" y="126" text-anchor="middle" font-size="12" fill="#0A5C33">y dónde colocarlas</text>
+  <rect x="240" y="30" width="200" height="130" rx="14" fill="#0E8A4B"/>
+  <text x="340" y="66" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onCreateOptionsMenu()</text>
+  <text x="340" y="96" text-anchor="middle" font-size="12" fill="#fff">el inflater convierte</text>
+  <text x="340" y="116" text-anchor="middle" font-size="12" fill="#fff">el XML en opciones</text>
+  <rect x="500" y="30" width="220" height="130" rx="14" fill="#0E8A4B"/>
+  <text x="610" y="66" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onOptionsItemSelected()</text>
+  <text x="610" y="96" text-anchor="middle" font-size="12" fill="#fff">recibe la opción pulsada</text>
+  <text x="610" y="116" text-anchor="middle" font-size="12" fill="#fff">y decide qué hacer</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#sm1)">
+    <line x1="184" y1="95" x2="236" y2="95"/>
+    <line x1="444" y1="95" x2="496" y2="95"/>
+  </g>
+  <text x="210" y="84" text-anchor="middle" font-size="11" fill="#56655D">se lee</text>
+  <text x="470" y="84" text-anchor="middle" font-size="11" fill="#56655D">pulsar</text>
+  <text x="360" y="200" text-anchor="middle" font-size="12.5" fill="#17211C">El primer método se llama al crear el menú; el segundo, cada vez que se pulsa una opción.</text>
+  <text x="360" y="222" text-anchor="middle" font-size="12" fill="#56655D">A los dos los llama Android: tu código nunca los llama.</text>
+</svg>
+<figcaption>Del XML a la pantalla. El menú se describe en un fichero, Android lo convierte en opciones y te avisa cuando se pulsa una.</figcaption>
+</figure>
+      <div class="sim" id="simMenu">
+        <div class="sim-head"><b>La barra y su menú</b><span>cambia el XML y pulsa las opciones</span></div>
+        <div class="sim-body">
+          <p>Elige el valor de <code>app:showAsAction</code> de cada opción y gira el móvil para ver qué cabe en la barra. Después pulsa un color y luego <em>Aplicar</em>. El aspecto es aproximado.</p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="smScreen">
+              <div class="appbar" id="smBar"></div>
+            </div></div>
+            <div class="panel">
+              <div class="btns"><button class="btn ghost" id="smGira" type="button">Girar el móvil</button></div>
+              <div class="opts" id="smOpts"></div>
+              <span class="estado" id="smEstado">selectedColor = WHITE</span>
+              <ul class="log" id="smLog" aria-label="Registro de llamadas"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box clave"><span class="box-label">Dos métodos, dos momentos</span><p><code>onCreateOptionsMenu()</code> crea las opciones; <code>onOptionsItemSelected()</code> responde cuando se pulsa una. Una sola actividad, un solo método para todas las opciones: dentro se distingue cuál ha sido por su id.</p></div>
+
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 9, y todos están en <code>MainActivity</code>.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1-2</span>Los atributos</h3>
+      <p>El color elegido tiene que estar en un atributo porque se escribe en una pulsación (un color) y se lee en otra (<em>Aplicar</em>). Una variable local desaparecería al terminar el método. El layout tiene un id en su vista raíz para poder cambiarle el fondo.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private ConstraintLayout constraintLayout;
+int selectedColor = Color.WHITE;
+
+constraintLayout = (ConstraintLayout) findViewById(R.id.root_const_lay);</code></pre></div>
+      <h3 id="s3-2"><span class="sn">TODO 3-4</span>Crear el menú</h3>
+      <p>Android le pasa al método un menú vacío, y <code>inflate()</code> lo llena con las opciones del XML. Devolver <code>true</code> indica que el menú debe mostrarse.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.simple_menu,menu);
+
+    return true;
+}</code></pre></div>
+      <h3 id="s3-3"><span class="sn">TODO 5-6</span>Saber qué opción se ha pulsado</h3>
+      <p>El método recibe la opción como un <code>MenuItem</code>, y su id se compara con los del XML, con <code>if</code>. Los id de recursos no se pueden usar en un <code>switch</code>, porque no son constantes.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">@Override
+public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    int itemId = item.getItemId();
+    // comparaciones y return
+}</code></pre></div>
+      <h3 id="s3-4"><span class="sn">TODO 7-8</span>Elegir y aplicar</h3>
+      <p>Un color no pinta nada: solo se guarda y avisa con un Toast. Es <em>Aplicar</em> quien usa el color guardado.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">if (itemId == R.id.item_blue) {
+    selectedColor = Color.BLUE;
+    myToast(&quot;Azul seleccionado&quot;);
+} else if (itemId == R.id.item_green) {
+    selectedColor = Color.GREEN;
+    myToast(&quot;Verde seleccionado&quot;);
+} else if (itemId == R.id.item_red) {
+    selectedColor = Color.RED;
+    myToast(&quot;Rojo seleccionado&quot;);
+} else if (itemId == R.id.item_apply) {
+    constraintLayout.setBackgroundColor(selectedColor);
+}</code></pre></div>
+      <h3 id="s3-5"><span class="sn">TODO 9</span>Opción atendida</h3>
+      <p>Aquí se devuelve siempre <code>true</code>, porque todas las opciones son nuestras. Cuando una actividad pueda recibir opciones que no son suyas, lo correcto es <code>return super.onOptionsItemSelected(item);</code> para las demás, como se ve en la teoría de la UD2.</p>
+
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>El menú y el layout</h2></div>
+<p>Los colores llevan su icono, en <code>res/drawable/</code>. <em>Aplicar</em> no tiene, así que, cuando cabe en la barra, se ve su texto.</p>
+      <div class="code"><div class="code-bar">res/menu/simple_menu.xml</div>
+<pre><code class="lang-xml">&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;&gt;
+    &lt;item
+        android:id=&quot;@+id/item_red&quot;
+        android:icon=&quot;@drawable/color_red&quot;
+        android:orderInCategory=&quot;1&quot;
+        android:title=&quot;Rojo&quot;
+        app:showAsAction=&quot;ifRoom|withText&quot; /&gt;
+    &lt;item
+        android:id=&quot;@+id/item_green&quot;
+        android:icon=&quot;@drawable/color_green&quot;
+        android:orderInCategory=&quot;2&quot;
+        android:title=&quot;Verde&quot;
+        app:showAsAction=&quot;ifRoom&quot; /&gt;
+    &lt;item
+        android:id=&quot;@+id/item_blue&quot;
+        android:icon=&quot;@drawable/color_blue&quot;
+        android:orderInCategory=&quot;3&quot;
+        android:title=&quot;Azul&quot;
+        app:showAsAction=&quot;ifRoom&quot; /&gt;
+    &lt;item
+        android:id=&quot;@+id/item_apply&quot;
+        android:orderInCategory=&quot;4&quot;
+        android:title=&quot;Aplicar&quot;
+        app:showAsAction=&quot;ifRoom&quot; /&gt;
+&lt;/menu&gt;</code></pre></div>
+      <p>El layout está vacío: no tiene ninguna vista, solo un id en la vista raíz para poder cambiarle el color de fondo.</p>
+      <div class="code"><div class="code-bar">res/layout/activity_main.xml</div>
+<pre><code class="lang-xml">&lt;androidx.constraintlayout.widget.ConstraintLayout
+    android:id=&quot;@+id/root_const_lay&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    tools:context=&quot;.MainActivity&quot;&gt;
+
+&lt;/androidx.constraintlayout.widget.ConstraintLayout&gt;</code></pre></div>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+<ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>) con el móvil en vertical. La pantalla está en blanco y en la barra hay dos colores y los tres puntos. Púlsalos: dentro están las otras dos opciones, solo con su texto.</li><li>Pulsa <strong>Aplicar</strong> sin haber elegido nada. El fondo se pinta de blanco, el valor inicial de <code>selectedColor</code>, así que no se nota.</li><li>Pulsa el rojo. Aparece el Toast, pero el fondo no cambia. Pulsa <strong>Aplicar</strong> y ahora sí.</li><li>Mantén pulsado un icono de la barra. Aparece su <code>title</code>: por eso hay que ponérselo siempre, aunque no se lea en la barra.</li><li>En el XML, cambia a <code>never</code> el <code>app:showAsAction</code> de Rojo y vuelve a ejecutar. Rojo pasa al menú de los tres puntos y su sitio en la barra lo ocupa la siguiente opción.</li><li>Gira el móvil con un color aplicado. Ahora caben las cuatro opciones en la barra, pero el fondo vuelve a ser blanco: la actividad se crea de nuevo y sus atributos vuelven a su valor inicial.</li></ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>La barra no muestra ninguna opción</td><td>Falta <code>inflate()</code>, o <code>onCreateOptionsMenu()</code> devuelve <code>false</code>.</td></tr>
+<tr><td><code>R.menu.simple_menu</code> sale en rojo</td><td>El fichero no está en <code>res/menu/</code> o tiene otro nombre.</td></tr>
+<tr><td>Las opciones aparecen, pero no hacen nada</td><td>El método está mal escrito y no sobrescribe el original. Con <code>@Override</code> el compilador lo avisa.</td></tr>
+<tr><td>Una opción no sale en la barra aunque hay sitio</td><td>Se ha escrito <code>android:showAsAction</code> en lugar de <code>app:showAsAction</code>.</td></tr>
+<tr><td>Falta el prefijo <code>app:</code></td><td>El elemento <code>&lt;menu&gt;</code> no declara <code>xmlns:app</code>.</td></tr>
+<tr><td>El fondo no cambia al pulsar un color</td><td>Es lo esperado: un color solo se guarda. El fondo cambia al pulsar <em>Aplicar</em>.</td></tr>
+</tbody>
+</table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+<p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_2_7</code>.</p>
+      <ol class="steps">
+        <li>Pasa a <code>strings.xml</code> los títulos de las opciones.</li>
+        <li>Añade una opción <em>Blanco</em> y otra <em>Sobre esta app</em>; esta última, con <code>never</code>, que muestre un Toast con tu nombre.</li>
+        <li>Haz que los colores se apliquen directamente al pulsarlos y quita la opción <em>Aplicar</em>.</li>
+        <li>Agrupa los tres colores en un submenú: un <code>&lt;item&gt;</code> <em>Colores</em> con otro <code>&lt;menu&gt;</code> dentro.</li>
+        <li>Cambia el final del método para que las opciones atendidas devuelvan <code>true</code> y el resto <code>super.onOptionsItemSelected(item)</code>.</li>
+        <li>Añade un <code>TextView</code> al layout que muestre el nombre del color elegido.</li>
+      </ol>
+    </section>
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+<script>
+(function(){
+"use strict";
+
+function $(id){ return document.getElementById(id); }
+function registro(id){
+  var ul = $(id);
+  function add(texto, clase){ var li = document.createElement("li"); li.textContent = texto; if(clase) li.className = clase; ul.appendChild(li); ul.scrollTop = ul.scrollHeight; }
+  return { met: function(t){ add(t, "met"); }, acc: function(t){ add(t, "acc"); }, nota: function(t){ add(t, "nota"); }, limpiar: function(){ ul.innerHTML = ""; } };
+}
+function pulsacionLarga(boton, alLargo, alCorto){
+  var temporizador = null, disparado = false;
+  boton.addEventListener("pointerdown", function(){ disparado = false; temporizador = setTimeout(function(){ disparado = true; alLargo(); }, 500); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(function(evento){ boton.addEventListener(evento, function(){ clearTimeout(temporizador); }); });
+  boton.addEventListener("click", function(){ if(!disparado && alCorto) alCorto(); });
+  boton.addEventListener("contextmenu", function(ev){ ev.preventDefault(); });
+}
+
+
+var log = registro("smLog"), pantalla = $("smScreen"), barra = $("smBar"), tmToast = null, abierto = false, elegido = "#FFFFFF", caben = 2;
+var ITEMS = [
+  {id: "item_red", n: "Rojo", c: "#FF0000", k: "RED", v: "ifRoom"},
+  {id: "item_green", n: "Verde", c: "#00FF00", k: "GREEN", v: "ifRoom"},
+  {id: "item_blue", n: "Azul", c: "#0000FF", k: "BLUE", v: "ifRoom"},
+  {id: "item_apply", n: "Aplicar", c: null, v: "ifRoom"}
+];
+function aviso(texto){
+  var viejo = pantalla.querySelector(".toast"); if(viejo) viejo.remove();
+  clearTimeout(tmToast);
+  var el = document.createElement("div"); el.className = "toast"; el.textContent = texto; pantalla.appendChild(el);
+  tmToast = setTimeout(function(){ el.remove(); }, 2000);
+}
+function cierra(){ var m = pantalla.querySelector(".pop"); if(m) m.remove(); abierto = false; }
+function pinta(){
+  cierra();
+  var html = '<span class="ttl">MainActivity</span>', resto = [], enBarra = 0;
+  ITEMS.forEach(function(item, i){
+    if(item.v === "never" || enBarra === caben){ resto.push(i); return; }
+    enBarra++;
+    html += '<button type="button" data-i="' + i + '" aria-label="' + item.n + '">' + (item.c ? '<i class="swatch" style="background:' + item.c + '"></i>' : item.n) + '</button>';
+  });
+  if(resto.length) html += '<button type="button" id="smMas" aria-label="Más opciones">⋮</button>';
+  barra.innerHTML = html;
+  var mas = $("smMas");
+  if(mas) mas.addEventListener("click", function(){
+    if(abierto){ cierra(); return; }
+    var m = document.createElement("div"); m.className = "pop"; m.style.cssText = "right:4px;top:44px";
+    resto.forEach(function(i){ var b = document.createElement("button"); b.type = "button"; b.textContent = ITEMS[i].n; b.setAttribute("data-i", i); m.appendChild(b); });
+    m.addEventListener("click", pulsa);
+    pantalla.appendChild(m); abierto = true;
+  });
+}
+function pulsa(ev){
+  var el = ev.target.closest("[data-i]"); if(!el) return;
+  var item = ITEMS[+el.getAttribute("data-i")];
+  cierra();
+  log.met("onOptionsItemSelected(" + item.id + ")");
+  if(item.c){
+    elegido = item.c;
+    log.acc("selectedColor = Color." + item.k);
+    $("smEstado").textContent = "selectedColor = " + item.k;
+    aviso(item.n + " seleccionado");
+  } else {
+    log.acc("constraintLayout.setBackgroundColor(selectedColor)");
+    pantalla.style.background = elegido;
+  }
+}
+barra.addEventListener("click", pulsa);
+$("smGira").addEventListener("click", function(){
+  caben = caben === 2 ? 4 : 2;
+  log.nota(caben === 4 ? "Móvil en horizontal: la barra es más ancha, caben más opciones." : "Móvil en vertical: la barra es más estrecha.");
+  pinta();
+});
+ITEMS.forEach(function(item, i){
+  var fila = document.createElement("div");
+  fila.innerHTML = "<span>" + item.n + '</span><select aria-label="showAsAction de ' + item.n + '"><option>ifRoom</option><option>never</option></select>';
+  fila.querySelector("select").addEventListener("change", function(){ item.v = this.value; pinta(); });
+  $("smOpts").appendChild(fila);
+});
+pinta();
+
+})();
+</script>
+</body>
+</html>

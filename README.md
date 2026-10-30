@@ -1,52 +1,44 @@
-# PMDM · Curso 2026-27
+# UD 2.7 · Menú simple
 
-**Programación Multimedia y Dispositivos Móviles · 2º DAM**
+Tres colores y una opción de aplicar en la **barra de app**. Pulsar un color lo
+deja elegido y *Aplicar* pinta el fondo con él. Verás cómo se describe un menú en
+XML, cómo se **infla** y cómo se responde a sus opciones.
 
-Este repositorio es el proyecto Android de todo el módulo. Cada **rama** es un
-tema, con sus apuntes en HTML y las explicaciones en los comentarios `TODO` del
-código. Esta rama, `main`, es la base del proyecto.
+## 📘 Apuntes
 
-![Android Studio](recursos/img/ventana_android_studio.svg)
-
-## 1. Clonar el proyecto
-
-Solo se hace una vez, al principio del curso:
-
-1. Copia la dirección de este repositorio: botón verde **Code** de esta página → pestaña *HTTPS*.
-2. En la pantalla de bienvenida de Android Studio pulsa **Clone Repository**
-   (con un proyecto abierto: *File → New → Project from Version Control*),
-   pega la dirección y elige una carpeta.
-3. Espera a que termine la sincronización de Gradle. Si te pide instalar una
-   plataforma del SDK, acepta.
-
-## 2. Abrir los apuntes
-
-Los apuntes están en la carpeta `recursos/html/` del proyecto y se abren **en el
-navegador desde tu copia local**. En GitHub solo verías su código.
-
-- **En Android Studio:** botón derecho sobre el fichero → *Open In → Browser*.
-- **En el explorador de Windows:** doble clic sobre el fichero.
-
-## 3. Índice
-
-| Apuntes | Fichero | Contenido |
+| Apuntes | Fichero | Para qué |
 |---|---|---|
-| 📌 **Cómo usar este repositorio** | [`recursos/html/como_usar.html`](recursos/html/como_usar.html) | Traer cada tema nuevo, estudiar una rama y normas para no tener conflictos con Git. |
-| 🧭 **Guía de Android Studio** | [`recursos/html/guia_android_studio.html`](recursos/html/guia_android_studio.html) | Partes del entorno, estructura del proyecto, ficheros clave, Gradle, ejecutar, Logcat, depurador y ciclo de vida. |
-| 📘 **UD1 · Introducción a Android** | [`recursos/html/UD01_Introduccion_Android.html`](recursos/html/UD01_Introduccion_Android.html) | Dispositivos móviles, tecnologías, arquitectura de Android, primer proyecto, despliegue y ciclo de vida. |
+| 📗 **UD2 · La interfaz de usuario** | [`recursos/html/UD02_Interfaz_Usuario.html`](recursos/html/UD02_Interfaz_Usuario.html) | **La teoría de toda la unidad.** Layouts, eventos, componentes, recursos, temas y estilos, barra de app y menús, mensajes, actividades e intenciones, menú contextual y fragmentos. |
+| 📘 **UD 2.7 · Menú simple** | [`recursos/html/UD_2_7_menu_simple.html`](recursos/html/UD_2_7_menu_simple.html) | Lo de esta rama: el fichero del menú, `app:showAsAction`, inflar y responder a las opciones. Con un simulador de la barra. |
 
-Estos tres apuntes están en todas las ramas. Cada rama añade los suyos, que
-encontrarás en el `README.md` de esa rama.
+Los apuntes de la **UD2** son los de la unidad entera: los vas a usar en este
+tema y en todos los que vienen después. Tenlos abiertos mientras trabajas: lo
+que aquí se practica, allí se explica.
 
-## 4. Versiones del proyecto
+Ábrelos en el navegador desde tu copia del proyecto: en Android Studio, botón
+derecho sobre el fichero → *Open In → Browser* (en GitHub solo se ve su código).
+Dentro de cada uno, arriba del índice lateral, tienes los enlaces al resto de
+apuntes.
 
-| | |
+## Qué mirar de la teoría en este tema
+
+| Apartado de la UD2 | Por qué ahora |
 |---|---|
-| Lenguaje | Java, con diseño de pantallas en XML |
-| Android mínimo (`minSdk`) | 28 (Android 9) |
-| Compilación (`compileSdk`) | 37 (Android 17) |
-| Comportamiento (`targetSdk`) | 36 (Android 16) |
-| Gradle / plugin de Android | 9.6 / 9.4 |
+| **Barra de app y menús** | Es el apartado de este tema: la barra, el fichero del menú y los métodos que lo crean y responden. |
+| **Recursos de la interfaz** | De dónde salen los iconos: `res/drawable/`. |
+| **Mensajes al usuario → Toast** | El aviso que aparece al elegir un color. |
 
-No hace falta instalar nada aparte de Android Studio: Gradle y el SDK necesario
-se descargan solos al abrir el proyecto.
+## Dónde está en el código
+
+| TODO | Fichero | Qué explica |
+|---|---|---|
+| 1-2 | `MainActivity.java` | El layout y el color elegido |
+| 3-4 | `MainActivity.java` | `onCreateOptionsMenu()` e inflar el menú |
+| 5-6 | `MainActivity.java` | `onOptionsItemSelected()` y el id de la opción |
+| 7-8 | `MainActivity.java` | Guardar el color y aplicarlo |
+| 9 | `MainActivity.java` | Qué significa devolver `true` |
+| — | `res/menu/simple_menu.xml` | Las opciones del menú |
+| — | `res/layout/activity_main.xml` | El layout vacío con su id |
+
+La ventana **TODO** de Android Studio (*View → Tool Windows → TODO*) los lista
+todos: un clic en uno te lleva a su línea.
