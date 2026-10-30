@@ -12,20 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
- * Actividad: Notificaciones_Toast_Alerts_Logs
+ * Actividad: Toast, AlertDialog y Snackbar
  * @author JC
- * @version 0.1
+ * @version 0.2
  *
- * Explica el uso de :
+ * Explica el uso de:
  *
- * 1- Toast como comunicación sin interacción con el usuario
- * 2- Alerts como medio de comunicación con el usuario
- * 3- Logs como medio de depuración.
+ * 1- Toast como aviso breve sin interacción con el usuario
+ * 2- AlertDialog como ventana que interrumpe y espera una respuesta
+ * 3- Snackbar como aviso breve que puede ofrecer una acción
  *
  */
 public class MainActivity extends AppCompatActivity {
 
-
+    //Todo 1: Un botón por cada forma de avisar al usuario
     Button btn_toast;
     Button btn_alert;
     Button btn_snack;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //Todo 2: Se conecta cada botón con su vista del layout
         btn_toast = (Button)   findViewById(R.id.btn_toast);
         btn_alert = (Button)   findViewById(R.id.btn_alert);
         btn_snack = (Button)   findViewById(R.id.btn_snack);
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         btn_toast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Todo 3: El Toast se muestra con un método propio, que está más abajo
                 myLongToast("Esto es un toast igual que el primero que vimos");
             }
         });
@@ -51,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
         btn_alert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Todo 2.4 Solo debemos crear un objeto AlertDialog y llamar al método que lo crea.
-                //Todo -> Posteriormente lo mostramos.
+                //Todo 4: Solo hay que pedir el AlertDialog al método que lo crea y mostrarlo
                 AlertDialog alertDialog = createAlertDialog("Mi titulo", "Esto es un mensaje de alerta");
                 alertDialog.show();
             }
@@ -61,17 +61,19 @@ public class MainActivity extends AppCompatActivity {
         btn_snack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Todo 3. Creamos el snackbar y almacenamos su instancia
+                //Todo 5: Se crea el Snackbar a partir de una vista de la pantalla, aquí el botón pulsado
                 Snackbar snackbar = Snackbar.make(view,"Esto es un mensaje snackbar",Snackbar.LENGTH_LONG);
-                //Todo 3.1 OPCIONAL. Un snackbar puede tener asociado un botón. Esto es útil, por ejemplo
-                //Todo -> para darle al usuario la opción de deshacer la ultima acción realizada.
+
+                //Todo 6: OPCIONAL. Un Snackbar puede llevar un botón. Es útil, por ejemplo, para
+                //Todo -> darle al usuario la opción de deshacer la última acción realizada
                 snackbar.setAction("Deshacer", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        myLongToast("Aquí deshariamos lo que sea que hayamos hecho!!!");
+                        myLongToast("Aquí desharíamos lo que sea que hayamos hecho");
                     }
                 });
 
+                //Todo 7: Sin show() no se ve nada, igual que en el Toast
                 snackbar.show();
             }
         });
@@ -86,44 +88,44 @@ public class MainActivity extends AppCompatActivity {
      * @param msg Mensaje a mostrar en el toast.
      */
     public void myLongToast(String msg){
-        //Todo 1 Un toast no es más que un mensaje de duración determinada SIN necesidad de interacción
-        //Todo -> por parte del usuario. Hay que tener en cuenta que puede que el usuario no lo lea
+        //Todo 8: Un Toast es un mensaje de duración determinada SIN interacción del usuario.
+        //Todo -> Hay que tener en cuenta que puede que el usuario no lo lea
         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
     }
 
     /**
-     * Esto es un método que encapsula la creación de cuadros de dialogos simples
-     * @param titulo Contiene el título del cuadro de dialogo
-     * @param mensaje Contiene el mensaje dentro del cuadro de dialogo
+     * Esto es un método que encapsula la creación de cuadros de diálogo simples
+     * @param titulo Contiene el título del cuadro de diálogo
+     * @param mensaje Contiene el mensaje dentro del cuadro de diálogo
      * @return Devuelve el objeto AlertDialog
      */
     public AlertDialog createAlertDialog(String titulo, String mensaje){
-        // Todo 2.1 Creamos un 'builder' o constructor que nos ayude a configurar el cuadro de dialogo
+        //Todo 9: Se crea un 'builder' o constructor que ayuda a configurar el cuadro de diálogo
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
-        // Todo 2.2 Este objeto builder nos permitirá añadir todas las configuraciones que se necesiten
-        // Todo -> antes de crear el alert. En este ejemplo se añade el mensaje y el titulo del alert
+        //Todo 10: El builder recibe todas las configuraciones antes de crear el diálogo.
+        //Todo -> En este ejemplo, el mensaje y el título
         builder.setMessage(mensaje)
                 .setTitle(titulo);
 
-        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+        //Todo 11: Cada botón lleva su texto y el listener que se ejecuta al pulsarlo.
+        //Todo -> Después de ejecutarlo, el diálogo se cierra solo
+        builder.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(MainActivity.this, "Ha pulsado SIII", Toast.LENGTH_SHORT).show();
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Toast.makeText(MainActivity.this, "Ha pulsado Sí", Toast.LENGTH_SHORT).show();
             }
         });
 
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(MainActivity.this, "NOOOOO", Toast.LENGTH_SHORT).show();
+            public void onClick(DialogInterface dialogInterface, int which) {
+                Toast.makeText(MainActivity.this, "Ha pulsado No", Toast.LENGTH_SHORT).show();
             }
         });
 
-
-
-        // Todo 2.3 Una vez hemos añadido todas las configuraciones creamos el alertDialog. En este
-        // Todo -> caso, devolvemos el objeto creado.
+        //Todo 12: Con todo configurado, se crea el AlertDialog y se devuelve.
+        //Todo -> Crearlo no lo muestra: de eso se encarga el show() del TODO 4
         return builder.create();
     }
 

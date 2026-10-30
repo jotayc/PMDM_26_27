@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 2.6 · Toast, diálogos y Snackbar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+<style>
+  /* ---------- Piezas propias de esta página ---------- */
+  :root{ --sim: #6D3FD8; --sim-soft: #EFE9FC; }
+  .legend{ display: grid; gap: 6px; margin: 18px 0 0; padding: 12px 16px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; font-size: 14px; }
+  .legend > div{ display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: start; }
+  .legend > div i{ margin-top: 4px; width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .legend code{ white-space: nowrap; }
+  .sim{ margin: 24px 0 28px; border-radius: var(--radius); background: var(--sim-soft); border: 1px solid #D9CCF7; overflow: hidden; }
+  .sim-head{ background: var(--sim); color: #fff; padding: 12px 18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .sim-head b{ font-family: var(--font-head); font-size: 17px; }
+  .sim-head span{ font-size: 13.5px; opacity: .9; }
+  .sim-body{ padding: 16px 18px 18px; }
+  .sim-body > p{ margin-top: 0; }
+  .sim-row{ display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+  .btns{ display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .btn{ font: 600 14px var(--font-body); border: 0; border-radius: 999px; padding: 9px 16px; background: var(--sim); color: #fff; cursor: pointer; }
+  .btn.ghost{ background: #fff; color: var(--sim); box-shadow: inset 0 0 0 1.5px var(--sim); }
+  .btn:disabled{ opacity: .4; cursor: default; }
+  .phone{ width: 248px; flex: none; background: #1D1B20; border-radius: 28px; padding: 12px 10px 16px; }
+  .phone-bar{ height: 18px; display: flex; justify-content: center; }
+  .phone-bar::before{ content: ""; width: 54px; height: 6px; border-radius: 3px; background: #3A3740; }
+  .screen{ position: relative; height: 330px; background: #fff; border-radius: 6px; overflow: hidden; transition: background .2s; touch-action: manipulation; }
+  .appbar{ height: 40px; background: #6200EE; color: #fff; font: 600 13px var(--font-body); display: flex; align-items: center; gap: 4px; padding: 0 4px 0 10px; }
+  .appbar .ttl{ flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appbar.modo{ background: #37343D; }
+  .appbar button{ border: 0; background: none; color: #fff; font: 600 12px var(--font-body); padding: 6px 5px; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
+  .appbar button:hover{ background: rgba(255,255,255,.16); }
+  .swatch{ width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(255,255,255,.75); display: inline-block; flex: none; }
+  .canvas{ position: absolute; inset: 40px 0 0; display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; align-content: center; padding: 10px; }
+  .droid{ font: 600 11.5px var(--font-body); text-transform: uppercase; letter-spacing: .03em; border: 0; border-radius: 6px; background: #6200EE; color: #fff; padding: 9px 9px; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .toast{ position: absolute; left: 12px; right: 12px; bottom: 26px; background: #3C3940; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 12px; border-radius: 16px; text-align: center; z-index: 5; pointer-events: none; }
+  .snack{ position: absolute; left: 8px; right: 8px; bottom: 8px; background: #323036; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 10px; border-radius: 5px; display: flex; gap: 8px; align-items: center; z-index: 4; }
+  .snack span{ flex: 1; }
+  .snack button{ border: 0; background: none; color: #03DAC5; font: 700 11.5px var(--font-body); text-transform: uppercase; cursor: pointer; padding: 4px; }
+  .scrimx{ position: absolute; inset: 0; background: rgba(0,0,0,.42); z-index: 6; display: grid; place-items: center; padding: 14px; }
+  .dialog{ background: #fff; border-radius: 6px; padding: 14px 14px 8px; width: 100%; box-shadow: 0 6px 22px rgba(0,0,0,.35); }
+  .dialog b{ display: block; font: 600 14px var(--font-body); margin-bottom: 8px; }
+  .dialog p{ margin: 0 0 10px; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+  .dialog .acts{ display: flex; justify-content: flex-end; gap: 6px; }
+  .dialog .acts button{ border: 0; background: none; color: #6200EE; font: 700 12px var(--font-body); text-transform: uppercase; padding: 6px 8px; cursor: pointer; }
+  .pop{ position: absolute; background: #fff; border-radius: 4px; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 7; min-width: 118px; padding: 4px 0; }
+  .pop button{ display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: none; font: 12.5px var(--font-body); color: var(--ink); text-align: left; padding: 8px 12px; cursor: pointer; }
+  .pop button:hover{ background: var(--bg); }
+  .pop .swatch{ border-color: rgba(0,0,0,.25); }
+  .pop .head{ font: 600 11.5px var(--font-body); color: var(--muted); padding: 6px 12px 4px; }
+  .panel{ flex: 1; min-width: 260px; }
+  .panel > *:first-child{ margin-top: 0; }
+  .log{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; height: 182px; overflow-y: auto; font: 12px/1.55 var(--font-mono); margin: 10px 0 0; list-style: none; }
+  .log li{ margin: 0; padding: 1px 0; overflow-wrap: anywhere; }
+  .log li.nota{ color: #9DA0A8; font-style: italic; }
+  .log li.met{ color: #6AAB73; }
+  .log li.acc{ color: #F4A35C; }
+  .why{ background: #fff; border-radius: 12px; padding: 10px 14px; margin-top: 10px; font-size: 14.5px; min-height: 48px; }
+  .estado{ display: inline-block; font: 600 12px var(--font-mono); background: #fff; border-radius: 8px; padding: 5px 9px; margin: 2px 0; }
+  .opts{ display: grid; gap: 6px; margin: 8px 0; }
+  .opts > div{ display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #fff; border-radius: 10px; padding: 5px 10px; font-size: 14px; }
+  .opts select{ font: 12px var(--font-mono); border: 1px solid #D9CCF7; border-radius: 6px; padding: 3px; background: #fff; color: var(--ink); }
+  @media (max-width: 700px){
+    main figure{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    main figure svg{ min-width: 660px; }
+    main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+  }
+  @media (max-width: 600px){ .phone{ margin: 0 auto; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 2.6 · Toast, diálogos y Snackbar</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_2_6_Notificaciones_simples.html" aria-current="page">UD 2.6 · Toast, diálogos y Snackbar</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Tres formas de avisar</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">El builder del diálogo</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">Los listeners de los botones</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1-2</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 3 y 8</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 4</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 9-10</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 11</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 12</a></li><li class="sub"><a href="#s3-7" data-nav data-target="s3-7">TODO 5-7</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>El layout</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Pruébalo</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Errores comunes</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_2_6_Notificaciones_simples</p>
+      <h1>Toast, diálogos y Snackbar</h1>
+      <p class="lede">Tres botones, tres formas de avisar al usuario: un mensaje que se va solo, una ventana que espera respuesta y un aviso con una acción. Con esta rama verás cómo se crea cada uno y aprenderás a elegir entre ellos.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+      <div class="legend" role="group" aria-label="Qué significa cada color">
+        <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener.</span></div>
+        <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones. En su registro, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
+        <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
+        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
+      </div>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><b>Toast</b><span>Un aviso breve que se oculta solo y no se puede pulsar.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 21h20z"/><path d="M12 10v5"/><path d="M12 18h.01"/></svg><b>AlertDialog</b><span>Una ventana que interrumpe hasta que el usuario responde.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></svg><b>Snackbar</b><span>Un aviso en la parte inferior que puede ofrecer una acción, como «Deshacer».</span></div></div><p>La aplicación tiene tres botones, uno para cada aviso. Comparándolos aprenderás a elegir el adecuado en cada situación.</p>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+
+      <h3 id="s2-1"><span class="sn">2.1</span>Tres formas de avisar</h3>
+      <p>Cuando algo ocurre en la aplicación, hay que decírselo al usuario. La pregunta para elegir cómo es sencilla: <strong>¿necesitas que te responda?</strong></p>
+      <div class="table-wrap"><table>
+<thead><tr><th></th><th>Toast</th><th>AlertDialog</th><th>Snackbar</th></tr></thead>
+<tbody>
+<tr><td><b>Dónde se ve</b></td><td>Abajo, flotando</td><td>En el centro, sobre un fondo oscurecido</td><td>Abajo, pegado al borde</td></tr>
+<tr><td><b>¿Detiene la pantalla?</b></td><td>No</td><td>Sí, hasta que se responda</td><td>No</td></tr>
+<tr><td><b>¿Tiene botones?</b></td><td>No</td><td>Sí, hasta tres</td><td>Uno, opcional</td></tr>
+<tr><td><b>¿Desaparece solo?</b></td><td>Sí</td><td>No</td><td>Sí</td></tr>
+<tr><td><b>Úsalo para</b></td><td>«Nota guardada»</td><td>«¿Seguro que quieres borrarla?»</td><td>«Nota borrada · Deshacer»</td></tr>
+</tbody>
+</table></div>
+      <div class="sim" id="simAvisos">
+        <div class="sim-head"><b>Los tres avisos</b><span>pulsa los botones del móvil</span></div>
+        <div class="sim-body">
+          <p>Son los mismos tres botones de la aplicación de esta rama. Mira qué ocurre con el resto de la pantalla mientras se ve cada aviso. El aspecto es aproximado.</p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="avScreen">
+              <div class="appbar"><span class="ttl">PMDM</span></div>
+              <div class="canvas"><button class="droid" id="avT" type="button">Toast</button><button class="droid" id="avA" type="button">Alert</button><button class="droid" id="avS" type="button">SnackBar</button></div>
+            </div></div>
+            <div class="panel">
+              <div class="why" id="avWhy">Pulsa uno de los tres botones.</div>
+              <ul class="log" id="avLog" aria-label="Registro de lo que ocurre"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box conocer"><span class="box-label">El nombre de la rama</span><p>Se llama «notificaciones» porque notifican algo al usuario <em>dentro de la aplicación</em>. Las notificaciones que aparecen en la barra de estado del móvil, aunque la aplicación esté cerrada, son otra cosa y no se ven aquí.</p></div>
+      <h3 id="s2-2"><span class="sn">2.2</span>El builder del diálogo</h3>
+      <p>Un <code>AlertDialog</code> tiene muchas partes opcionales: título, mensaje, hasta tres botones… En lugar de un constructor con decenas de parámetros, se usa un <strong>builder</strong>, un objeto auxiliar al que se le va indicando cada parte.</p>
+      <figure>
+<svg viewBox="0 0 720 210" role="img" aria-label="El builder recibe el título y el mensaje, después los dos botones. Con create se obtiene el AlertDialog y con show aparece en pantalla.">
+  <defs><marker id="nt1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+  <rect x="0" y="30" width="210" height="130" rx="14" fill="#E2F4EA"/>
+  <text x="105" y="60" text-anchor="middle" font-size="14" font-weight="700" fill="#0A5C33">Builder</text>
+  <text x="105" y="84" text-anchor="middle" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">setTitle()</text>
+  <text x="105" y="104" text-anchor="middle" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">setMessage()</text>
+  <text x="105" y="124" text-anchor="middle" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">setPositiveButton()</text>
+  <text x="105" y="144" text-anchor="middle" font-size="11.5" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">setNegativeButton()</text>
+  <rect x="290" y="50" width="170" height="90" rx="14" fill="#6D3FD8"/>
+  <text x="375" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">AlertDialog</text>
+  <text x="375" y="110" text-anchor="middle" font-size="12" fill="#fff">creado, aún no se ve</text>
+  <rect x="540" y="50" width="180" height="90" rx="14" fill="#0E8A4B"/>
+  <text x="630" y="88" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">En pantalla</text>
+  <text x="630" y="110" text-anchor="middle" font-size="12" fill="#fff">espera una respuesta</text>
+  <g stroke="#56655D" stroke-width="2" marker-end="url(#nt1)">
+    <line x1="214" y1="95" x2="286" y2="95"/>
+    <line x1="464" y1="95" x2="536" y2="95"/>
+  </g>
+  <text x="250" y="84" text-anchor="middle" font-size="11" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">create()</text>
+  <text x="500" y="84" text-anchor="middle" font-size="11" fill="#17211C" font-family="'JetBrains Mono', Consolas, monospace">show()</text>
+  <text x="360" y="192" text-anchor="middle" font-size="12" fill="#56655D">El builder solo guarda la configuración: el diálogo se fabrica al final, de una vez.</text>
+</svg>
+<figcaption>Un builder es como rellenar un pedido: primero marcas lo que quieres y al final lo encargas. <code>create()</code> lo fabrica y <code>show()</code> lo pone en pantalla.</figcaption>
+</figure>
+      <p>Fíjate en esta línea de la aplicación:</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">builder.setMessage(mensaje)
+        .setTitle(titulo);</code></pre></div>
+      <p>Cada método del builder devuelve el propio builder, así que se puede llamar al siguiente sobre el resultado. Esta técnica se llama <strong>encadenamiento de métodos</strong> y también la usa el Snackbar.</p>
+      <h3 id="s2-3"><span class="sn">2.3</span>Los listeners de los botones</h3>
+      <p>Los botones del diálogo funcionan como los que ya conoces: se les pasa un listener con el código que debe ejecutarse. Pero la interfaz no es la misma, porque lo que se pulsa no es una vista.</p>
+      <div class="table-wrap"><table>
+<thead><tr><th></th><th>Botón de un layout</th><th>Botón de un diálogo</th></tr></thead>
+<tbody>
+<tr><td><b>Listener</b></td><td><code>View.OnClickListener</code></td><td><code>DialogInterface.OnClickListener</code></td></tr>
+<tr><td><b>Su método</b></td><td><code>onClick(View view)</code></td><td><code>onClick(DialogInterface dialogInterface, int which)</code></td></tr>
+<tr><td><b>Qué recibe</b></td><td>La vista pulsada</td><td>El diálogo y qué botón se ha pulsado</td></tr>
+</tbody>
+</table></div>
+      <div class="box clave"><span class="box-label">El diálogo se cierra solo</span><p>Al pulsar cualquiera de sus botones, primero se ejecuta el listener y después el diálogo se cierra. No hay que escribir nada para cerrarlo.</p></div>
+
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 12, y todos están en <code>MainActivity</code>.</p>
+      <h3 id="s3-1"><span class="sn">TODO 1-2</span>Los tres botones</h3>
+      <p>Tres atributos y un <code>findViewById()</code> para cada uno, en <code>onCreate()</code>. Cada botón lleva después su propio <code>OnClickListener</code>.</p>
+      <h3 id="s3-2"><span class="sn">TODO 3 y 8</span>El Toast</h3>
+      <p>El listener del primer botón llama a un método propio, <code>myLongToast()</code>, que está más abajo y encapsula la llamada: el contexto y la duración son siempre los mismos, y así no se puede olvidar el <code>show()</code>.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">public void myLongToast(String msg){
+    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+}</code></pre></div>
+      <div class="table-wrap"><table>
+<thead><tr><th>Parámetro</th><th>Qué es</th></tr></thead>
+<tbody>
+<tr><td class="mono">MainActivity.this</td><td>El contexto. Se escribe así porque el método también se usa desde dentro de clases anónimas.</td></tr>
+<tr><td class="mono">msg</td><td>El texto que se muestra.</td></tr>
+<tr><td class="mono">Toast.LENGTH_LONG</td><td>La duración: <code>LENGTH_LONG</code> (unos 3,5 segundos) o <code>LENGTH_SHORT</code> (unos 2).</td></tr>
+</tbody>
+</table></div>
+      <h3 id="s3-3"><span class="sn">TODO 4</span>Pedir el diálogo y mostrarlo</h3>
+      <p>El segundo botón también delega en un método propio, que devuelve el diálogo ya configurado. El listener solo tiene que mostrarlo.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">AlertDialog alertDialog = createAlertDialog(&quot;Mi titulo&quot;, &quot;Esto es un mensaje de alerta&quot;);
+alertDialog.show();</code></pre></div>
+      <h3 id="s3-4"><span class="sn">TODO 9-10</span>El builder</h3>
+      <p>Dentro de <code>createAlertDialog()</code>, se crea el builder con su contexto y se le indican el mensaje y el título que han llegado como parámetros.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+builder.setMessage(mensaje)
+        .setTitle(titulo);</code></pre></div>
+      <h3 id="s3-5"><span class="sn">TODO 11</span>Los botones</h3>
+      <p>Cada uno recibe su texto y su listener, aquí con una clase anónima. Hay tres posibles: positivo, negativo y neutro. Android los coloca siempre en su sitio, sea cual sea el orden en que los añadas.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">builder.setPositiveButton(&quot;Sí&quot;, new DialogInterface.OnClickListener() {
+    @Override
+    public void onClick(DialogInterface dialogInterface, int which) {
+        Toast.makeText(MainActivity.this, &quot;Ha pulsado Sí&quot;, Toast.LENGTH_SHORT).show();
+    }
+});</code></pre></div>
+      <h3 id="s3-6"><span class="sn">TODO 12</span>Crear el diálogo</h3>
+      <p><code>create()</code> fabrica el <code>AlertDialog</code> con todo lo indicado y el método lo devuelve. Todavía no se ve: lo muestra el <code>show()</code> del TODO 4.</p>
+      <h3 id="s3-7"><span class="sn">TODO 5-7</span>El Snackbar</h3>
+      <p>El tercer botón hace todo en su listener. El Snackbar se crea con <code>make()</code>, que recibe una vista de la pantalla, el mensaje y la duración.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">Snackbar snackbar = Snackbar.make(view,&quot;Esto es un mensaje snackbar&quot;,Snackbar.LENGTH_LONG);
+
+snackbar.setAction(&quot;Deshacer&quot;, new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        myLongToast(&quot;Aquí desharíamos lo que sea que hayamos hecho&quot;);
+    }
+});
+
+snackbar.show();</code></pre></div>
+      <div class="box conocer"><span class="box-label">Por qué necesita una vista</span><p>A diferencia del Toast, el Snackbar se dibuja dentro de tu pantalla, no por encima de todo. A partir de la vista que recibe, en este caso el botón pulsado, busca el layout donde colocarse.</p></div>
+
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>El layout</h2></div>
+<p>Tres botones en una fila, centrados y repartidos con una cadena de <code>ConstraintLayout</code>. Lo único que importa aquí es el <code>id</code> de cada uno, que es el que se usa en <code>findViewById()</code>.</p>
+      <div class="code"><div class="code-bar">res/layout/activity_main.xml</div>
+<pre><code class="lang-xml">&lt;Button
+    android:id=&quot;@+id/btn_toast&quot;
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:text=&quot;Toast&quot;
+    ... /&gt;</code></pre></div>
+      <p>Los tres avisos no están en el layout: se crean desde el código en el momento en que hacen falta.</p>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Pruébalo</h2></div>
+<ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>). Verás los tres botones en el centro.</li><li>Pulsa <strong>Toast</strong> y, mientras se ve el mensaje, pulsa <strong>SnackBar</strong>. Los dos avisos se ven a la vez: ninguno detiene la pantalla.</li><li>Pulsa <strong>Alert</strong> e intenta pulsar los botones de detrás. No responden.</li><li>Pulsa <strong>Sí</strong> y después repite con <strong>No</strong>. Cada uno muestra su Toast y el diálogo se cierra solo.</li><li>Abre otra vez el diálogo y toca fuera de la ventana. Se cierra, pero no aparece ningún Toast: no se ha ejecutado ningún listener.</li><li>Abre el diálogo y gira el móvil. El diálogo desaparece, porque la actividad se vuelve a crear.</li><li>Pulsa <strong>SnackBar</strong> y luego <strong>Deshacer</strong>. Repite sin pulsar nada y observa cómo desaparece solo.</li></ol>
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Errores comunes</h2></div>
+<div class="table-wrap"><table>
+<thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>El Toast o el Snackbar no aparecen, y no hay ningún error</td><td>Falta llamar a <code>show()</code> al final.</td></tr>
+<tr><td>El diálogo no aparece, y no hay ningún error</td><td>Se ha llamado a <code>create()</code> pero no a <code>show()</code>.</td></tr>
+<tr><td><code>new Toast.makeText(...)</code> no compila</td><td><code>makeText()</code> es un método estático: se llama sin <code>new</code>.</td></tr>
+<tr><td>Error de compilación con <code>this</code> dentro del listener</td><td>Dentro de una clase anónima, <code>this</code> es el listener, que no es un contexto. Usa <code>MainActivity.this</code>.</td></tr>
+<tr><td>Error de compilación en <code>setPositiveButton()</code></td><td>Se ha pasado un <code>View.OnClickListener</code>. El de los diálogos es <code>DialogInterface.OnClickListener</code>.</td></tr>
+<tr><td>El usuario no ve el mensaje importante</td><td>Un Toast puede pasar desapercibido. Si es importante que lo lea, usa un diálogo.</td></tr>
+</tbody>
+</table></div>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Para practicar</h2></div>
+<p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_2_6</code>.</p>
+      <ol class="steps">
+        <li>Pasa a <code>strings.xml</code> todos los textos: botones, título, mensaje y avisos.</li>
+        <li>Añade al diálogo un tercer botón, con <code>setNeutralButton()</code>, que muestre su propio Toast.</li>
+        <li>Haz que el diálogo no se pueda cerrar tocando fuera, con <code>setCancelable(false)</code>. Comprueba qué ocurre también con el botón Atrás.</li>
+        <li>Cambia <code>AlertDialog.Builder</code> por <code>MaterialAlertDialogBuilder</code>, el que usa la teoría de la UD2. Los métodos son los mismos: observa qué cambia en el aspecto.</li>
+        <li>Crea un método para el Snackbar, como los que hay para el Toast y el diálogo, que reciba el mensaje y la vista.</li>
+        <li>Añade un contador que suba al pulsar SnackBar y baje al pulsar Deshacer, y muestra su valor en un <code>TextView</code>.</li>
+      </ol>
+    </section>
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+<script>
+(function(){
+"use strict";
+
+function $(id){ return document.getElementById(id); }
+function registro(id){
+  var ul = $(id);
+  function add(texto, clase){ var li = document.createElement("li"); li.textContent = texto; if(clase) li.className = clase; ul.appendChild(li); ul.scrollTop = ul.scrollHeight; }
+  return { met: function(t){ add(t, "met"); }, acc: function(t){ add(t, "acc"); }, nota: function(t){ add(t, "nota"); }, limpiar: function(){ ul.innerHTML = ""; } };
+}
+function pulsacionLarga(boton, alLargo, alCorto){
+  var temporizador = null, disparado = false;
+  boton.addEventListener("pointerdown", function(){ disparado = false; temporizador = setTimeout(function(){ disparado = true; alLargo(); }, 500); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(function(evento){ boton.addEventListener(evento, function(){ clearTimeout(temporizador); }); });
+  boton.addEventListener("click", function(){ if(!disparado && alCorto) alCorto(); });
+  boton.addEventListener("contextmenu", function(ev){ ev.preventDefault(); });
+}
+
+
+var log = registro("avLog"), pantalla = $("avScreen"), tmToast = null, tmSnack = null;
+function quita(sel){ var el = pantalla.querySelector(sel); if(el) el.remove(); }
+function toast(texto){
+  quita(".toast"); clearTimeout(tmToast);
+  var el = document.createElement("div"); el.className = "toast"; el.textContent = texto; pantalla.appendChild(el);
+  tmToast = setTimeout(function(){ quita(".toast"); log.nota("El Toast desaparece solo."); }, 3500);
+}
+$("avT").addEventListener("click", function(){
+  log.acc('myLongToast("Esto es un toast…")');
+  toast("Esto es un toast igual que el primero que vimos");
+  $("avWhy").innerHTML = "El <b>Toast</b> no detiene nada: mientras se ve, puedes seguir pulsando los botones. Tampoco se puede pulsar ni cerrar: desaparece solo.";
+});
+$("avA").addEventListener("click", function(){
+  log.acc('createAlertDialog(…).show()');
+  var fondo = document.createElement("div"); fondo.className = "scrimx";
+  fondo.innerHTML = '<div class="dialog" role="dialog" aria-label="Mi titulo"><b>Mi titulo</b><p>Esto es un mensaje de alerta</p><div class="acts"><button type="button" data-r="No">No</button><button type="button" data-r="Sí">Sí</button></div></div>';
+  pantalla.appendChild(fondo);
+  $("avWhy").innerHTML = "El <b>diálogo</b> interrumpe: los botones de detrás ya no responden. Pulsa una respuesta o toca fuera de la ventana, en la zona oscura.";
+  fondo.addEventListener("click", function(ev){
+    var r = ev.target.getAttribute("data-r");
+    if(r){
+      log.met("onClick() del botón «" + r + "»");
+      fondo.remove();
+      toast("Ha pulsado " + r);
+      $("avWhy").innerHTML = "Se ejecuta el listener de ese botón y el diálogo se cierra solo: en el código nadie lo cierra.";
+    } else if(ev.target === fondo){
+      fondo.remove();
+      log.nota("Diálogo cancelado: no se ejecuta ningún listener.");
+      $("avWhy").innerHTML = "Al tocar fuera el diálogo se cierra <b>sin ejecutar ningún listener</b>. El programa no se entera de ninguna respuesta.";
+    }
+  });
+});
+$("avS").addEventListener("click", function(){
+  log.acc('Snackbar.make(…).setAction(…).show()');
+  quita(".snack"); clearTimeout(tmSnack);
+  var el = document.createElement("div"); el.className = "snack";
+  el.innerHTML = '<span>Esto es un mensaje snackbar</span><button type="button">Deshacer</button>';
+  pantalla.appendChild(el);
+  tmSnack = setTimeout(function(){ quita(".snack"); log.nota("El Snackbar desaparece solo."); }, 3500);
+  el.querySelector("button").addEventListener("click", function(){
+    clearTimeout(tmSnack); el.remove();
+    log.met("onClick() de «Deshacer»");
+    log.acc('myLongToast("Aquí desharíamos…")');
+    toast("Aquí desharíamos lo que sea que hayamos hecho");
+  });
+  $("avWhy").innerHTML = "El <b>Snackbar</b> tampoco detiene nada, pero ofrece una acción. Si no la pulsas a tiempo, desaparece y la oportunidad se pierde.";
+});
+
+})();
+</script>
+</body>
+</html>
