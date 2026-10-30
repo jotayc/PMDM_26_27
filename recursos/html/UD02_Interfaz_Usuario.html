@@ -252,6 +252,7 @@
       <li class="sub"><a href="#s9-3" data-nav data-target="s9-3">Pasar parámetros</a></li>
       <li class="sub"><a href="#s9-4" data-nav data-target="s9-4">Obtener un resultado</a></li>
       <li><a href="#s10" data-nav data-target="s10"><span class="n">10</span>Menú contextual</a></li>
+      <li class="sub"><a href="#s10-1" data-nav data-target="s10-1">Menú de acción</a></li>
       <li><a href="#s11" data-nav data-target="s11"><span class="n">11</span>Fragmentos</a></li>
       <li class="sub"><a href="#s11-1" data-nav data-target="s11-1">Transacciones</a></li>
       <li class="sub"><a href="#s11-2" data-nav data-target="s11-2">Comunicación con la actividad</a></li>
@@ -2554,6 +2555,100 @@ popup.setOnMenuItemClickListener(item -&gt; {
 popup.show();</code></pre>
       </div><p><a href="https://developer.android.com/develop/ui/views/components/menus?hl=es-419" target="_blank" rel="noopener">Menús en la documentación oficial</a>.</p>
       </div>
+
+      <h3 id="s10-1"><span class="sn">10.1</span>Menú de acción</h3>
+      <p>El menú contextual flota sobre la pantalla. Un <strong>menú de acción</strong> ofrece también opciones sobre un
+        elemento concreto, pero las coloca arriba: durante un rato <strong>sustituye a la barra de app</strong>. Es lo que
+        ves en una galería de fotos al mantener pulsada una imagen. Android lo llama <em>modo de acción</em>.</p>
+      <figure>
+        <svg viewBox="0 0 720 190" role="img" aria-label="A la izquierda, la barra de app normal con el título. Al mantener pulsado un elemento, la barra de acción ocupa su sitio, con una flecha para cerrar, un título y las opciones. Al cerrarse, vuelve la barra de app.">
+          <defs><marker id="ma1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
+          <rect x="0" y="30" width="290" height="46" rx="8" fill="#0E8A4B"/>
+          <text x="16" y="59" font-size="14" font-weight="700" fill="#fff">Mis notas</text>
+          <rect x="0" y="84" width="290" height="60" rx="8" fill="#E2F4EA"/>
+          <text x="145" y="119" text-anchor="middle" font-size="13" fill="#0A5C33">Nota: mantener pulsada</text>
+          <rect x="430" y="30" width="290" height="46" rx="8" fill="#37343D"/>
+          <text x="446" y="59" font-size="16" fill="#fff">←</text>
+          <text x="474" y="59" font-size="13" font-weight="700" fill="#fff">Seleccionada</text>
+          <text x="610" y="59" font-size="11.5" fill="#fff">Compartir</text>
+          <text x="674" y="59" font-size="11.5" fill="#fff">Borrar</text>
+          <rect x="430" y="84" width="290" height="60" rx="8" fill="#E2F4EA"/>
+          <text x="575" y="119" text-anchor="middle" font-size="13" fill="#0A5C33">Nota: el resto no cambia</text>
+          <g stroke="#56655D" stroke-width="2" marker-end="url(#ma1)">
+            <line x1="298" y1="46" x2="422" y2="46"/>
+            <line x1="422" y1="66" x2="298" y2="66"/>
+          </g>
+          <text x="360" y="36" text-anchor="middle" font-size="11" fill="#56655D">pulsación larga</text>
+          <text x="360" y="84" text-anchor="middle" font-size="11" fill="#56655D">cerrar</text>
+          <text x="360" y="176" text-anchor="middle" font-size="12" fill="#56655D">Esquema aproximado de la parte superior de la pantalla.</text>
+        </svg>
+        <figcaption>La barra de acción ocupa el sitio de la barra de app mientras se actúa sobre un elemento.</figcaption>
+      </figure>
+      <p>No se registra la vista: el menú se abre desde el código, normalmente con un <code>OnLongClickListener</code>. Su
+        método devuelve <code>true</code> si la pulsación ya está atendida. La actividad guarda el modo de acción en un
+        atributo para saber si hay uno abierto y no abrir otro:</p>
+      <div class="code">
+        <div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private ActionMode modoAccion;   // androidx.appcompat.view.ActionMode
+
+// Dentro de onCreate
+txvNota.setOnLongClickListener(v -&gt; {
+    if (modoAccion != null) {
+        return false;
+    }
+    modoAccion = startSupportActionMode(callbackNota);
+    return true;
+});</code></pre>
+      </div>
+      <p><code>startSupportActionMode()</code> recibe un <code>ActionMode.Callback</code>, una interfaz con cuatro métodos a
+        los que Android llama según lo que ocurre. Como no se puede escribir con una lambda, porque tiene más de un método,
+        se usa una clase anónima guardada en un atributo. Las opciones están en un fichero de menú, <code>res/menu/menu_nota.xml</code>,
+        que se crea como cualquier otro (apartado 7.1), aquí con los id <code>opCompartir</code> y <code>opBorrar</code>:</p>
+      <div class="code">
+        <div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">private final ActionMode.Callback callbackNota = new ActionMode.Callback() {
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.menu_nota, menu);
+        mode.setTitle(R.string.nota_seleccionada);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.opCompartir) {
+            Toast.makeText(MainActivity.this, "Compartir", Toast.LENGTH_SHORT).show();
+            mode.finish();
+            return true;
+        } else if (id == R.id.opBorrar) {
+            Toast.makeText(MainActivity.this, "Borrar", Toast.LENGTH_SHORT).show();
+            mode.finish();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        modoAccion = null;
+    }
+};</code></pre>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Método</th><th>Cuándo lo llama Android</th><th>Para qué</th></tr></thead><tbody><tr><td class="mono">onCreateActionMode()</td><td>Al abrirse</td><td>Crear las opciones y poner el título. Con <code>false</code>, no se abre.</td></tr><tr><td class="mono">onPrepareActionMode()</td><td>Justo después y al refrescarse</td><td>Cambiar opciones sobre la marcha. Devuelve <code>true</code> si ha cambiado algo.</td></tr><tr><td class="mono">onActionItemClicked()</td><td>Al pulsar una opción</td><td>Hacer lo que corresponda y cerrar con <code>mode.finish()</code>.</td></tr><tr><td class="mono">onDestroyActionMode()</td><td>Al cerrarse de cualquier forma: con <code>finish()</code>, con la flecha o con Atrás</td><td>Poner el atributo a <code>null</code>, o el menú no volverá a abrirse.</td></tr></tbody></table></div>
+      <p>Si la barra de la actividad es una <code>MaterialToolbar</code> (apartado 7), la barra de acción no la tapa, sino que
+        aparece encima y empuja hacia abajo toda la pantalla. Para que ocupe su sitio, se indica en el tema:</p>
+      <div class="code">
+        <div class="code-bar">res/values/themes.xml</div>
+<pre><code class="lang-xml">&lt;item name="windowActionModeOverlay"&gt;true&lt;/item&gt;</code></pre>
+      </div>
+      <p>Resumiendo, para elegir entre los dos menús sobre un elemento:</p>
+      <div class="table-wrap"><table><thead><tr><th></th><th>Menú contextual</th><th>Menú de acción</th></tr></thead><tbody><tr><td>Dónde aparece</td><td>Flotando, junto al dedo</td><td>En el sitio de la barra de app</td></tr><tr><td>Cómo se abre</td><td>registerForContextMenu(vista)</td><td>startSupportActionMode(callback), desde el código</td></tr><tr><td>Se crea en</td><td>onCreateContextMenu()</td><td>onCreateActionMode()</td></tr><tr><td>Se responde en</td><td>onContextItemSelected()</td><td>onActionItemClicked()</td></tr><tr><td>Tras elegir</td><td>Se cierra solo</td><td>Hay que cerrarlo con finish()</td></tr></tbody></table></div>
 
     </section>
 
