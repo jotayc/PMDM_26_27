@@ -10,7 +10,7 @@ mientras está abierta.
 | Apuntes | Fichero | Para qué |
 |---|---|---|
 | 📗 **UD2 · La interfaz de usuario** | [`recursos/html/UD02_Interfaz_Usuario.html`](recursos/html/UD02_Interfaz_Usuario.html) | **La teoría de toda la unidad.** Layouts, eventos, componentes, recursos, temas y estilos, barra de app y menús, mensajes, actividades e intenciones, menú contextual y fragmentos. |
-| 📘 **UD 2.8 · Menú de acción** | [`recursos/html/UD_2_8_action_menu.html`](recursos/html/UD_2_8_action_menu.html) | Lo de esta rama: el menú de acción, la pulsación larga y los cuatro métodos del Callback. Este tipo de menú no está en la teoría de la UD2. Con un simulador que enseña cada llamada. |
+| 📘 **UD 2.8 · Menú de acción** | [`recursos/html/UD_2_8_action_menu.html`](recursos/html/UD_2_8_action_menu.html) | Lo de esta rama: el menú de acción, la pulsación larga y los cuatro métodos del Callback. Con un simulador que enseña cada llamada. |
 
 Los apuntes de la **UD2** son los de la unidad entera: los vas a usar en este
 tema y en todos los que vienen después. Tenlos abiertos mientras trabajas: lo
@@ -25,6 +25,7 @@ apuntes.
 
 | Apartado de la UD2 | Por qué ahora |
 |---|---|
+| **Menú contextual → Menú de acción** | Es el apartado de este tema: el Callback, sus cuatro métodos y en qué se diferencia del menú contextual. |
 | **Barra de app y menús** | Qué es la barra de app, a la que sustituye este menú, y cómo se define un menú en XML. |
 | **Eventos de usuario** | Los listeners y las clases anónimas, que aquí aparecen de una forma nueva. |
 
