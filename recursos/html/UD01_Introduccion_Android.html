@@ -243,6 +243,7 @@
         <h1>Introducción a Android</h1>
         <p class="lede">Qué es un dispositivo móvil, qué tecnologías hay para programarlo, cómo está construido
           Android y cómo se crea, se ejecuta y funciona por dentro tu primera aplicación.</p>
+        <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
       </div>
       <svg viewBox="0 0 220 240" aria-hidden="true">
         <rect x="46" y="4" width="128" height="232" rx="22" fill="#17211C"/>
@@ -1166,9 +1167,12 @@
 
 import android.os.Bundle;
 
+import android.view.View;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -1179,10 +1183,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            }
         });
     }
 }</code></pre>
@@ -1195,6 +1202,7 @@ public class MainActivity extends AppCompatActivity {
         <li><code>EdgeToEdge.enable(this)</code> hace que la aplicación ocupe toda la pantalla, también detrás de la
           barra de estado y la de navegación; el bloque siguiente añade el margen justo para que el contenido no
           quede tapado por ellas. Por ahora basta con dejarlo como está.</li>
+        <li>Android Studio genera el bloque de <code>setOnApplyWindowInsetsListener()</code> escrito de forma abreviada, con una flecha (<code>-&gt;</code>) en lugar de <code>new OnApplyWindowInsetsListener()</code>: hace exactamente lo mismo.</li>
       </ul>
       <p>¿Qué es <code>R.layout.activity_main</code>? Al compilar, Android genera automáticamente una clase llamada
         <strong>R</strong> con una constante por cada recurso del proyecto. Por cada fichero de
@@ -1615,6 +1623,7 @@ public class MainActivity extends AppCompatActivity {
       </div>
     </section>
 
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
   </main>
 </div>
 
