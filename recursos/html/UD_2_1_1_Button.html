@@ -307,7 +307,7 @@ protected void onStart() {
         <li>Haz que los dos botones cambien el texto central (<code>txt_view</code>) en lugar del botón «Saludar».</li>
         <li>Añade un tercer botón «Limpiar» atendido por el mismo <code>onClick()</code>, que deje el texto central vacío.</li>
         <li>Quita el <em>cast</em> <code>(Button) view</code> y usa directamente <code>view.getId()</code>.</li>
-        <li>Reescribe la forma 1 con lambdas.</li>
+        <li>Reescribe la forma 1 con una clase con nombre que implemente <code>View.OnClickListener</code>, en lugar de la clase anónima.</li>
         <li>Pasa todos los textos a <code>strings.xml</code>.</li>
       </ol>
     </section>

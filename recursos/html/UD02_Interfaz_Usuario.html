@@ -957,16 +957,7 @@ btnSaludar.setOnClickListener(new View.OnClickListener() {
         txvMensaje.setText(R.string.despedida);
     }
 });</code></pre>
-      </div>
-      <h4>2. Con una expresión lambda</h4>
-      <p><code>OnClickListener</code> tiene un único método, así que la clase anónima se puede abreviar con una
-        <strong>lambda</strong>: a la izquierda de la flecha, el parámetro (la vista pulsada); a la derecha, lo que se
-        hace. Es la forma más habitual hoy:</p>
-      <div class="code">
-        <div class="code-bar">MainActivity.java (dentro de onCreate)</div>
-<pre><code class="lang-java">btnSaludar.setOnClickListener(v -&gt; txvMensaje.setText(R.string.despedida));</code></pre>
-      </div>
-      <h4>3. La actividad implementa la interfaz</h4>
+      </div>      <h4>2. La actividad implementa la interfaz</h4>
       <p>La propia actividad hace de escuchador: implementa <code>View.OnClickListener</code>, se registra con
         <code>this</code> y escribe el método <code>onClick()</code>. Es útil cuando varias vistas comparten
         escuchador, porque con <code>v.getId()</code> se sabe cuál se ha pulsado:</p>
@@ -1095,9 +1086,12 @@ String nombre = edtNombre.getText().toString();</code></pre>
       <div class="code">
         <div class="code-bar">Java</div>
 <pre><code class="lang-java">MaterialSwitch swAvisos = findViewById(R.id.swAvisos);
-swAvisos.setOnCheckedChangeListener((boton, activado) -&gt; {
-    if (activado) {
-        // el usuario lo ha activado
+swAvisos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(CompoundButton boton, boolean activado) {
+        if (activado) {
+            // el usuario lo ha activado
+        }
     }
 });</code></pre>
       </div>
@@ -1285,7 +1279,7 @@ spCity.setAdapter(adapter);</code></pre>
 
       <h3 id="s4-2-2"><span class="sn">4.2.2</span>Eventos</h3>
       <p>Para saber qué elemento elige el usuario se registra un escuchador <code>AdapterView.OnItemSelectedListener</code>.
-        Tiene dos métodos, así que no se puede escribir como lambda:</p>
+        Tiene dos métodos, y hay que escribir los dos aunque solo se use uno:</p>
       <div class="code">
         <div class="code-bar">MainActivity.java (dentro de onCreate)</div>
 <pre><code class="lang-java">spCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -1558,17 +1552,25 @@ public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 public void bind(Note note, OnItemClickListener listener) {
     txvTitle.setText(note.getTitle());
     txvContent.setText(note.getContent());
-    itemView.setOnClickListener(v -&gt; listener.onItemClick(note));
+    itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            listener.onItemClick(note);
+        }
+    });
 }</code></pre>
       </div>
       <p><code>itemView</code> es un atributo de <code>RecyclerView.ViewHolder</code>: la vista de la fila completa.
-        Por último, la actividad crea el adaptador pasándole lo que debe hacer al pulsar, en este caso con una
-        lambda:</p>
+        Por último, la actividad crea el adaptador pasándole lo que debe hacer al pulsar, en este caso con una clase anónima que implementa su interfaz:</p>
       <div class="code">
         <div class="code-bar">MainActivity.java (dentro de onCreate)</div>
-<pre><code class="lang-java">NoteAdapter adapter = new NoteAdapter(notes, note -&gt;
-        Toast.makeText(this, "Nota seleccionada: " + note.getTitle(),
-                Toast.LENGTH_LONG).show());
+<pre><code class="lang-java">NoteAdapter adapter = new NoteAdapter(notes, new NoteAdapter.OnItemClickListener() {
+    @Override
+    public void onItemClick(Note note) {
+        Toast.makeText(MainActivity.this, "Nota seleccionada: " + note.getTitle(),
+                Toast.LENGTH_LONG).show();
+    }
+});
 rvNotes.setAdapter(adapter);</code></pre>
       </div>
       <figure>
@@ -2150,7 +2152,12 @@ Toast.makeText(this, R.string.nota_guardada, Toast.LENGTH_LONG).show();</code></
         .setTitle(R.string.borrar_titulo)
         .setMessage(R.string.borrar_mensaje)
         .setNegativeButton(R.string.cancelar, null)
-        .setPositiveButton(R.string.borrar, (dialog, which) -&gt; borrarNota())
+        .setPositiveButton(R.string.borrar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                borrarNota();
+            }
+        })
         .show();</code></pre>
       </div>
       <ul>
@@ -2168,8 +2175,12 @@ Toast.makeText(this, R.string.nota_guardada, Toast.LENGTH_LONG).show();</code></
 <pre><code class="lang-java">String[] colores = {"Rojo", "Verde", "Azul"};
 new MaterialAlertDialogBuilder(this)
         .setTitle("Elige un color")
-        .setItems(colores, (dialog, which) -&gt;
-                Toast.makeText(this, colores[which], Toast.LENGTH_SHORT).show())
+        .setItems(colores, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, colores[which], Toast.LENGTH_SHORT).show();
+            }
+        })
         .show();</code></pre>
       </div>
       <p>También hay <code>setSingleChoiceItems()</code> (opciones con botón de radio),
@@ -2199,8 +2210,12 @@ new MaterialAlertDialogBuilder(this)
         actividad, por ejemplo al pulsar un botón:</p>
       <div class="code">
         <div class="code-bar">MainActivity.java (dentro de onCreate)</div>
-<pre><code class="lang-java">btnAviso.setOnClickListener(v -&gt;
-        new AvisoDialog().show(getSupportFragmentManager(), "aviso"));</code></pre>
+<pre><code class="lang-java">btnAviso.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        new AvisoDialog().show(getSupportFragmentManager(), "aviso");
+    }
+});</code></pre>
       </div>
       <div class="box saber">
         <span class="box-label">Para saber más</span>
@@ -2215,7 +2230,12 @@ new MaterialAlertDialogBuilder(this)
       <div class="code">
         <div class="code-bar">MainActivity.java</div>
 <pre><code class="lang-java">Snackbar.make(view, R.string.nota_borrada, Snackbar.LENGTH_LONG)
-        .setAction(R.string.deshacer, v -&gt; restaurarNota())
+        .setAction(R.string.deshacer, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restaurarNota();
+            }
+        })
         .show();</code></pre>
       </div>
       <p><code>make()</code> recibe tres parámetros:</p>
@@ -2299,16 +2319,19 @@ startActivity(llamar);</code></pre>
         setContentView(R.layout.activity_main);
 
         Button btnSend = findViewById(R.id.btnSend);
-        btnSend.setOnClickListener(v -&gt; {
-            Intent intent = new Intent(this, SecondActivity.class);
-            startActivity(intent);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                startActivity(intent);
+            }
         });
     }
 }</code></pre>
       </div>
       <p>El constructor del <code>Intent</code> recibe el contexto (la actividad actual) y la clase de la actividad que se
-        quiere abrir. Dentro de una lambda, <code>this</code> sigue siendo la actividad; dentro de una clase anónima
-        habría que escribir <code>MainActivity.this</code>. (En los ejemplos de este apartado se omite el bloque de
+        quiere abrir. Como estamos dentro de una clase anónima, <code>this</code> sería el escuchador, no la actividad: por eso se
+        escribe <code>MainActivity.this</code>. (En los ejemplos de este apartado se omite el bloque de
         pantalla completa que añade la plantilla, para centrarnos en lo nuevo.)</p>
       <p>Toda actividad debe estar <strong>registrada en el manifiesto</strong>; si no, al intentar abrirla la
         aplicación se cierra con un error. Android Studio la ha registrado al crearla, pero compruébalo:</p>
@@ -2392,7 +2415,7 @@ if (bundle != null) {
       <p>Ahora, la vuelta: la segunda actividad devuelve un dato a la primera al cerrarse. Por ejemplo, una pantalla
         para elegir un contacto que devuelve el contacto elegido.</p>
       <figure>
-        <svg viewBox="0 0 720 240" role="img" aria-label="MainActivity abre SecondActivity con un Intent que lleva el extra message. SecondActivity lo lee con getIntent y getStringExtra; al terminar devuelve con setResult un Intent con el extra return y se cierra con finish. MainActivity recibe el resultado en su callback."><defs><marker id="u2m12" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="40" width="200" height="170" rx="14" fill="#E7F0FD"/><text x="100" y="66" font-size="13.5" fill="#0B4FA8" font-weight="700" text-anchor="middle" class="mono">MainActivity</text><text x="100" y="96" font-size="11" fill="#0B4FA8" text-anchor="middle" class="mono">launcher.launch(intent)</text><text x="100" y="176" font-size="11" fill="#0B4FA8" text-anchor="middle" class="mono">result -&gt; { ... }</text><text x="100" y="194" font-size="11.5" fill="#0B4FA8" text-anchor="middle">recibe el resultado</text><rect x="520" y="40" width="200" height="170" rx="14" fill="#E2F4EA"/><text x="620" y="66" font-size="13.5" fill="#0A5C33" font-weight="700" text-anchor="middle" class="mono">SecondActivity</text><text x="620" y="96" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">getIntent()</text><text x="620" y="114" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">.getStringExtra("message")</text><text x="620" y="162" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">setResult(RESULT_OK, data)</text><text x="620" y="180" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">finish()</text><line x1="204" y1="92" x2="516" y2="92" stroke="#56655D" stroke-width="2" marker-end="url(#u2m12)"/><rect x="270" y="70" width="180" height="42" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.5"/><text x="360" y="88" font-size="12" fill="#17211C" font-weight="700" text-anchor="middle">Intent + extra</text><text x="360" y="104" font-size="11" fill="#56655D" text-anchor="middle" class="mono">message</text><line x1="516" y1="172" x2="204" y2="172" stroke="#56655D" stroke-width="2" marker-end="url(#u2m12)"/><rect x="270" y="150" width="180" height="42" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.5"/><text x="360" y="168" font-size="12" fill="#17211C" font-weight="700" text-anchor="middle">Intent de resultado</text><text x="360" y="184" font-size="11" fill="#56655D" text-anchor="middle" class="mono">return</text><text x="360" y="24" font-size="12.5" fill="#56655D" font-weight="600" text-anchor="middle">Ida: parámetros</text><text x="360" y="232" font-size="12.5" fill="#56655D" font-weight="600" text-anchor="middle">Vuelta: resultado</text></svg>
+        <svg viewBox="0 0 720 240" role="img" aria-label="MainActivity abre SecondActivity con un Intent que lleva el extra message. SecondActivity lo lee con getIntent y getStringExtra; al terminar devuelve con setResult un Intent con el extra return y se cierra con finish. MainActivity recibe el resultado en su callback."><defs><marker id="u2m12" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="40" width="200" height="170" rx="14" fill="#E7F0FD"/><text x="100" y="66" font-size="13.5" fill="#0B4FA8" font-weight="700" text-anchor="middle" class="mono">MainActivity</text><text x="100" y="96" font-size="11" fill="#0B4FA8" text-anchor="middle" class="mono">launcher.launch(intent)</text><text x="100" y="176" font-size="11" fill="#0B4FA8" text-anchor="middle" class="mono">onActivityResult(result)</text><text x="100" y="194" font-size="11.5" fill="#0B4FA8" text-anchor="middle">recibe el resultado</text><rect x="520" y="40" width="200" height="170" rx="14" fill="#E2F4EA"/><text x="620" y="66" font-size="13.5" fill="#0A5C33" font-weight="700" text-anchor="middle" class="mono">SecondActivity</text><text x="620" y="96" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">getIntent()</text><text x="620" y="114" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">.getStringExtra("message")</text><text x="620" y="162" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">setResult(RESULT_OK, data)</text><text x="620" y="180" font-size="11" fill="#0A5C33" text-anchor="middle" class="mono">finish()</text><line x1="204" y1="92" x2="516" y2="92" stroke="#56655D" stroke-width="2" marker-end="url(#u2m12)"/><rect x="270" y="70" width="180" height="42" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.5"/><text x="360" y="88" font-size="12" fill="#17211C" font-weight="700" text-anchor="middle">Intent + extra</text><text x="360" y="104" font-size="11" fill="#56655D" text-anchor="middle" class="mono">message</text><line x1="516" y1="172" x2="204" y2="172" stroke="#56655D" stroke-width="2" marker-end="url(#u2m12)"/><rect x="270" y="150" width="180" height="42" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.5"/><text x="360" y="168" font-size="12" fill="#17211C" font-weight="700" text-anchor="middle">Intent de resultado</text><text x="360" y="184" font-size="11" fill="#56655D" text-anchor="middle" class="mono">return</text><text x="360" y="24" font-size="12.5" fill="#56655D" font-weight="600" text-anchor="middle">Ida: parámetros</text><text x="360" y="232" font-size="12.5" fill="#56655D" font-weight="600" text-anchor="middle">Vuelta: resultado</text></svg>
         <figcaption>Los datos viajan siempre dentro de un <code>Intent</code>: a la ida como parámetros y a la vuelta como resultado.</figcaption>
       </figure>
       <p>En la actividad principal, en lugar de abrir la segunda con <code>startActivity()</code>, se registra un
@@ -2409,10 +2432,13 @@ if (bundle != null) {
     // Se registra al crear la actividad
     private final ActivityResultLauncher&lt;Intent&gt; secondLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            result -&gt; {
-                if (result.getResultCode() == RESULT_OK &amp;&amp; result.getData() != null) {
-                    String value = result.getData().getStringExtra("return");
-                    txvResult.setText(value);
+            new ActivityResultCallback&lt;ActivityResult&gt;() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK &amp;&amp; result.getData() != null) {
+                        String value = result.getData().getStringExtra("return");
+                        txvResult.setText(value);
+                    }
                 }
             });
 
@@ -2423,10 +2449,13 @@ if (bundle != null) {
         txvResult = findViewById(R.id.txvResult);
 
         Button btnSend = findViewById(R.id.btnSend);
-        btnSend.setOnClickListener(v -&gt; {
-            Intent intent = new Intent(this, SecondActivity.class);
-            intent.putExtra("message", "Nos vemos a las 12:00");
-            secondLauncher.launch(intent);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("message", "Nos vemos a las 12:00");
+                secondLauncher.launch(intent);
+            }
         });
     }
 }</code></pre>
@@ -2435,18 +2464,20 @@ if (bundle != null) {
       <div class="code">
         <div class="code-bar">SecondActivity.java (dentro de onCreate)</div>
 <pre><code class="lang-java">Button btnReturn = findViewById(R.id.btnReturn);
-btnReturn.setOnClickListener(v -&gt; {
-    Intent data = new Intent();
-    data.putExtra("return", "Venimos de la segunda pantalla");
-    setResult(RESULT_OK, data);
-    finish();
+btnReturn.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        Intent data = new Intent();
+        data.putExtra("return", "Venimos de la segunda pantalla");
+        setResult(RESULT_OK, data);
+        finish();
+    }
 });</code></pre>
       </div>
       <ul>
         <li><code>setResult(código, intent)</code> indica el resultado: <code>RESULT_OK</code> si todo ha ido bien, y un
           <code>Intent</code> con los datos que se devuelven como extras.</li>
-        <li><code>finish()</code> cierra la actividad, y el control vuelve a la principal, que recibe el resultado en su
-          lambda.</li>
+        <li><code>finish()</code> cierra la actividad, y el control vuelve a la principal, que recibe el resultado en <code>onActivityResult()</code>.</li>
         <li>Si el usuario vuelve con el botón de atrás sin pulsar <code>btnReturn</code>, el código es
           <code>RESULT_CANCELED</code> y no hay datos: por eso se comprueban las dos cosas antes de leerlos.</li>
       </ul>
@@ -2543,9 +2574,12 @@ public boolean onContextItemSelected(MenuItem item) {
         <div class="code-bar">Java</div>
 <pre><code class="lang-java">PopupMenu popup = new PopupMenu(this, view);
 popup.getMenuInflater().inflate(R.menu.menu_label, popup.getMenu());
-popup.setOnMenuItemClickListener(item -&gt; {
-    // responder a la opción elegida
-    return true;
+popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        // responder a la opción elegida
+        return true;
+    }
 });
 popup.show();</code></pre>
       </div><p><a href="https://developer.android.com/develop/ui/views/components/menus?hl=es-419" target="_blank" rel="noopener">Menús en la documentación oficial</a>.</p>
@@ -2715,7 +2749,12 @@ public void onAttach(@NonNull Context context) {
         escuchador del adaptador:</p>
       <div class="code">
         <div class="code-bar">ListNoteFragment.java (dentro de onViewCreated)</div>
-<pre><code class="lang-java">NoteAdapter adapter = new NoteAdapter(notes, note -&gt; callback.onNoteView(note));
+<pre><code class="lang-java">NoteAdapter adapter = new NoteAdapter(notes, new NoteAdapter.OnItemClickListener() {
+    @Override
+    public void onItemClick(Note note) {
+        callback.onNoteView(note);
+    }
+});
 rvNotes.setAdapter(adapter);</code></pre>
       </div>
       <div class="box saber">
