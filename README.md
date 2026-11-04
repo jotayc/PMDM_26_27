@@ -8,7 +8,7 @@ cómo se lee el valor guardado con **SharedPreferences**.
 
 | Apuntes | Fichero | Para qué |
 |---|---|---|
-| 📘 **UD 3.1 · Preferencias** | [`recursos/html/UD_3_1_Preferences.html`](recursos/html/UD_3_1_Preferences.html) | Lo de esta rama, explicado sobre su código: el XML, el fragmento, la transacción y la lectura por clave. Con un simulador del recorrido. |
+| 📘 **UD 3.1 · Preferencias** | [`recursos/html/UD_3_1_Preferences.html`](recursos/html/UD_3_1_Preferences.html) | Por qué se pierden los datos, cómo funcionan las preferencias, la pantalla de ajustes en XML, los fragmentos y el código de la rama. Con cuatro simuladores y comprobaciones. |
 | 📗 **UD2 · La interfaz de usuario** | [`recursos/html/UD02_Interfaz_Usuario.html`](recursos/html/UD02_Interfaz_Usuario.html) | Para consultar lo que ya has visto. |
 
 Ábrelos en el navegador desde tu copia del proyecto: en Android Studio, botón

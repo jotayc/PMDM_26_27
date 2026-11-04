@@ -71,6 +71,50 @@
     main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
   }
   @media (max-width: 600px){ .phone{ margin: 0 auto; } }
+
+  /* ---------- Comprobaciones ---------- */
+  .comp{ margin: 24px 0 28px; border-radius: var(--radius); background: #fff; border: 1.5px solid #D9CCF7; padding: 0 0 14px; overflow: hidden; }
+  .comp-head{ background: var(--sim-soft); color: var(--sim); font: 700 13px var(--font-body); letter-spacing: .04em; text-transform: uppercase; padding: 9px 18px; }
+  .comp > *:not(.comp-head){ margin-left: 18px; margin-right: 18px; }
+  .comp .q{ font-weight: 600; margin: 12px 18px 10px; }
+  .comp .opciones{ display: grid; gap: 8px; }
+  .comp .opt{ font: 14.5px var(--font-body); text-align: left; border: 1.5px solid var(--rule); background: #fff; color: var(--ink); border-radius: 12px; padding: 9px 12px; cursor: pointer; }
+  .comp .opt:hover{ border-color: var(--sim); }
+  .comp .opt.sel{ border-color: var(--sim); background: var(--sim-soft); }
+  .comp .fila{ display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 7px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
+  .comp .fila:last-of-type{ border-bottom: 0; }
+  .comp .vf{ display: inline-flex; gap: 6px; flex: none; }
+  .comp .vf button{ font: 600 13px var(--font-body); width: 38px; border: 1.5px solid var(--rule); background: #fff; border-radius: 10px; padding: 5px 0; cursor: pointer; color: var(--ink); }
+  .comp .vf button.sel{ border-color: var(--sim); background: var(--sim-soft); }
+  .comp select{ font: 13px var(--font-body); border: 1.5px solid var(--rule); border-radius: 10px; padding: 5px 6px; background: #fff; color: var(--ink); max-width: 100%; }
+  .comp .bien{ border-color: var(--green) !important; background: var(--green-soft) !important; }
+  .comp .mal{ border-color: #C5221F !important; background: #FCE8E6 !important; }
+  .comp-bar{ display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+  .comp-res{ font-weight: 600; font-size: 14px; }
+  .comp-res.ok{ color: var(--green-deep); }
+  .comp-res.ko{ color: #C5221F; }
+  .comp-exp{ margin-top: 10px; font-size: 14.5px; color: var(--muted); border-left: 3px solid #D9CCF7; padding-left: 12px; }
+  /* ---------- Piezas de los simuladores de la UD3 ---------- */
+  .checks label{ display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 0 0 8px; cursor: pointer; }
+  .checks input{ margin-top: 3px; accent-color: var(--sim); }
+  .sel{ display: inline-flex; flex-wrap: wrap; gap: 6px; }
+  .sel button{ font: 600 13px var(--font-body); border: 1.5px solid var(--sim); background: #fff; color: var(--sim); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .sel button[aria-pressed="true"]{ background: var(--sim); color: #fff; }
+  .campo{ display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  .campo input, .campo select{ font: 14px var(--font-body); border: 1.5px solid #D9CCF7; border-radius: 10px; padding: 6px 9px; background: #fff; color: var(--ink); min-width: 0; }
+  .campos{ display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 8px 0; }
+  .fichero{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; font: 12.5px/1.55 var(--font-mono); white-space: pre-wrap; margin: 10px 0 0; min-height: 70px; overflow-wrap: anywhere; }
+  .fichero .tag{ color: var(--tk-tag); } .fichero .str{ color: var(--tk-str); }
+  .tabla-sim{ width: 100%; border-collapse: collapse; font-size: 13.5px; background: #fff; border-radius: 10px; overflow: hidden; }
+  .tabla-sim th{ background: var(--green-deep); color: #fff; font: 600 12px var(--font-mono); text-align: left; padding: 6px 9px; }
+  .tabla-sim td{ border-top: 1px solid var(--rule); padding: 6px 9px; font-family: var(--font-mono); font-size: 12.5px; }
+  .tabla-sim tr.cursor td{ background: var(--sim-soft); box-shadow: inset 0 0 0 0 var(--sim); }
+  .tabla-sim tr.cursor td:first-child{ box-shadow: inset 4px 0 0 var(--sim); }
+  .tabla-sim tr.antes td, .tabla-sim tr.despues td{ color: var(--muted); font-style: italic; font-family: var(--font-body); }
+  .tabla-sim tr.antes.cursor td, .tabla-sim tr.despues.cursor td{ color: var(--sim); }
+  .settings-row{ display: block; width: 100%; text-align: left; border: 0; background: none; padding: 9px 14px; font: 14px var(--font-body); color: var(--ink); cursor: pointer; border-bottom: 1px solid #EEE; }
+  .settings-row small{ display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .settings-cat{ font: 600 11.5px var(--font-body); color: #6200EE; padding: 12px 14px 4px; }
 </style>
 </head>
 <body>
@@ -81,7 +125,7 @@
       <div class="brand-text"><b>UD 3.1 · Preferencias</b><span>PMDM · 2º DAM</span></div>
     </div>
     <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_3_1_Preferences.html" aria-current="page">UD 3.1 · Preferencias</a></li></ul>
-    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Persistencia</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Las piezas de la rama</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-0" data-nav data-target="s3-0">La biblioteca y el XML</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 2-3</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 4-5</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 6-7</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 8</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 9-11</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Pruébalo</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Errores comunes</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Para practicar</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>El problema: los datos se pierden</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Guardar en una variable</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Dónde guardar cada cosa</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>Preferencias: pares clave-valor</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">Pares clave-valor</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">Leer y escribir</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>La pantalla de ajustes en XML</a></li><li class="sub"><a href="#s4-1" data-nav data-target="s4-1">El XML de los ajustes</a></li><li class="sub"><a href="#s4-2" data-nav data-target="s4-2">Otros tipos</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Fragmentos: un trozo de pantalla</a></li><li class="sub"><a href="#s5-1" data-nav data-target="s5-1">Un trozo de pantalla</a></li><li class="sub"><a href="#s5-2" data-nav data-target="s5-2">La transacción</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Leer al volver: onResume()</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>El código paso a paso</a></li><li class="sub"><a href="#s7-0" data-nav data-target="s7-0">La biblioteca y el XML</a></li><li class="sub"><a href="#s7-1" data-nav data-target="s7-1">TODO 1</a></li><li class="sub"><a href="#s7-2" data-nav data-target="s7-2">TODO 2-3</a></li><li class="sub"><a href="#s7-3" data-nav data-target="s7-3">TODO 4-5</a></li><li class="sub"><a href="#s7-4" data-nav data-target="s7-4">TODO 6-7</a></li><li class="sub"><a href="#s7-5" data-nav data-target="s7-5">TODO 8</a></li><li class="sub"><a href="#s7-6" data-nav data-target="s7-6">TODO 9-11</a></li><li><a href="#s8" data-nav data-target="s8"><span class="n">08</span>Pruébalo</a></li><li><a href="#s9" data-nav data-target="s9"><span class="n">09</span>Errores comunes</a></li><li><a href="#s10" data-nav data-target="s10"><span class="n">10</span>Para practicar</a></li></ul>
   </nav>
   <div class="scrim" id="scrim"></div>
   <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
@@ -89,138 +133,168 @@
     <header class="hero"><div>
       <p class="kicker">Rama UD_3_1_Preferences</p>
       <h1>Preferencias</h1>
-      <p class="lede">Una pantalla de ajustes en la que se escribe un email que sigue ahí aunque cierres la aplicación. Con esta rama verás cómo se describe esa pantalla en XML, cómo llega hasta la actividad y cómo se lee después el valor guardado.</p>
+      <p class="lede">Una pantalla de ajustes en la que se escribe un email que sigue ahí aunque cierres la aplicación. Con esta rama verás por qué se pierden los datos de una variable, cómo se guardan y se leen las preferencias, cómo se describe una pantalla de ajustes en XML y cómo la coloca un fragmento.</p>
       <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
       <div class="legend" role="group" aria-label="Qué significa cada color">
         <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener.</span></div>
-        <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones. En su registro, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
+        <div><i style="background:#6D3FD8"></i><span>Violeta: lo que se maneja con botones, simuladores y comprobaciones. En el registro de un simulador, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
         <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
-        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
+        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte, o lo que no se hace.</span></div>
       </div>
     </div></header>
     <section class="chapter" id="s1">
       <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
-<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg><b>Una pantalla de ajustes</b><span>Cómo se describe en XML, sin diseñar sus vistas una a una.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="14" height="14" rx="2"/><path d="M3 15V5a2 2 0 0 1 2-2h10"/></svg><b>El fragmento</b><span>La clase que convierte ese XML en una pantalla y se coloca dentro de una actividad.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg><b>Datos que no se pierden</b><span>Lo que escribe el usuario sigue ahí aunque cierre la aplicación.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 2 12l6 6"/><path d="m16 6 6 6-6 6"/></svg><b>Leer por clave</b><span>Cómo se recupera un valor con <code>SharedPreferences</code>.</span></div></div><p>La pantalla principal muestra un texto y un botón <em>Ajustes</em>. En los ajustes se puede escribir un email, y al volver, la pantalla principal lo muestra. Si cierras la aplicación y vuelves a abrirla, sigue ahí.</p>
+<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg><b>Datos que no se pierden</b><span>Por qué lo que guardas en una variable desaparece y dónde guardarlo para que dure.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg><b>Pares clave-valor</b><span>Cómo se guardan y se leen las preferencias, cada una con su clave y su tipo.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 2 12l6 6"/><path d="m16 6 6 6-6 6"/></svg><b>Una pantalla de ajustes en XML</b><span>Cómo se describe sin diseñar sus vistas una a una.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="14" height="14" rx="2"/><path d="M3 15V5a2 2 0 0 1 2-2h10"/></svg><b>Fragmentos</b><span>El trozo de pantalla que construye los ajustes y cómo se coloca en una actividad.</span></div></div><p>La pantalla principal de la rama muestra un texto y un botón <em>Ajustes</em>. En los ajustes se puede escribir un email, y al volver, la pantalla principal lo muestra. Si cierras la aplicación y vuelves a abrirla, sigue ahí.</p>
     </section>
     <section class="chapter" id="s2">
-      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>El problema: los datos se pierden</h2></div>
 
-      <h3 id="s2-1"><span class="sn">2.1</span>Persistencia: que los datos sobrevivan</h3>
-      <p>Hasta ahora, los datos de tus aplicaciones vivían en variables, y al cerrar la aplicación desaparecían. <strong>Persistencia</strong> significa guardarlos de forma que sigan ahí la próxima vez.</p>
-      <p>Las <strong>preferencias compartidas</strong> (<em>SharedPreferences</em>) son la forma más sencilla: un fichero de la aplicación con pares <strong>clave-valor</strong>. Sirven para datos pequeños y sueltos, como los ajustes del usuario.</p>
-      <div class="code"><div class="code-bar">Lo que queda guardado tras escribir el email</div>
-<pre><code class="lang-xml">&lt;map&gt;
-    &lt;string name=&quot;emailPreference&quot;&gt;ana@ies.es&lt;/string&gt;
-&lt;/map&gt;</code></pre></div>
-      <p>Ese es el contenido real del fichero, que no hay que escribir ni leer a mano: Android se encarga.</p>
-      <h3 id="s2-2"><span class="sn">2.2</span>Las piezas de la rama</h3>
-      <figure>
-<svg viewBox="0 0 720 300" role="img" aria-label="MainActivity abre SettingActivity con una intención. SettingActivity contiene a SettingsFragment, que construye la pantalla a partir de root_preferences.xml. Lo que el usuario escribe lo guarda Android en las preferencias compartidas, y MainActivity lo lee de ahí al volver.">
-  <defs><marker id="pf1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
-  <rect x="0" y="20" width="200" height="90" rx="14" fill="#E2F4EA"/>
-  <text x="100" y="56" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A5C33">MainActivity</text>
-  <text x="100" y="80" text-anchor="middle" font-size="12" fill="#0A5C33">muestra el valor guardado</text>
-  <rect x="260" y="20" width="200" height="90" rx="14" fill="#E2F4EA"/>
-  <text x="360" y="56" text-anchor="middle" font-size="13.5" font-weight="700" fill="#0A5C33">SettingActivity</text>
-  <text x="360" y="80" text-anchor="middle" font-size="12" fill="#0A5C33">coloca el fragmento</text>
-  <rect x="520" y="20" width="200" height="90" rx="14" fill="#0E8A4B"/>
-  <text x="620" y="56" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">SettingsFragment</text>
-  <text x="620" y="80" text-anchor="middle" font-size="12" fill="#fff">construye la pantalla</text>
-  <rect x="520" y="170" width="200" height="70" rx="14" fill="#6D3FD8"/>
-  <text x="620" y="200" text-anchor="middle" font-size="12" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">root_preferences.xml</text>
-  <text x="620" y="222" text-anchor="middle" font-size="12" fill="#fff">qué preferencias hay</text>
-  <rect x="0" y="170" width="460" height="70" rx="14" fill="#E7F0FD"/>
-  <text x="230" y="200" text-anchor="middle" font-size="13.5" font-weight="700" fill="#174EA6">Preferencias compartidas</text>
-  <text x="230" y="222" text-anchor="middle" font-size="12" fill="#174EA6">un fichero de la app con pares clave-valor</text>
-  <g stroke="#56655D" stroke-width="2" marker-end="url(#pf1)">
-    <line x1="204" y1="65" x2="256" y2="65"/>
-    <line x1="464" y1="65" x2="516" y2="65"/>
-    <line x1="620" y1="114" x2="620" y2="166"/>
-    <line x1="560" y1="114" x2="440" y2="166"/>
-    <line x1="100" y1="166" x2="100" y2="114"/>
-  </g>
-  <text x="230" y="55" text-anchor="middle" font-size="11" fill="#56655D">abre</text>
-  <text x="490" y="55" text-anchor="middle" font-size="11" fill="#56655D">contiene</text>
-  <text x="690" y="144" text-anchor="middle" font-size="11" fill="#56655D">lee</text>
-  <text x="450" y="134" text-anchor="middle" font-size="11" fill="#56655D">Android guarda</text>
-  <text x="130" y="144" text-anchor="middle" font-size="11" fill="#56655D">lee</text>
-  <text x="360" y="280" text-anchor="middle" font-size="12" fill="#56655D">Nadie escribe código para guardar: lo hace el fragmento de preferencias.</text>
-</svg>
-<figcaption>Las piezas de la rama. El único código que trata con los datos es la lectura en <code>MainActivity</code>.</figcaption>
-</figure>
-      <div class="table-wrap"><table>
-<thead><tr><th>Fichero</th><th>Qué hace</th></tr></thead>
-<tbody>
-<tr><td class="mono">MainActivity.java</td><td>Abre los ajustes y muestra el valor guardado.</td></tr>
-<tr><td class="mono">SettingActivity.java</td><td>La actividad de la pantalla de ajustes: coloca el fragmento y gestiona la flecha de volver.</td></tr>
-<tr><td class="mono">SettingsFragment.java</td><td>Construye la pantalla a partir del XML.</td></tr>
-<tr><td class="mono">res/xml/root_preferences.xml</td><td>Qué preferencias hay, con su clave y su título.</td></tr>
-</tbody>
-</table></div>
-      <div class="sim" id="simPref">
-        <div class="sim-head"><b>Dónde está el dato</b><span>escribe, vuelve y cierra la app</span></div>
+      <h3 id="s2-1"><span class="sn">2.1</span>Guardar en una variable</h3>
+      <p>Hasta ahora, lo que escribía el usuario lo guardabas en un atributo de la actividad. Funciona mientras la actividad está viva:</p>
+      <div class="code"><div class="code-bar">MainActivity.java · así no se guarda un ajuste</div>
+<pre><code class="lang-java">// Atributo de la actividad
+private String email = &quot;Valor por defecto&quot;;
+
+// En el onClick() del botón Guardar
+email = campoEmail.getText().toString();</code></pre></div>
+      <p>El problema es que Android destruye las actividades más a menudo de lo que parece. No solo al cerrar la aplicación: también cuando <strong>giras el móvil</strong>, porque vuelve a crear la actividad para la nueva orientación, y cuando necesita memoria para otra aplicación. Cada vez que se crea una actividad nueva, sus atributos empiezan de cero.</p>
+      <div class="sim" id="simMem">
+        <div class="sim-head"><b>Variable o preferencias</b><span>guarda un email y destruye la actividad</span></div>
         <div class="sim-body">
-          <p>Sigue el recorrido de la aplicación y mira qué ocurre en el fichero de preferencias. El aspecto es aproximado.</p>
+          <p>Escribe un email y pulsa <em>Guardar</em>. Después gira el móvil o cierra la aplicación. Cambia dónde se guarda y repite. El aspecto es aproximado.</p>
+          <p>Guardar en: <span class="sel" id="memDonde"><button type="button" aria-pressed="true" data-d="var">una variable</button><button type="button" aria-pressed="false" data-d="pref">las preferencias</button></span></p>
           <div class="sim-row">
-            <div class="phone"><div class="phone-bar"></div><div class="screen" id="prScreen"></div></div>
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="memScreen">
+              <div class="appbar"><span class="ttl">PMDM</span></div>
+              <div class="canvas" style="flex-direction:column;gap:12px;align-items:stretch;padding:18px">
+                <input type="text" id="memCampo" aria-label="Email" placeholder="email" style="font:14px var(--font-body);padding:7px;border:0;border-bottom:2px solid #6200EE">
+                <button class="droid" id="memGuardar" type="button">Guardar</button>
+                <span id="memValor" style="font-size:14px;text-align:center;overflow-wrap:anywhere"></span>
+              </div>
+            </div></div>
             <div class="panel">
-              <div class="btns"><button class="btn ghost" id="prCerrar" type="button">Cerrar y abrir la app</button><button class="btn ghost" id="prBorrar" type="button">Borrar datos de la app</button></div>
-              <div class="why" id="prWhy">Todavía no hay nada guardado. Pulsa Ajustes.</div>
-              <ul class="log" id="prLog" aria-label="Fichero y registro de llamadas"></ul>
+              <div class="btns"><button class="btn ghost" id="memGirar" type="button">Girar el móvil</button><button class="btn ghost" id="memCerrar" type="button">Cerrar y abrir la app</button></div>
+              <div class="why" id="memWhy"></div>
+              <ul class="log" id="memLog" aria-label="Registro del simulador de memoria"></ul>
             </div>
           </div>
         </div>
       </div>
-      <div class="box conocer"><span class="box-label">Hoy en día</span><p>Para guardar datos clave-valor, la documentación de Android recomienda <strong>DataStore</strong>, una alternativa a <code>SharedPreferences</code> pensada para Kotlin. La biblioteca de preferencias de esta rama sigue vigente para crear pantallas de ajustes, y guarda en <code>SharedPreferences</code>.</p></div>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="La memoria de la aplicación se borra cuando la actividad se destruye; las preferencias son un fichero que sigue en el móvil."><rect x="0" y="20" width="330" height="200" rx="14" fill="#FDF1DD"/><text x="165" y="50" text-anchor="middle" font-size="14" fill="#B26A00" font-weight="700">En una variable</text><text x="165" y="74" text-anchor="middle" font-size="12" fill="#B26A00">vive en la memoria de la actividad</text><rect x="40" y="96" width="250" height="44" rx="10" fill="#fff" stroke="#B26A00" stroke-width="1.8"/><text x="165" y="124" text-anchor="middle" font-size="13" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">email = &quot;ana@ies.es&quot;</text><text x="165" y="172" text-anchor="middle" font-size="12" fill="#56655D">giras el móvil o cierras la app:</text><text x="165" y="194" text-anchor="middle" font-size="12" fill="#56655D" font-weight="700">la actividad se destruye y el valor se pierde</text><rect x="390" y="20" width="330" height="200" rx="14" fill="#E2F4EA"/><text x="555" y="50" text-anchor="middle" font-size="14" fill="#0A5C33" font-weight="700">En las preferencias</text><text x="555" y="74" text-anchor="middle" font-size="12" fill="#0A5C33">un fichero guardado en el móvil</text><rect x="430" y="96" width="250" height="44" rx="10" fill="#fff" stroke="#0E8A4B" stroke-width="1.8"/><text x="555" y="124" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">emailPreference → &quot;ana@ies.es&quot;</text><text x="555" y="172" text-anchor="middle" font-size="12" fill="#56655D">giras el móvil o cierras la app:</text><text x="555" y="194" text-anchor="middle" font-size="12" fill="#56655D" font-weight="700">el fichero sigue ahí y se vuelve a leer</text></svg>
+<figcaption>Lo que está en una variable dura lo que dura la actividad. Lo que está en las preferencias, hasta que se desinstala la aplicación o se borran sus datos.</figcaption>
+</figure>
+      <div class="box clave"><span class="box-label">Persistencia</span><p>Guardar los datos de forma que sigan ahí la próxima vez que se abra la aplicación, aunque se haya cerrado o la actividad se haya destruido. Lo que vive en variables no es persistente.</p></div>
+      <div class="box conocer"><span class="box-label">Una comparación</span><p>La memoria de la aplicación es como la pizarra del aula: cuando se acaba la clase, se borra. Las preferencias son tu libreta: te la llevas en la mochila y al día siguiente lo apuntado sigue ahí.</p></div>
+      <h3 id="s2-2"><span class="sn">2.2</span>Dónde guardar cada cosa</h3>
+      <p>Android tiene varias formas de guardar datos de forma persistente. Cuál usar depende de qué y cuánto vayas a guardar:</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Qué guardas</th><th>Dónde</th><th>Cuándo lo verás</th></tr></thead>
+<tbody>
+<tr><td>Unos pocos datos sueltos: el email del usuario, si quiere el modo oscuro, cuántas veces ha abierto la aplicación</td><td><strong>Preferencias</strong> (<code>SharedPreferences</code>)</td><td>En esta rama</td></tr>
+<tr><td>Muchos datos con la misma forma: una lista de ciudades, cada una con su población y su superficie</td><td><strong>Base de datos</strong> SQLite</td><td>En la rama 3.2</td></tr>
+<tr><td>Contenido entero: una foto, un audio, un documento</td><td><strong>Ficheros</strong></td><td>Más adelante</td></tr>
+<tr><td>Datos que comparten varios móviles</td><td>Un <strong>servidor</strong> en internet</td><td>Más adelante</td></tr>
+</tbody>
+</table></div>
+      <div class="comp" data-tipo="empareja"><div class="comp-head">Comprueba · Empareja</div><p class="q">¿Dónde guardarías cada cosa?</p><div class="fila"><span>Si el usuario ha elegido el modo oscuro.</span><select data-r="Preferencias" aria-label="Si el usuario ha elegido el modo oscuro."><option value="">Elige…</option><option value="Base de datos">Base de datos</option><option value="Ficheros">Ficheros</option><option value="Preferencias">Preferencias</option></select></div><div class="fila"><span>Los 300 contactos de una agenda, cada uno con su nombre, teléfono y correo.</span><select data-r="Base de datos" aria-label="Los 300 contactos de una agenda, cada uno con su nombre, teléfono y correo."><option value="">Elige…</option><option value="Base de datos">Base de datos</option><option value="Ficheros">Ficheros</option><option value="Preferencias">Preferencias</option></select></div><div class="fila"><span>Una foto hecha con la cámara.</span><select data-r="Ficheros" aria-label="Una foto hecha con la cámara."><option value="">Elige…</option><option value="Base de datos">Base de datos</option><option value="Ficheros">Ficheros</option><option value="Preferencias">Preferencias</option></select></div><div class="fila"><span>El último email que escribió el usuario, para rellenarlo la próxima vez.</span><select data-r="Preferencias" aria-label="El último email que escribió el usuario, para rellenarlo la próxima vez."><option value="">Elige…</option><option value="Base de datos">Base de datos</option><option value="Ficheros">Ficheros</option><option value="Preferencias">Preferencias</option></select></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Las preferencias son para datos pequeños y sueltos, como un ajuste o un último valor. Cuando hay muchos registros con la misma forma, una base de datos. Un contenido entero, como una foto, va en un fichero.</div></div>
 
     </section>
     <section class="chapter" id="s3">
-      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
-<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 11, siguiendo el recorrido de la aplicación, así que saltan entre tres ficheros.</p>
-      <h3 id="s3-0"><span class="sn">Antes</span>La biblioteca y el XML</h3>
-      <p>La pantalla de ajustes necesita una biblioteca que no viene con el proyecto base. Está añadida en <code>app/build.gradle</code>:</p>
-      <div class="code"><div class="code-bar">app/build.gradle</div>
-<pre><code class="lang-java">implementation libs.preference</code></pre></div>
-      <p>Y lo primero que se escribe es el XML, en la carpeta <code>res/xml/</code>:</p>
-      <div class="code"><div class="code-bar">res/xml/root_preferences.xml</div>
-<pre><code class="lang-xml">&lt;PreferenceScreen xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>Preferencias: pares clave-valor</h2></div>
 
-    &lt;PreferenceCategory android:title=&quot;Preference category&quot;&gt;
+      <h3 id="s3-1"><span class="sn">3.1</span>Pares clave-valor</h3>
+      <p>Las <strong>preferencias compartidas</strong> (<em>SharedPreferences</em>) son un fichero de la aplicación que guarda datos como pares <strong>clave-valor</strong>: cada dato tiene un nombre, la clave, y para recuperarlo hay que decir ese nombre exacto.</p>
+      <figure>
+<svg viewBox="0 0 720 270" role="img" aria-label="Tres preferencias como taquillas con nombre: emailPreference guarda un texto, modoOscuro un booleano y vecesAbierta un entero. Cada una se lee con el método de su tipo y un valor por defecto."><defs><marker id="pf2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><text x="110" y="20" text-anchor="middle" font-size="12" fill="#56655D" font-weight="700">Clave</text><text x="290" y="20" text-anchor="middle" font-size="12" fill="#56655D" font-weight="700">Valor</text><text x="560" y="20" text-anchor="middle" font-size="12" fill="#56655D" font-weight="700">Cómo se lee</text><rect x="10" y="36" width="200" height="56" rx="12" fill="#0E8A4B"/><text x="110" y="69" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">emailPreference</text><rect x="220" y="36" width="140" height="56" rx="12" fill="#E2F4EA"/><text x="290" y="62" text-anchor="middle" font-size="13" fill="#0A5C33" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">&quot;ana@ies.es&quot;</text><text x="290" y="80" text-anchor="middle" font-size="11" fill="#0A5C33">String</text><line x1="364" y1="64" x2="400" y2="64" stroke="#56655D" stroke-width="2" marker-end="url(#pf2)"/><rect x="404" y="44" width="310" height="40" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="559" y="68" text-anchor="middle" font-size="9.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">getString(&quot;emailPreference&quot;, &quot;Valor por defecto&quot;)</text><rect x="10" y="108" width="200" height="56" rx="12" fill="#0E8A4B"/><text x="110" y="141" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">modoOscuro</text><rect x="220" y="108" width="140" height="56" rx="12" fill="#E2F4EA"/><text x="290" y="134" text-anchor="middle" font-size="13" fill="#0A5C33" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">true</text><text x="290" y="152" text-anchor="middle" font-size="11" fill="#0A5C33">boolean</text><line x1="364" y1="136" x2="400" y2="136" stroke="#56655D" stroke-width="2" marker-end="url(#pf2)"/><rect x="404" y="116" width="310" height="40" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="559" y="140" text-anchor="middle" font-size="9.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">getBoolean(&quot;modoOscuro&quot;, false)</text><rect x="10" y="180" width="200" height="56" rx="12" fill="#0E8A4B"/><text x="110" y="213" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">vecesAbierta</text><rect x="220" y="180" width="140" height="56" rx="12" fill="#E2F4EA"/><text x="290" y="206" text-anchor="middle" font-size="13" fill="#0A5C33" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">7</text><text x="290" y="224" text-anchor="middle" font-size="11" fill="#0A5C33">int</text><line x1="364" y1="208" x2="400" y2="208" stroke="#56655D" stroke-width="2" marker-end="url(#pf2)"/><rect x="404" y="188" width="310" height="40" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="559" y="212" text-anchor="middle" font-size="9.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">getInt(&quot;vecesAbierta&quot;, 0)</text><text x="360" y="262" text-anchor="middle" font-size="12" fill="#56655D" font-style="italic">Si la clave no existe, se devuelve el segundo parámetro: el valor por defecto.</text></svg>
+<figcaption>Cada preferencia es una taquilla con nombre. Para sacar lo que guarda hay que decir el nombre exacto y usar el método de su tipo.</figcaption>
+</figure>
+      <div class="box conocer"><span class="box-label">Como las taquillas de un gimnasio</span><p>Cada taquilla tiene un nombre en la puerta y dentro cabe una sola cosa. Si pides la taquilla «emailPreference», te dan lo que hay dentro. Si pides una que no existe, no hay error: te dan lo que tú hayas dicho que quieres en ese caso, el valor por defecto.</p></div>
+      <p>El fichero es un XML que gestiona Android. Con tres preferencias guardadas, su contenido es este:</p>
+      <div class="code"><div class="code-bar">shared_prefs/com.example.pmdm_preferences.xml</div>
+<pre><code class="lang-xml">&lt;map&gt;
+    &lt;string name=&quot;emailPreference&quot;&gt;ana@ies.es&lt;/string&gt;
+    &lt;boolean name=&quot;modoOscuro&quot; value=&quot;true&quot; /&gt;
+    &lt;int name=&quot;vecesAbierta&quot; value=&quot;7&quot; /&gt;
+&lt;/map&gt;</code></pre></div>
+      <p>No hay que escribirlo ni leerlo a mano: se trabaja con métodos.</p>
+      <h3 id="s3-2"><span class="sn">3.2</span>Leer y escribir</h3>
+      <div class="table-wrap"><table>
+<thead><tr><th>Para…</th><th>Método</th><th>Qué hace</th></tr></thead>
+<tbody>
+<tr><td>Acceder a las preferencias</td><td><code>PreferenceManager.getDefaultSharedPreferences(contexto)</code></td><td>Devuelve las preferencias de toda la aplicación: cualquier actividad lee las mismas.</td></tr>
+<tr><td>Leer</td><td><code>getString(clave, porDefecto)</code>, <code>getInt</code>, <code>getBoolean</code>, <code>getFloat</code>…</td><td>Devuelve el valor de esa clave, o el valor por defecto si no existe. Hay un método por tipo.</td></tr>
+<tr><td>Escribir</td><td><code>edit().putString(clave, valor).apply()</code>, <code>putInt</code>, <code>putBoolean</code>…</td><td><code>edit()</code> abre la edición, <code>put…</code> pone el valor y <code>apply()</code> lo guarda.</td></tr>
+</tbody>
+</table></div>
+      <p>En esta rama no escribes nada desde código: lo guarda la pantalla de ajustes, como verás en el apartado 4. Escribir lo necesitarás en «Para practicar».</p>
+      <div class="sim" id="simTaq">
+        <div class="sim-head"><b>Las taquillas por dentro</b><span>guarda y lee por clave</span></div>
+        <div class="sim-body">
+          <p>Guarda valores con una clave y léelos con cada método. Debajo ves el fichero de preferencias tal como lo deja Android.</p>
+          <div class="campos">
+            <label class="campo">Clave<input type="text" id="tqClave" value="emailPreference" spellcheck="false"></label>
+            <label class="campo">Tipo<select id="tqTipo"><option value="String">String</option><option value="int">int</option><option value="boolean">boolean</option></select></label>
+            <label class="campo">Valor<input type="text" id="tqValor" value="ana@ies.es" spellcheck="false"></label>
+          </div>
+          <div class="btns"><button class="btn" id="tqPut" type="button">Guardar (put…)</button><button class="btn ghost" id="tqGetS" type="button">getString(clave, "—")</button><button class="btn ghost" id="tqGetI" type="button">getInt(clave, 0)</button><button class="btn ghost" id="tqGetB" type="button">getBoolean(clave, false)</button><button class="btn ghost" id="tqBorrar" type="button">Borrar datos</button></div>
+          <div class="sim-row">
+            <div class="panel"><div class="fichero" id="tqFichero" role="region" aria-label="Contenido del fichero de preferencias"></div></div>
+            <div class="panel"><ul class="log" id="tqLog" aria-label="Registro del simulador de taquillas" style="margin-top:10px"></ul></div>
+          </div>
+          <div class="why" id="tqWhy"></div>
+        </div>
+      </div>
+      <div class="box clave"><span class="box-label">La clave y el tipo tienen que coincidir</span><p>Si la clave no existe, se devuelve el valor por defecto sin ningún aviso: un error al escribirla no se nota, simplemente nunca aparece lo guardado. Si existe pero se lee con un método de otro tipo, la aplicación se cierra con <code>ClassCastException</code>.</p></div>
+      <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">El XML de la pantalla de ajustes guarda el email con <code>android:key="emailPreference"</code>. En Java se lee con <code>getString("email", "nada")</code>. Después de escribir un email en los ajustes, ¿qué devuelve?</p><div class="opciones"><button class="opt" type="button">Un error al compilar, porque la clave no existe.</button><button class="opt" type="button">El email que escribió el usuario.</button><button class="opt" type="button" data-ok><code>"nada"</code>, porque no hay ninguna preferencia con la clave <code>"email"</code>.</button><button class="opt" type="button">La aplicación se cierra con <code>ClassCastException</code>.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Las claves son textos: Java no sabe cuáles existen, así que compila sin problemas. Al ejecutar, como no hay nada guardado con <code>"email"</code>, se devuelve el valor por defecto. <code>ClassCastException</code> sería si la clave existiese con otro tipo.</div></div>
 
-        &lt;EditTextPreference
-            android:key=&quot;emailPreference&quot;
-            android:selectAllOnFocus=&quot;true&quot;
-            android:singleLine=&quot;true&quot;
-            android:title=&quot;email&quot; /&gt;
-    &lt;/PreferenceCategory&gt;
-&lt;/PreferenceScreen&gt;</code></pre></div>
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>La pantalla de ajustes en XML</h2></div>
+
+      <p>Una pantalla de ajustes tiene casi siempre lo mismo: filas con un título, que al pulsarlas abren un diálogo o cambian un interruptor, y que guardan el valor elegido. Hacerla con un layout normal obligaría a escribir cada fila, cada listener y cada guardado. La biblioteca <strong>Preference</strong> lo hace por ti: tú describes en XML qué ajustes hay y ella dibuja la pantalla, abre los diálogos y guarda lo que elige el usuario en las preferencias.</p>
+      <h3 id="s4-1"><span class="sn">4.1</span>El XML de los ajustes</h3>
+      <figure>
+<svg viewBox="0 0 720 290" role="img" aria-label="A la izquierda, el XML de la rama: PreferenceScreen, PreferenceCategory y EditTextPreference. A la derecha, la pantalla que construye a partir de él: el título de la categoría y una fila email que abre un diálogo."><defs><marker id="pf3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="10" width="360" height="270" rx="12" fill="#1E1F22"/><text x="16" y="40" text-anchor="start" font-size="12" fill="#D5B778" style="font-family:'JetBrains Mono', Consolas, monospace">&lt;PreferenceScreen&gt;</text><text x="34" y="70" text-anchor="start" font-size="12" fill="#D5B778" style="font-family:'JetBrains Mono', Consolas, monospace">&lt;PreferenceCategory</text><text x="52" y="100" text-anchor="start" font-size="12" fill="#BABABA" style="font-family:'JetBrains Mono', Consolas, monospace">android:title=&quot;Preference category&quot;&gt;</text><text x="52" y="130" text-anchor="start" font-size="12" fill="#D5B778" style="font-family:'JetBrains Mono', Consolas, monospace">&lt;EditTextPreference</text><text x="70" y="160" text-anchor="start" font-size="12" fill="#6AAB73" style="font-family:'JetBrains Mono', Consolas, monospace">android:key=&quot;emailPreference&quot;</text><text x="70" y="190" text-anchor="start" font-size="12" fill="#BABABA" style="font-family:'JetBrains Mono', Consolas, monospace">android:title=&quot;email&quot; /&gt;</text><text x="34" y="220" text-anchor="start" font-size="12" fill="#D5B778" style="font-family:'JetBrains Mono', Consolas, monospace">&lt;/PreferenceCategory&gt;</text><text x="16" y="250" text-anchor="start" font-size="12" fill="#D5B778" style="font-family:'JetBrains Mono', Consolas, monospace">&lt;/PreferenceScreen&gt;</text><rect x="460" y="10" width="230" height="270" rx="22" fill="#1D1B20"/><rect x="472" y="30" width="206" height="238" rx="6" fill="#fff"/><rect x="472" y="30" width="206" height="34" rx="6" fill="#6200EE"/><text x="486" y="52" text-anchor="start" font-size="12" fill="#fff" font-weight="700">←  PMDM</text><text x="486" y="92" text-anchor="start" font-size="11" fill="#6200EE" font-weight="700">Preference category</text><text x="486" y="124" text-anchor="start" font-size="13" fill="#17211C">email</text><line x1="476" y1="140" x2="674" y2="140" stroke="#E5E5E5" stroke-width="1"/><path d="M 330 95 C 390 95, 410 88, 480 88" fill="none" stroke="#6D3FD8" stroke-width="2" marker-end="url(#pf3)"/><path d="M 330 185 C 390 185, 410 120, 480 120" fill="none" stroke="#6D3FD8" stroke-width="2" marker-end="url(#pf3)"/><text x="575" y="180" text-anchor="middle" font-size="11.5" fill="#56655D">Al pulsar «email»</text><text x="575" y="196" text-anchor="middle" font-size="11.5" fill="#56655D">se abre un diálogo</text><text x="575" y="212" text-anchor="middle" font-size="11.5" fill="#56655D">para escribir.</text></svg>
+<figcaption>Cada elemento del XML se convierte en una parte de la pantalla. El <code>android:key</code> no se ve: es el nombre con el que se guarda el valor.</figcaption>
+</figure>
       <div class="table-wrap"><table>
 <thead><tr><th>Elemento o atributo</th><th>Qué hace</th></tr></thead>
 <tbody>
 <tr><td class="mono">PreferenceScreen</td><td>La raíz: la pantalla entera.</td></tr>
 <tr><td class="mono">PreferenceCategory</td><td>Un grupo de preferencias con su título.</td></tr>
 <tr><td class="mono">EditTextPreference</td><td>Una preferencia que se rellena escribiendo en un diálogo.</td></tr>
-<tr><td class="mono">android:key</td><td>La <strong>clave</strong> con la que se guarda el valor. Es la que se usa después en Java.</td></tr>
+<tr><td class="mono">android:key</td><td>La <strong>clave</strong> con la que se guarda el valor: el nombre de la taquilla. Es la que se usa después en Java.</td></tr>
 <tr><td class="mono">android:title</td><td>El texto que ve el usuario.</td></tr>
 </tbody>
 </table></div>
-      <h3 id="s3-1"><span class="sn">TODO 1</span>Abrir la pantalla de ajustes</h3>
-      <p>Es una actividad más, con su clase, su layout y su línea en el manifiesto, y se abre con una intención explícita.</p>
-      <div class="code"><div class="code-bar">MainActivity.java</div>
-<pre><code class="lang-java">Intent i = new Intent(MainActivity.this, SettingActivity.class);
-startActivity(i);</code></pre></div>
-      <h3 id="s3-2"><span class="sn">TODO 2-3</span>El fragmento que construye la pantalla</h3>
-      <p>Un <strong>fragmento</strong> es una parte de una pantalla, con su propio ciclo de vida. Heredando de <code>PreferenceFragmentCompat</code>, solo hay que decirle qué XML usar: él crea la lista, los diálogos y el guardado.</p>
-      <div class="code"><div class="code-bar">SettingsFragment.java</div>
-<pre><code class="lang-java">public class SettingsFragment extends PreferenceFragmentCompat {
+      <h3 id="s4-2"><span class="sn">4.2</span>Otros tipos de preferencia</h3>
+      <p>La rama solo usa <code>EditTextPreference</code>. Estas son las demás que vas a necesitar, y el tipo que guarda cada una:</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Elemento</th><th>Cómo se ve</th><th>Guarda un</th><th>Se lee con</th></tr></thead>
+<tbody>
+<tr><td class="mono">EditTextPreference</td><td>Una fila que abre un diálogo para escribir</td><td><code>String</code></td><td><code>getString()</code></td></tr>
+<tr><td class="mono">SwitchPreferenceCompat</td><td>Una fila con un interruptor</td><td><code>boolean</code></td><td><code>getBoolean()</code></td></tr>
+<tr><td class="mono">CheckBoxPreference</td><td>Una fila con una casilla</td><td><code>boolean</code></td><td><code>getBoolean()</code></td></tr>
+<tr><td class="mono">ListPreference</td><td>Una fila que abre una lista de opciones</td><td><code>String</code> (el valor de la opción)</td><td><code>getString()</code></td></tr>
+</tbody>
+</table></div>
+      <div class="box consejo"><span class="box-label">Cuidado con defaultValue</span><p>Si una preferencia lleva <code>android:defaultValue</code>, al abrirse la pantalla de ajustes ese valor se guarda como si lo hubiese escrito el usuario. La rama no lo usa, y lee el valor por defecto desde Java.</p></div>
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey);
-    }
-}</code></pre></div>
-      <h3 id="s3-3"><span class="sn">TODO 4-5</span>Colocar el fragmento en la actividad</h3>
-      <p>El layout de <code>SettingActivity</code> es un contenedor vacío con un id. Con una <strong>transacción</strong> se mete el fragmento dentro.</p>
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Fragmentos: un trozo de pantalla</h2></div>
+
+      <p>La pantalla de ajustes no la construye una actividad, sino un <strong>fragmento</strong> de una clase que da la biblioteca.</p>
+      <h3 id="s5-1"><span class="sn">5.1</span>Un trozo de pantalla</h3>
+      <div class="box clave"><span class="box-label">Fragmento</span><p>Una parte de la interfaz, con su propia clase y su propio ciclo de vida, que vive <strong>dentro</strong> de una actividad. Una actividad puede tener uno o varios, y cambiarlos sin cambiar de actividad.</p></div>
+      <p>Piensa en una pared con un marco vacío. La actividad es la pared, el contenedor de su layout es el marco y el fragmento es el cuadro. La <strong>transacción</strong> es el acto de colgar el cuadro: hasta que no se hace, el marco está vacío.</p>
+      <figure>
+<svg viewBox="0 0 720 260" role="img" aria-label="SettingActivity tiene en su layout un contenedor vacío con el id setting_container. La transacción coloca dentro el SettingsFragment, que construye la lista de ajustes."><defs><marker id="pf4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="10" width="250" height="240" rx="14" fill="#E2F4EA"/><text x="125" y="38" text-anchor="middle" font-size="14" fill="#0A5C33" font-weight="700">SettingActivity</text><text x="125" y="58" text-anchor="middle" font-size="12" fill="#0A5C33" font-style="italic">la pared</text><rect x="20" y="76" width="210" height="150" rx="10" fill="#fff" stroke="#56655D" stroke-width="1.8" stroke-dasharray="6 4"/><text x="125" y="140" text-anchor="middle" font-size="13" fill="#56655D" font-weight="700">FrameLayout</text><text x="125" y="160" text-anchor="middle" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">id: setting_container</text><text x="125" y="182" text-anchor="middle" font-size="12" fill="#56655D" font-style="italic">el marco, vacío</text><rect x="480" y="76" width="230" height="150" rx="14" fill="#0E8A4B"/><text x="595" y="128" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">SettingsFragment</text><text x="595" y="150" text-anchor="middle" font-size="12" fill="#fff">construye la lista</text><text x="595" y="172" text-anchor="middle" font-size="12" fill="#fff" font-style="italic">el cuadro</text><line x1="476" y1="151" x2="234" y2="151" stroke="#6D3FD8" stroke-width="2" marker-end="url(#pf4)"/><text x="365" y="112" text-anchor="middle" font-size="10.5" fill="#6D3FD8" style="font-family:'JetBrains Mono', Consolas, monospace">replace(</text><text x="365" y="127" text-anchor="middle" font-size="10.5" fill="#6D3FD8" style="font-family:'JetBrains Mono', Consolas, monospace">R.id.setting_container,</text><text x="365" y="142" text-anchor="middle" font-size="10.5" fill="#6D3FD8" style="font-family:'JetBrains Mono', Consolas, monospace">new SettingsFragment())</text><text x="365" y="176" text-anchor="middle" font-size="11.5" fill="#6D3FD8" font-weight="700">commit(): se cuelga</text></svg>
+<figcaption>La actividad pone el sitio; el fragmento, el contenido. La transacción es el acto de colgar el cuadro en el marco.</figcaption>
+</figure>
+      <p>Por eso <code>SettingActivity</code> tiene un layout casi vacío, con solo un <code>FrameLayout</code> y su id. Todo el contenido lo pone el fragmento.</p>
+      <h3 id="s5-2"><span class="sn">5.2</span>La transacción</h3>
       <div class="code"><div class="code-bar">SettingActivity.java</div>
 <pre><code class="lang-java">getSupportFragmentManager()
         .beginTransaction()
@@ -235,7 +309,97 @@ startActivity(i);</code></pre></div>
 <tr><td class="mono">commit()</td><td>Aplica los cambios. Sin él, no ocurre nada.</td></tr>
 </tbody>
 </table></div>
-      <h3 id="s3-4"><span class="sn">TODO 6-7</span>La flecha de volver</h3>
+      <p>Y el fragmento, por su parte, solo tiene que decir qué XML usar:</p>
+      <div class="code"><div class="code-bar">SettingsFragment.java</div>
+<pre><code class="lang-java">public class SettingsFragment extends PreferenceFragmentCompat {
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.root_preferences, rootKey);
+    }
+}</code></pre></div>
+      <div class="sim" id="simMonta">
+        <div class="sim-head"><b>Monta la pantalla de ajustes</b><span>quita piezas y mira qué pasa</span></div>
+        <div class="sim-body">
+          <p>Estas son las líneas que hacen falta para que aparezca la pantalla de ajustes. Desmarca alguna, o cambia el contenedor, y pulsa <em>Abrir ajustes</em>.</p>
+          <div class="sim-row">
+            <div class="checks" style="flex:1;min-width:250px">
+              <label><input type="checkbox" id="mtRecurso" checked> <span>En el fragmento: <code>setPreferencesFromResource(R.xml.root_preferences, rootKey);</code></span></label>
+              <label><input type="checkbox" id="mtReplace" checked> <span>En la actividad: <code>.replace(…, new SettingsFragment())</code></span></label>
+              <label><input type="checkbox" id="mtCommit" checked> <span>En la actividad: <code>.commit();</code></span></label>
+              <p style="margin:8px 0 6px">Contenedor que se pasa a <code>replace()</code>:</p>
+              <span class="sel" id="mtCont"><button type="button" aria-pressed="true" data-c="bien">R.id.setting_container</button><button type="button" aria-pressed="false" data-c="mal">R.id.txtView</button></span>
+              <div class="btns" style="margin-top:14px"><button class="btn" id="mtAbrir" type="button">Abrir ajustes</button></div>
+            </div>
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="mtScreen"></div></div>
+          </div>
+          <div class="why" id="mtWhy"></div>
+        </div>
+      </div>
+      <div class="comp" data-tipo="empareja"><div class="comp-head">Comprueba · Ordena</div><p class="q">Ordena las llamadas para colocar el fragmento en la actividad.</p><div class="fila"><span><code>.replace(R.id.setting_container, new SettingsFragment())</code></span><select data-r="3" aria-label=".replace(R.id.setting_container, new SettingsFragment())"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="fila"><span><code>getSupportFragmentManager()</code></span><select data-r="1" aria-label="getSupportFragmentManager()"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="fila"><span><code>.commit()</code></span><select data-r="4" aria-label=".commit()"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="fila"><span><code>.beginTransaction()</code></span><select data-r="2" aria-label=".beginTransaction()"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Primero se pide el gestor de fragmentos, con él se empieza la transacción, se dice qué fragmento va en qué contenedor y, por último, <code>commit()</code> lo aplica.</div></div>
+
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Leer al volver: onResume()</h2></div>
+
+      <p>Falta una pieza: que la pantalla principal muestre el email nada más volver de los ajustes. La clave está en qué le pasa a <code>MainActivity</code> mientras los ajustes están abiertos.</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="MainActivity abre SettingActivity: MainActivity pasa por onPause y onStop pero no se destruye. Al volver, se ejecutan onRestart, onStart y onResume, y no onCreate."><defs><marker id="pf5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="20" width="210" height="70" rx="14" fill="#E2F4EA"/><text x="105" y="50" text-anchor="middle" font-size="13.5" fill="#0A5C33" font-weight="700">MainActivity</text><text x="105" y="72" text-anchor="middle" font-size="10.5" fill="#0A5C33" style="font-family:'JetBrains Mono', Consolas, monospace">onCreate → onStart → onResume</text><rect x="255" y="20" width="210" height="70" rx="14" fill="#E7F0FD"/><text x="360" y="50" text-anchor="middle" font-size="13.5" fill="#174EA6" font-weight="700">Abre los ajustes</text><text x="360" y="72" text-anchor="middle" font-size="10.5" fill="#174EA6" style="font-family:'JetBrains Mono', Consolas, monospace">MainActivity: onPause → onStop</text><rect x="510" y="20" width="210" height="70" rx="14" fill="#0E8A4B"/><text x="615" y="50" text-anchor="middle" font-size="13.5" fill="#fff" font-weight="700">Vuelve con la flecha</text><text x="615" y="72" text-anchor="middle" font-size="10.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onRestart → onStart → onResume</text><line x1="214" y1="55" x2="251" y2="55" stroke="#56655D" stroke-width="2" marker-end="url(#pf5)"/><line x1="469" y1="55" x2="506" y2="55" stroke="#56655D" stroke-width="2" marker-end="url(#pf5)"/><rect x="0" y="130" width="720" height="100" rx="12" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="20" y="160" text-anchor="start" font-size="12.5" fill="#17211C">MainActivity no se destruye al abrir los ajustes: se queda debajo, en la pila de actividades.</text><text x="20" y="186" text-anchor="start" font-size="12.5" fill="#17211C">Al volver, onCreate() no se repite. Lo que se lee en onCreate() se queda con el valor de antes;</text><text x="20" y="210" text-anchor="start" font-size="12.5" fill="#0A5C33" font-weight="700">lo que se lee en onResume() se actualiza cada vez que la actividad vuelve a primer plano.</text></svg>
+<figcaption>Los métodos del ciclo de vida que se ejecutan en el recorrido de la rama.</figcaption>
+</figure>
+      <p>Al abrir otra actividad encima, <code>MainActivity</code> no se destruye: se queda debajo, en la pila. Al volver, Android no la crea de nuevo, así que <strong><code>onCreate()</code> no se repite</strong>. El método que sí se ejecuta cada vez que vuelve a primer plano es <code>onResume()</code>, y por eso la rama lee las preferencias ahí.</p>
+      <div class="sim" id="simPref">
+        <div class="sim-head"><b>Dónde está el dato</b><span>escribe, vuelve y cierra la app</span></div>
+        <div class="sim-body">
+          <p>El recorrido completo de la aplicación de la rama, con los métodos del ciclo de vida. Elige dónde se cargan las preferencias y prueba los dos casos. El aspecto es aproximado.</p>
+          <p>Cargar las preferencias en: <span class="sel" id="prDonde"><button type="button" aria-pressed="true" data-m="onResume">onResume()</button><button type="button" aria-pressed="false" data-m="onCreate">onCreate()</button></span></p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="prScreen"></div></div>
+            <div class="panel">
+              <div class="btns"><button class="btn ghost" id="prCerrar" type="button">Cerrar y abrir la app</button><button class="btn ghost" id="prBorrar" type="button">Borrar datos de la app</button></div>
+              <div class="why" id="prWhy">Todavía no hay nada guardado. Pulsa Ajustes.</div>
+              <ul class="log" id="prLog" aria-label="Fichero y registro de llamadas"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figure>
+<svg viewBox="0 0 720 300" role="img" aria-label="MainActivity abre SettingActivity con una intención. SettingActivity contiene a SettingsFragment, que construye la pantalla a partir de root_preferences.xml. Lo que el usuario escribe lo guarda Android en las preferencias compartidas, y MainActivity lo lee de ahí al volver."><defs><marker id="pf1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="20" width="200" height="90" rx="14" fill="#E2F4EA"/><text x="100" y="56" text-anchor="middle" font-size="13.5" fill="#0A5C33" font-weight="700">MainActivity</text><text x="100" y="80" text-anchor="middle" font-size="12" fill="#0A5C33">muestra el valor guardado</text><rect x="260" y="20" width="200" height="90" rx="14" fill="#E2F4EA"/><text x="360" y="56" text-anchor="middle" font-size="13.5" fill="#0A5C33" font-weight="700">SettingActivity</text><text x="360" y="80" text-anchor="middle" font-size="12" fill="#0A5C33">coloca el fragmento</text><rect x="520" y="20" width="200" height="90" rx="14" fill="#0E8A4B"/><text x="620" y="56" text-anchor="middle" font-size="13.5" fill="#fff" font-weight="700">SettingsFragment</text><text x="620" y="80" text-anchor="middle" font-size="12" fill="#fff">construye la pantalla</text><rect x="520" y="170" width="200" height="70" rx="14" fill="#6D3FD8"/><text x="620" y="200" text-anchor="middle" font-size="12" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">root_preferences.xml</text><text x="620" y="222" text-anchor="middle" font-size="12" fill="#fff">qué preferencias hay</text><rect x="0" y="170" width="460" height="70" rx="14" fill="#E7F0FD"/><text x="230" y="200" text-anchor="middle" font-size="13.5" fill="#174EA6" font-weight="700">Preferencias compartidas</text><text x="230" y="222" text-anchor="middle" font-size="12" fill="#174EA6">un fichero de la app con pares clave-valor</text><line x1="204" y1="65" x2="256" y2="65" stroke="#56655D" stroke-width="2" marker-end="url(#pf1)"/><line x1="464" y1="65" x2="516" y2="65" stroke="#56655D" stroke-width="2" marker-end="url(#pf1)"/><line x1="620" y1="114" x2="620" y2="166" stroke="#56655D" stroke-width="2" marker-end="url(#pf1)"/><line x1="560" y1="114" x2="440" y2="166" stroke="#56655D" stroke-width="2" marker-end="url(#pf1)"/><line x1="100" y1="166" x2="100" y2="114" stroke="#56655D" stroke-width="2" marker-end="url(#pf1)"/><text x="230" y="55" text-anchor="middle" font-size="11" fill="#56655D">abre</text><text x="490" y="55" text-anchor="middle" font-size="11" fill="#56655D">contiene</text><text x="690" y="144" text-anchor="middle" font-size="11" fill="#56655D">lee</text><text x="450" y="134" text-anchor="middle" font-size="11" fill="#56655D">Android guarda</text><text x="130" y="144" text-anchor="middle" font-size="11" fill="#56655D">lee</text><text x="360" y="280" text-anchor="middle" font-size="12" fill="#56655D">Nadie escribe código para guardar: lo hace el fragmento de preferencias.</text></svg>
+<figcaption>Las piezas de la rama. El único código que trata con los datos es la lectura en <code>MainActivity</code>.</figcaption>
+</figure>
+      <div class="comp" data-tipo="vf"><div class="comp-head">Comprueba · Verdadero o falso</div><div style="margin-top:10px"><div class="fila" data-r="f"><span>Al abrir los ajustes, <code>MainActivity</code> se destruye.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Al volver de los ajustes con la flecha, se ejecuta <code>onResume()</code> de <code>MainActivity</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Si las preferencias se leen en <code>onCreate()</code>, el texto no cambia al volver de los ajustes.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>El código de la rama guarda el email con <code>putString()</code> al pulsar OK.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden><code>MainActivity</code> se queda en la pila mientras los ajustes están abiertos; al volver pasa por <code>onRestart()</code>, <code>onStart()</code> y <code>onResume()</code>, pero no por <code>onCreate()</code>. El guardado lo hace la biblioteca de preferencias, no tu código.</div></div>
+
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 11, siguiendo el recorrido de la aplicación, así que saltan entre tres ficheros. Lo que ya has visto en los apartados anteriores aquí solo se sitúa en el código.</p>
+      <h3 id="s7-0"><span class="sn">Antes</span>La biblioteca y el XML</h3>
+      <p>La pantalla de ajustes necesita una biblioteca que no viene con el proyecto base. Está añadida en <code>app/build.gradle</code>:</p>
+      <div class="code"><div class="code-bar">app/build.gradle</div>
+<pre><code class="lang-java">implementation libs.preference</code></pre></div>
+      <p>Y el XML está en la carpeta <code>res/xml/</code>:</p>
+      <div class="code"><div class="code-bar">res/xml/root_preferences.xml</div>
+<pre><code class="lang-xml">&lt;PreferenceScreen xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;PreferenceCategory android:title=&quot;Preference category&quot;&gt;
+
+        &lt;EditTextPreference
+            android:key=&quot;emailPreference&quot;
+            android:selectAllOnFocus=&quot;true&quot;
+            android:singleLine=&quot;true&quot;
+            android:title=&quot;email&quot; /&gt;
+    &lt;/PreferenceCategory&gt;
+&lt;/PreferenceScreen&gt;</code></pre></div>
+      <h3 id="s7-1"><span class="sn">TODO 1</span>Abrir la pantalla de ajustes</h3>
+      <p>Es una actividad más, con su clase, su layout y su línea en el manifiesto, y se abre con una intención explícita.</p>
+      <div class="code"><div class="code-bar">MainActivity.java</div>
+<pre><code class="lang-java">Intent i = new Intent(MainActivity.this, SettingActivity.class);
+startActivity(i);</code></pre></div>
+      <h3 id="s7-2"><span class="sn">TODO 2-3</span>El fragmento</h3>
+      <p>Hereda de <code>PreferenceFragmentCompat</code> y, en <code>onCreatePreferences()</code>, le dice qué XML usar con <code>setPreferencesFromResource()</code> (apartado 5.2).</p>
+      <h3 id="s7-3"><span class="sn">TODO 4-5</span>La transacción</h3>
+      <p>En <code>onCreate()</code> de <code>SettingActivity</code>, la cadena <code>beginTransaction()</code>, <code>replace()</code> y <code>commit()</code> del apartado 5.2.</p>
+      <h3 id="s7-4"><span class="sn">TODO 6-7</span>La flecha de volver</h3>
       <p>Es opcional. Se activa en la barra de app y, al pulsarla, llega como una opción más del menú, con un id propio de Android.</p>
       <div class="code"><div class="code-bar">SettingActivity.java</div>
 <pre><code class="lang-java">ActionBar actionBar = getSupportActionBar();
@@ -252,31 +416,31 @@ public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
     return super.onOptionsItemSelected(item);
 }</code></pre></div>
-      <h3 id="s3-5"><span class="sn">TODO 8</span>Cargar en onResume()</h3>
-      <p>Si se cargara en <code>onCreate()</code>, el texto no cambiaría al volver de los ajustes, porque <code>MainActivity</code> sigue viva en la pila y no se vuelve a crear. <code>onResume()</code>, en cambio, se ejecuta cada vez que la actividad vuelve a primer plano.</p>
+      <h3 id="s7-5"><span class="sn">TODO 8</span>Cargar en onResume()</h3>
       <div class="code"><div class="code-bar">MainActivity.java</div>
 <pre><code class="lang-java">@Override
 protected void onResume() {
     super.onResume();
     loadPreferences();
 }</code></pre></div>
-      <h3 id="s3-6"><span class="sn">TODO 9-11</span>Leer el valor</h3>
+      <p>El porqué está en el apartado 6.</p>
+      <h3 id="s7-6"><span class="sn">TODO 9-11</span>Leer el valor</h3>
       <div class="code"><div class="code-bar">MainActivity.java</div>
 <pre><code class="lang-java">SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
 String emailText = sharedPreferences.getString(&quot;emailPreference&quot;,&quot;Valor por defecto&quot;);
 txtView.setText(emailText);</code></pre></div>
-      <p><code>getDefaultSharedPreferences()</code> devuelve las preferencias de toda la aplicación, las mismas en las que guarda el fragmento. <code>getString()</code> recibe la clave y el valor que se devuelve si no hay nada guardado con ella.</p>
-      <div class="box clave"><span class="box-label">La clave tiene que ser idéntica</span><p>La clave de Java y el <code>android:key</code> del XML son el único vínculo entre las dos partes. Si no coinciden, no hay ningún error: simplemente se ve siempre el valor por defecto. Por eso, en un proyecto real, conviene guardarla en <code>strings.xml</code> o en una constante.</p></div>
-      <div class="box conocer"><span class="box-label">Cada tipo tiene su método</span><p>Hay <code>getInt()</code>, <code>getBoolean()</code>, <code>getFloat()</code>… Todos reciben la clave y un valor por defecto. El método tiene que corresponder al tipo que guarda esa preferencia.</p></div>
+      <p>Es la lectura del apartado 3: acceder a las preferencias de la aplicación y leer por la clave, con el valor por defecto como segundo parámetro.</p>
+      <div class="box clave"><span class="box-label">Una clave, escrita una sola vez</span><p>La clave de Java y el <code>android:key</code> del XML son el único vínculo entre las dos partes. En un proyecto real conviene guardarla en <code>strings.xml</code> o en una constante, para escribirla en un solo sitio.</p></div>
+      <div class="box conocer"><span class="box-label">Hoy en día</span><p>Para guardar datos clave-valor, la documentación de Android recomienda <strong>DataStore</strong>, una alternativa a <code>SharedPreferences</code> pensada para Kotlin. La biblioteca de preferencias de esta rama sigue vigente para crear pantallas de ajustes, y guarda en <code>SharedPreferences</code>.</p></div>
 
     </section>
-    <section class="chapter" id="s4">
-      <div class="chapter-head"><span class="chapter-num">4</span><h2>Pruébalo</h2></div>
-<ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>). Se ve «Valor por defecto», porque no hay nada guardado.</li><li>Pulsa <strong>Ajustes</strong> y vuelve sin escribir nada. Sigue igual.</li><li>Entra otra vez, pulsa <strong>email</strong>, escribe tu correo y pulsa <strong>OK</strong>.</li><li>Vuelve con la flecha de arriba. El texto ya es tu correo: se ha ejecutado <code>onResume()</code>.</li><li>Cierra la aplicación del todo, quitándola de las recientes, y ábrela. El correo sigue ahí.</li><li>Mueve la llamada a <code>loadPreferences()</code> a <code>onCreate()</code> y repite. Al volver de los ajustes el texto no cambia hasta que reinicias la aplicación.</li><li>Para ver el fichero, abre <em>View → Tool Windows → Device Explorer</em> y busca <code>data/data/com.example.pmdm/shared_prefs/</code>.</li></ol>
+    <section class="chapter" id="s8">
+      <div class="chapter-head"><span class="chapter-num">8</span><h2>Pruébalo</h2></div>
+<ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>). Se ve «Valor por defecto», porque no hay nada guardado.</li><li>Pulsa <strong>Ajustes</strong> y vuelve sin escribir nada. Sigue igual.</li><li>Entra otra vez, pulsa <strong>email</strong>, escribe tu correo y pulsa <strong>OK</strong>.</li><li>Vuelve con la flecha de arriba. El texto ya es tu correo: se ha ejecutado <code>onResume()</code>.</li><li>Gira el emulador. El correo sigue ahí, aunque la actividad se ha creado de nuevo.</li><li>Cierra la aplicación del todo, quitándola de las recientes, y ábrela. El correo sigue ahí.</li><li>Mueve la llamada a <code>loadPreferences()</code> a <code>onCreate()</code> y repite. Al volver de los ajustes el texto no cambia hasta que reinicias la aplicación.</li><li>Para ver el fichero, abre <em>View → Tool Windows → Device Explorer</em> y busca <code>data/data/com.example.pmdm/shared_prefs/</code>.</li></ol>
     </section>
-    <section class="chapter" id="s5">
-      <div class="chapter-head"><span class="chapter-num">5</span><h2>Errores comunes</h2></div>
+    <section class="chapter" id="s9">
+      <div class="chapter-head"><span class="chapter-num">9</span><h2>Errores comunes</h2></div>
 <div class="table-wrap"><table>
 <thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
 <tbody>
@@ -285,12 +449,13 @@ txtView.setText(emailText);</code></pre></div>
 <tr><td>Después de abrir los ajustes aparece un valor que nadie ha escrito</td><td>El XML lleva <code>android:defaultValue</code>: al abrirse la pantalla, ese valor se guarda como si lo hubiese escrito el usuario.</td></tr>
 <tr><td><code>R.xml.root_preferences</code> sale en rojo</td><td>El fichero no está en <code>res/xml/</code>.</td></tr>
 <tr><td>La pantalla de ajustes sale en blanco</td><td>Falta <code>commit()</code>, o <code>setPreferencesFromResource()</code>.</td></tr>
+<tr><td><code>IllegalArgumentException: No view found for id</code></td><td>El id que se pasa a <code>replace()</code> no está en el layout de la actividad.</td></tr>
 <tr><td>Se cierra la app con <code>ClassCastException</code> al leer</td><td>Se ha leído con un método de otro tipo: por ejemplo, <code>getInt()</code> sobre una clave que guarda un texto.</td></tr>
 </tbody>
 </table></div>
     </section>
-    <section class="chapter" id="s6">
-      <div class="chapter-head"><span class="chapter-num">6</span><h2>Para practicar</h2></div>
+    <section class="chapter" id="s10">
+      <div class="chapter-head"><span class="chapter-num">10</span><h2>Para practicar</h2></div>
 <p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_3_1</code>.</p>
       <ol class="steps">
         <li>Pasa a <code>strings.xml</code> los títulos del XML y la clave, y úsala tanto en el XML como en Java.</li>
@@ -323,49 +488,269 @@ function pulsacionLarga(boton, alLargo, alCorto){
 }
 
 
-var log = registro("prLog"), pantalla = $("prScreen"), guardado = null;
+document.querySelectorAll(".comp").forEach(function(caja){
+  var tipo = caja.getAttribute("data-tipo");
+  var resultado = caja.querySelector(".comp-res");
+  var explicacion = caja.querySelector(".comp-exp");
+  caja.querySelectorAll(".opt").forEach(function(opcion){
+    opcion.addEventListener("click", function(){
+      caja.querySelectorAll(".opt").forEach(function(otra){ otra.classList.remove("sel", "bien", "mal"); });
+      opcion.classList.add("sel");
+    });
+  });
+  caja.querySelectorAll(".vf").forEach(function(grupo){
+    grupo.querySelectorAll("button").forEach(function(boton){
+      boton.addEventListener("click", function(){
+        grupo.querySelectorAll("button").forEach(function(otro){ otro.classList.remove("sel"); });
+        boton.classList.add("sel");
+        grupo.closest(".fila").classList.remove("bien", "mal");
+      });
+    });
+  });
+  caja.querySelectorAll("select").forEach(function(lista){
+    lista.addEventListener("change", function(){ lista.classList.remove("bien", "mal"); });
+  });
+  caja.querySelector(".comp-ok").addEventListener("click", function(){
+    var total = 0, aciertos = 0, faltan = 0;
+    caja.querySelectorAll(".bien, .mal").forEach(function(marcada){ marcada.classList.remove("bien", "mal"); });
+    if(tipo === "elige"){
+      total = 1;
+      var elegida = caja.querySelector(".opt.sel");
+      if(!elegida){ faltan = 1; }
+      else { var correcta = elegida.hasAttribute("data-ok"); elegida.classList.add(correcta ? "bien" : "mal"); if(correcta) aciertos = 1; }
+    } else if(tipo === "vf"){
+      caja.querySelectorAll(".fila").forEach(function(fila){
+        total++;
+        var marcado = fila.querySelector(".vf button.sel");
+        if(!marcado){ faltan++; return; }
+        var correcta = marcado.getAttribute("data-v") === fila.getAttribute("data-r");
+        fila.classList.add(correcta ? "bien" : "mal");
+        if(correcta) aciertos++;
+      });
+    } else {
+      caja.querySelectorAll("select").forEach(function(lista){
+        total++;
+        if(!lista.value){ faltan++; return; }
+        var correcta = lista.value === lista.getAttribute("data-r");
+        lista.classList.add(correcta ? "bien" : "mal");
+        if(correcta) aciertos++;
+      });
+    }
+    if(faltan){ resultado.className = "comp-res ko"; resultado.textContent = "Contesta todo antes de comprobar."; return; }
+    explicacion.hidden = false;
+    if(aciertos === total){ resultado.className = "comp-res ok"; resultado.textContent = "¡Correcto!"; }
+    else { resultado.className = "comp-res ko"; resultado.textContent = aciertos + " de " + total + " bien. Revisa lo marcado en rojo."; }
+  });
+  caja.querySelector(".comp-reset").addEventListener("click", function(){
+    caja.querySelectorAll(".sel, .bien, .mal").forEach(function(marcada){ marcada.classList.remove("sel", "bien", "mal"); });
+    caja.querySelectorAll("select").forEach(function(lista){ lista.value = ""; });
+    resultado.textContent = ""; resultado.className = "comp-res";
+    explicacion.hidden = true;
+  });
+});
+
 function escapa(texto){ var div = document.createElement("div"); div.textContent = texto; return div.innerHTML; }
-function principal(){
-  log.met("onResume()");
-  var valor = guardado === null ? "Valor por defecto" : guardado;
-  log.acc('getString("emailPreference", "Valor por defecto") → "' + valor + '"');
-  pantalla.innerHTML = '<div class="appbar"><span class="ttl">Shared Preferences</span></div><div class="canvas" style="flex-direction:column;gap:18px"><span style="font-size:17px;overflow-wrap:anywhere;text-align:center">' + escapa(valor) + '</span><button class="droid" id="prAjustes" type="button">Ajustes</button></div>';
-  $("prAjustes").addEventListener("click", ajustes);
-}
-function ajustes(){
-  log.acc("startActivity(i) → SettingActivity");
-  pantalla.innerHTML = '<div class="appbar"><button type="button" id="prVolver" aria-label="Volver">←</button><span class="ttl">PMDM</span></div><div style="position:absolute;inset:40px 0 0;padding:12px 14px"><div style="font:600 11.5px var(--font-body);color:#6200EE;margin-bottom:10px">Preference category</div><button type="button" id="prEmail" style="border:0;background:none;padding:6px 0;font:14px var(--font-body);color:var(--ink);cursor:pointer;width:100%;text-align:left">email</button></div>';
-  $("prVolver").addEventListener("click", function(){ log.nota("Flecha: vuelve a MainActivity."); principal(); $("prWhy").innerHTML = "Al volver se ejecuta <code>onResume()</code>, y por eso el texto ya está actualizado."; });
-  $("prEmail").addEventListener("click", dialogo);
-  $("prWhy").innerHTML = "Esta pantalla no tiene layout propio con vistas: el fragmento la construye a partir del XML. Pulsa <em>email</em>.";
-}
-function dialogo(){
-  var fondo = document.createElement("div"); fondo.className = "scrimx";
-  fondo.innerHTML = '<div class="dialog" role="dialog" aria-label="email"><b>email</b><input type="text" id="prCampo" aria-label="email" style="width:100%;box-sizing:border-box;font:13px var(--font-body);padding:6px;margin-bottom:8px"><div class="acts"><button type="button" id="prNo">Cancel</button><button type="button" id="prOk">OK</button></div></div>';
-  pantalla.appendChild(fondo);
-  $("prCampo").value = guardado === null ? "" : guardado;
-  $("prNo").addEventListener("click", function(){ fondo.remove(); });
-  $("prOk").addEventListener("click", function(){
-    guardado = $("prCampo").value;
-    fondo.remove();
-    log.nota('Android guarda: emailPreference = "' + guardado + '"');
-    $("prWhy").innerHTML = "Lo ha guardado Android, sin una línea de código nuestra. Ahora vuelve con la flecha.";
+function selector(id, alCambiar){
+  var botones = $(id).querySelectorAll("button");
+  botones.forEach(function(boton){
+    boton.addEventListener("click", function(){
+      botones.forEach(function(otro){ otro.setAttribute("aria-pressed", otro === boton ? "true" : "false"); });
+      alCambiar(boton);
+    });
   });
 }
-$("prCerrar").addEventListener("click", function(){
-  log.limpiar();
-  log.nota("Aplicación cerrada y abierta otra vez.");
-  principal();
-  $("prWhy").innerHTML = guardado === null ? "Sigue sin haber nada guardado: se ve el valor por defecto." : "El dato sigue ahí: está en un fichero, no en la memoria de la aplicación.";
-});
-$("prBorrar").addEventListener("click", function(){
-  guardado = null;
-  log.limpiar();
-  log.nota("Datos de la aplicación borrados: desaparece el fichero.");
-  principal();
-  $("prWhy").innerHTML = "Como la clave ya no existe, <code>getString()</code> devuelve su segundo parámetro.";
-});
-principal();
+
+/* --- 1. variable o preferencias --- */
+(function(){
+  var log = registro("memLog"), donde = "var", variable = null, fichero = null;
+  function muestra(){
+    var valor = donde === "var" ? variable : fichero;
+    $("memValor").textContent = valor === null ? "Guardado: (nada)" : "Guardado: " + valor;
+  }
+  function recrea(motivo){
+    log.nota(motivo);
+    log.met("onDestroy()");
+    log.met("onCreate()");
+    if(donde === "var"){
+      variable = null;
+      log.acc('email = null  (la variable se crea de nuevo, vacía)');
+      $("memWhy").innerHTML = "La actividad se ha destruido y se ha creado otra: sus variables empiezan de cero. El email se ha perdido.";
+    } else {
+      log.acc('getString("emailPreference", null) → ' + (fichero === null ? "null" : '"' + fichero + '"'));
+      $("memWhy").innerHTML = fichero === null ? "No había nada en el fichero." : "La actividad también se ha creado de nuevo, pero ha vuelto a leer el fichero: el email sigue ahí.";
+    }
+    $("memCampo").value = "";
+    muestra();
+  }
+  $("memGuardar").addEventListener("click", function(){
+    var texto = $("memCampo").value;
+    if(donde === "var"){ variable = texto; log.acc('email = "' + texto + '"'); }
+    else { fichero = texto; log.acc('edit().putString("emailPreference", "' + texto + '").apply()'); }
+    $("memWhy").innerHTML = "Guardado. Ahora gira el móvil o cierra la aplicación.";
+    muestra();
+  });
+  $("memGirar").addEventListener("click", function(){ recrea("Giras el móvil: Android destruye la actividad y la crea otra vez."); });
+  $("memCerrar").addEventListener("click", function(){ recrea("Cierras la aplicación y la abres."); });
+  selector("memDonde", function(boton){
+    donde = boton.getAttribute("data-d");
+    log.limpiar();
+    $("memWhy").innerHTML = donde === "var" ? "Ahora el email se guarda en un atributo de la actividad." : "Ahora el email se guarda en las preferencias, un fichero del móvil.";
+    muestra();
+  });
+  muestra();
+  $("memWhy").innerHTML = "Escribe un email y pulsa Guardar.";
+})();
+
+/* --- 2. las taquillas --- */
+(function(){
+  var log = registro("tqLog"), datos = {}, orden = [];
+  var CLASE = { "String": "java.lang.String", "int": "java.lang.Integer", "boolean": "java.lang.Boolean" };
+  function pinta(){
+    var texto = '<span class="tag">&lt;map&gt;</span>\n';
+    orden.forEach(function(clave){
+      var dato = datos[clave];
+      if(dato.tipo === "String") texto += '    <span class="tag">&lt;string name="' + escapa(clave) + '"&gt;</span><span class="str">' + escapa(dato.valor) + '</span><span class="tag">&lt;/string&gt;</span>\n';
+      else texto += '    <span class="tag">&lt;' + dato.tipo + ' name="' + escapa(clave) + '" value="' + escapa(String(dato.valor)) + '" /&gt;</span>\n';
+    });
+    $("tqFichero").innerHTML = texto + '<span class="tag">&lt;/map&gt;</span>';
+  }
+  $("tqPut").addEventListener("click", function(){
+    var clave = $("tqClave").value.trim(), tipo = $("tqTipo").value, texto = $("tqValor").value.trim();
+    if(!clave){ $("tqWhy").innerHTML = "Escribe una clave."; return; }
+    var valor = texto;
+    if(tipo === "int"){
+      if(!/^-?\d+$/.test(texto)){ $("tqWhy").innerHTML = "Para un <code>int</code> el valor tiene que ser un número entero."; return; }
+      valor = parseInt(texto, 10);
+    } else if(tipo === "boolean"){
+      if(texto !== "true" && texto !== "false"){ $("tqWhy").innerHTML = "Para un <code>boolean</code> el valor es <code>true</code> o <code>false</code>."; return; }
+      valor = texto === "true";
+    }
+    if(!datos[clave]) orden.push(clave);
+    datos[clave] = { tipo: tipo, valor: valor };
+    var metodo = tipo === "String" ? "putString" : (tipo === "int" ? "putInt" : "putBoolean");
+    log.acc("edit()." + metodo + '("' + clave + '", ' + (tipo === "String" ? '"' + valor + '"' : valor) + ").apply()");
+    $("tqWhy").innerHTML = "Guardado. Si la clave ya existía, se ha sustituido su valor: en cada taquilla cabe una sola cosa.";
+    pinta();
+  });
+  function lee(tipo, metodo, porDefecto){
+    var clave = $("tqClave").value.trim();
+    var llamada = metodo + '("' + clave + '", ' + porDefecto + ")";
+    var dato = datos[clave];
+    if(!dato){
+      log.acc(llamada + " → " + porDefecto);
+      $("tqWhy").innerHTML = "No hay ninguna taquilla con esa clave, así que se devuelve el valor por defecto. Fíjate en que no da ningún error.";
+    } else if(dato.tipo !== tipo){
+      log.acc(llamada + " → ClassCastException");
+      log.nota(CLASE[dato.tipo] + " cannot be cast to " + CLASE[tipo]);
+      $("tqWhy").innerHTML = "La clave existe, pero guarda un <code>" + dato.tipo + "</code> y la estás leyendo como <code>" + tipo + "</code>: la aplicación se cerraría.";
+    } else {
+      var valor = tipo === "String" ? '"' + dato.valor + '"' : dato.valor;
+      log.acc(llamada + " → " + valor);
+      $("tqWhy").innerHTML = "La clave existe y el tipo coincide: se devuelve lo guardado.";
+    }
+  }
+  $("tqGetS").addEventListener("click", function(){ lee("String", "getString", '"—"'); });
+  $("tqGetI").addEventListener("click", function(){ lee("int", "getInt", "0"); });
+  $("tqGetB").addEventListener("click", function(){ lee("boolean", "getBoolean", "false"); });
+  $("tqBorrar").addEventListener("click", function(){ datos = {}; orden = []; log.limpiar(); log.nota("Datos de la aplicación borrados: el fichero desaparece."); $("tqWhy").innerHTML = "Ahora cualquier lectura devuelve su valor por defecto."; pinta(); });
+  pinta();
+})();
+
+/* --- 3. monta la pantalla de ajustes --- */
+(function(){
+  var contenedor = "bien";
+  selector("mtCont", function(boton){ contenedor = boton.getAttribute("data-c"); });
+  function pantallaPrincipal(){
+    $("mtScreen").innerHTML = '<div class="appbar"><span class="ttl">Shared Preferences</span></div><div class="canvas"><button class="droid" type="button" tabindex="-1">Ajustes</button></div>';
+  }
+  $("mtAbrir").addEventListener("click", function(){
+    var recurso = $("mtRecurso").checked, reemplaza = $("mtReplace").checked, aplica = $("mtCommit").checked;
+    var barra = '<div class="appbar"><span class="ttl">← PMDM</span></div>';
+    if(reemplaza && aplica && contenedor === "mal"){
+      $("mtScreen").innerHTML = '<div class="canvas" style="inset:0;background:#fff;color:#C5221F;font-size:13px;text-align:center">La aplicación se ha detenido</div>';
+      $("mtWhy").innerHTML = "<code>IllegalArgumentException: No view found for id … for fragment SettingsFragment</code>. En el layout de <code>SettingActivity</code> no hay ninguna vista con ese id: el cuadro no tiene marco.";
+      return;
+    }
+    if(!reemplaza || !aplica){
+      $("mtScreen").innerHTML = barra;
+      $("mtWhy").innerHTML = !reemplaza ? "Nadie ha metido el fragmento en el contenedor: la actividad se abre vacía." : "La transacción se ha preparado pero no se ha aplicado: sin <code>commit()</code> no ocurre nada.";
+      return;
+    }
+    if(!recurso){
+      $("mtScreen").innerHTML = barra;
+      $("mtWhy").innerHTML = "El fragmento está colocado, pero no sabe qué XML usar: la lista sale vacía.";
+      return;
+    }
+    $("mtScreen").innerHTML = barra + '<div style="position:absolute;inset:40px 0 0"><div class="settings-cat">Preference category</div><button class="settings-row" type="button" tabindex="-1">email</button></div>';
+    $("mtWhy").innerHTML = "Están todas las piezas: el fragmento construye la lista a partir del XML y la transacción lo coloca en su contenedor.";
+  });
+  pantallaPrincipal();
+  $("mtWhy").innerHTML = "Así se ve la pantalla principal. Pulsa Abrir ajustes.";
+})();
+
+/* --- 4. dónde está el dato --- */
+(function(){
+  var log = registro("prLog"), pantalla = $("prScreen"), guardado = null, cargaEn = "onResume", mostrado = "";
+  selector("prDonde", function(boton){
+    cargaEn = boton.getAttribute("data-m");
+    abre("Cambias el código y vuelves a ejecutar la aplicación.");
+  });
+  function lee(){
+    var valor = guardado === null ? "Valor por defecto" : guardado;
+    log.acc('getString("emailPreference", "Valor por defecto") → "' + valor + '"');
+    mostrado = valor;
+  }
+  function pintaPrincipal(){
+    pantalla.innerHTML = '<div class="appbar"><span class="ttl">Shared Preferences</span></div><div class="canvas" style="flex-direction:column;gap:18px"><span style="font-size:17px;overflow-wrap:anywhere;text-align:center">' + escapa(mostrado) + '</span><button class="droid" id="prAjustes" type="button">Ajustes</button></div>';
+    $("prAjustes").addEventListener("click", ajustes);
+  }
+  function abre(nota){
+    log.limpiar();
+    log.nota(nota);
+    log.met("onCreate()"); if(cargaEn === "onCreate") lee();
+    log.met("onStart()");
+    log.met("onResume()"); if(cargaEn === "onResume") lee();
+    pintaPrincipal();
+  }
+  function ajustes(){
+    log.acc("startActivity(i) → SettingActivity");
+    log.met("onPause()"); log.met("onStop()");
+    log.nota("MainActivity sigue viva, debajo de SettingActivity.");
+    pantalla.innerHTML = '<div class="appbar"><button type="button" id="prVolver" aria-label="Volver">←</button><span class="ttl">PMDM</span></div><div style="position:absolute;inset:40px 0 0"><div class="settings-cat">Preference category</div><button type="button" class="settings-row" id="prEmail">email</button></div>';
+    $("prVolver").addEventListener("click", function(){
+      log.nota("Flecha: vuelve a MainActivity.");
+      log.met("onRestart()"); log.met("onStart()");
+      log.met("onResume()"); if(cargaEn === "onResume") lee();
+      pintaPrincipal();
+      $("prWhy").innerHTML = cargaEn === "onResume" ? "Al volver se ejecuta <code>onResume()</code> y se lee otra vez: el texto ya está actualizado." : "Al volver no se ejecuta <code>onCreate()</code>: el texto se queda con lo que leyó al abrir la aplicación. Cierra y ábrela para verlo cambiar.";
+    });
+    $("prEmail").addEventListener("click", dialogo);
+    $("prWhy").innerHTML = "Esta pantalla la construye el fragmento a partir del XML. Pulsa <em>email</em>.";
+  }
+  function dialogo(){
+    var fondo = document.createElement("div"); fondo.className = "scrimx";
+    fondo.innerHTML = '<div class="dialog" role="dialog" aria-label="email"><b>email</b><input type="text" id="prCampo" aria-label="email" style="width:100%;box-sizing:border-box;font:13px var(--font-body);padding:6px;margin-bottom:8px"><div class="acts"><button type="button" id="prNo">Cancel</button><button type="button" id="prOk">OK</button></div></div>';
+    pantalla.appendChild(fondo);
+    $("prCampo").value = guardado === null ? "" : guardado;
+    $("prNo").addEventListener("click", function(){ fondo.remove(); });
+    $("prOk").addEventListener("click", function(){
+      guardado = $("prCampo").value;
+      fondo.remove();
+      log.nota('Android guarda: emailPreference = "' + guardado + '"');
+      $("prWhy").innerHTML = "Lo ha guardado Android, sin una línea de código nuestra. Ahora vuelve con la flecha.";
+    });
+  }
+  $("prCerrar").addEventListener("click", function(){
+    abre("Aplicación cerrada y abierta otra vez.");
+    $("prWhy").innerHTML = guardado === null ? "Sigue sin haber nada guardado: se ve el valor por defecto." : "El dato sigue ahí: está en un fichero, no en la memoria de la aplicación.";
+  });
+  $("prBorrar").addEventListener("click", function(){
+    guardado = null;
+    abre("Datos de la aplicación borrados: desaparece el fichero.");
+    $("prWhy").innerHTML = "Como la clave ya no existe, <code>getString()</code> devuelve su segundo parámetro.";
+  });
+  abre("Abres la aplicación.");
+})();
 
 })();
 </script>
