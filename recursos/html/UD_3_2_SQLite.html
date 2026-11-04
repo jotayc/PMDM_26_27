@@ -71,6 +71,50 @@
     main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
   }
   @media (max-width: 600px){ .phone{ margin: 0 auto; } }
+
+  /* ---------- Comprobaciones ---------- */
+  .comp{ margin: 24px 0 28px; border-radius: var(--radius); background: #fff; border: 1.5px solid #D9CCF7; padding: 0 0 14px; overflow: hidden; }
+  .comp-head{ background: var(--sim-soft); color: var(--sim); font: 700 13px var(--font-body); letter-spacing: .04em; text-transform: uppercase; padding: 9px 18px; }
+  .comp > *:not(.comp-head){ margin-left: 18px; margin-right: 18px; }
+  .comp .q{ font-weight: 600; margin: 12px 18px 10px; }
+  .comp .opciones{ display: grid; gap: 8px; }
+  .comp .opt{ font: 14.5px var(--font-body); text-align: left; border: 1.5px solid var(--rule); background: #fff; color: var(--ink); border-radius: 12px; padding: 9px 12px; cursor: pointer; }
+  .comp .opt:hover{ border-color: var(--sim); }
+  .comp .opt.sel{ border-color: var(--sim); background: var(--sim-soft); }
+  .comp .fila{ display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 7px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
+  .comp .fila:last-of-type{ border-bottom: 0; }
+  .comp .vf{ display: inline-flex; gap: 6px; flex: none; }
+  .comp .vf button{ font: 600 13px var(--font-body); width: 38px; border: 1.5px solid var(--rule); background: #fff; border-radius: 10px; padding: 5px 0; cursor: pointer; color: var(--ink); }
+  .comp .vf button.sel{ border-color: var(--sim); background: var(--sim-soft); }
+  .comp select{ font: 13px var(--font-body); border: 1.5px solid var(--rule); border-radius: 10px; padding: 5px 6px; background: #fff; color: var(--ink); max-width: 100%; }
+  .comp .bien{ border-color: var(--green) !important; background: var(--green-soft) !important; }
+  .comp .mal{ border-color: #C5221F !important; background: #FCE8E6 !important; }
+  .comp-bar{ display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+  .comp-res{ font-weight: 600; font-size: 14px; }
+  .comp-res.ok{ color: var(--green-deep); }
+  .comp-res.ko{ color: #C5221F; }
+  .comp-exp{ margin-top: 10px; font-size: 14.5px; color: var(--muted); border-left: 3px solid #D9CCF7; padding-left: 12px; }
+  /* ---------- Piezas de los simuladores de la UD3 ---------- */
+  .checks label{ display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 0 0 8px; cursor: pointer; }
+  .checks input{ margin-top: 3px; accent-color: var(--sim); }
+  .sel{ display: inline-flex; flex-wrap: wrap; gap: 6px; }
+  .sel button{ font: 600 13px var(--font-body); border: 1.5px solid var(--sim); background: #fff; color: var(--sim); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .sel button[aria-pressed="true"]{ background: var(--sim); color: #fff; }
+  .campo{ display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  .campo input, .campo select{ font: 14px var(--font-body); border: 1.5px solid #D9CCF7; border-radius: 10px; padding: 6px 9px; background: #fff; color: var(--ink); min-width: 0; }
+  .campos{ display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 8px 0; }
+  .fichero{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; font: 12.5px/1.55 var(--font-mono); white-space: pre-wrap; margin: 10px 0 0; min-height: 70px; overflow-wrap: anywhere; }
+  .fichero .tag{ color: var(--tk-tag); } .fichero .str{ color: var(--tk-str); }
+  .tabla-sim{ width: 100%; border-collapse: collapse; font-size: 13.5px; background: #fff; border-radius: 10px; overflow: hidden; }
+  .tabla-sim th{ background: var(--green-deep); color: #fff; font: 600 12px var(--font-mono); text-align: left; padding: 6px 9px; }
+  .tabla-sim td{ border-top: 1px solid var(--rule); padding: 6px 9px; font-family: var(--font-mono); font-size: 12.5px; }
+  .tabla-sim tr.cursor td{ background: var(--sim-soft); box-shadow: inset 0 0 0 0 var(--sim); }
+  .tabla-sim tr.cursor td:first-child{ box-shadow: inset 4px 0 0 var(--sim); }
+  .tabla-sim tr.antes td, .tabla-sim tr.despues td{ color: var(--muted); font-style: italic; font-family: var(--font-body); }
+  .tabla-sim tr.antes.cursor td, .tabla-sim tr.despues.cursor td{ color: var(--sim); }
+  .settings-row{ display: block; width: 100%; text-align: left; border: 0; background: none; padding: 9px 14px; font: 14px var(--font-body); color: var(--ink); cursor: pointer; border-bottom: 1px solid #EEE; }
+  .settings-row small{ display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .settings-cat{ font: 600 11.5px var(--font-body); color: #6200EE; padding: 12px 14px 4px; }
 </style>
 </head>
 <body>
@@ -81,7 +125,7 @@
       <div class="brand-text"><b>UD 3.2 · SQLite</b><span>PMDM · 2º DAM</span></div>
     </div>
     <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_3_2_SQLite.html" aria-current="page">UD 3.2 · SQLite</a></li></ul>
-    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>Conceptos</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Una base de datos en la app</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Las versiones</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>El código paso a paso</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">TODO 1-3</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">TODO 4-6</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">TODO 7-8</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">TODO 9-13</a></li><li class="sub"><a href="#s3-5" data-nav data-target="s3-5">TODO 14-19</a></li><li class="sub"><a href="#s3-6" data-nav data-target="s3-6">TODO 20-21</a></li><li class="sub"><a href="#s3-7" data-nav data-target="s3-7">TODO 22</a></li><li class="sub"><a href="#s3-8" data-nav data-target="s3-8">TODO 23-24</a></li><li class="sub"><a href="#s3-9" data-nav data-target="s3-9">TODO 25</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Pruébalo</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Errores comunes</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Para practicar</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>El problema: muchos datos con la misma forma</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Cuando no bastan las preferencias</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Tablas, filas y columnas</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">SQLite</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>Las clases de la rama</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Crear y actualizar: las versiones</a></li><li class="sub"><a href="#s4-1" data-nav data-target="s4-1">onCreate()</a></li><li class="sub"><a href="#s4-2" data-nav data-target="s4-2">onUpgrade()</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Insertar y consultar</a></li><li class="sub"><a href="#s5-1" data-nav data-target="s5-1">ContentValues</a></li><li class="sub"><a href="#s5-2" data-nav data-target="s5-2">query()</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Recorrer el resultado: el cursor</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>El código paso a paso</a></li><li class="sub"><a href="#s7-1" data-nav data-target="s7-1">TODO 1-3</a></li><li class="sub"><a href="#s7-2" data-nav data-target="s7-2">TODO 4-6</a></li><li class="sub"><a href="#s7-3" data-nav data-target="s7-3">TODO 7-8</a></li><li class="sub"><a href="#s7-4" data-nav data-target="s7-4">TODO 9-13</a></li><li class="sub"><a href="#s7-5" data-nav data-target="s7-5">TODO 14-19</a></li><li class="sub"><a href="#s7-6" data-nav data-target="s7-6">TODO 20-21</a></li><li class="sub"><a href="#s7-7" data-nav data-target="s7-7">TODO 22</a></li><li class="sub"><a href="#s7-8" data-nav data-target="s7-8">TODO 23-24</a></li><li class="sub"><a href="#s7-9" data-nav data-target="s7-9">TODO 25</a></li><li><a href="#s8" data-nav data-target="s8"><span class="n">08</span>Pruébalo</a></li><li><a href="#s9" data-nav data-target="s9"><span class="n">09</span>Errores comunes</a></li><li><a href="#s10" data-nav data-target="s10"><span class="n">10</span>Para practicar</a></li></ul>
   </nav>
   <div class="scrim" id="scrim"></div>
   <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
@@ -89,25 +133,50 @@
     <header class="hero"><div>
       <p class="kicker">Rama UD_3_2_SQLite</p>
       <h1>SQLite</h1>
-      <p class="lede">Una pequeña aplicación que guarda ciudades en una base de datos dentro del móvil. Con esta rama verás cómo se crea esa base de datos, cómo se actualiza sin perder datos cuando cambian sus tablas y cómo se insertan y se consultan filas.</p>
+      <p class="lede">Una pequeña aplicación que guarda ciudades en una base de datos dentro del móvil. Con esta rama verás cuándo hace falta una base de datos, cómo se crea y se actualiza sin perder datos, cómo se insertan filas y cómo se recorren las de una consulta.</p>
       <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
       <div class="legend" role="group" aria-label="Qué significa cada color">
         <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener.</span></div>
-        <div><i style="background:#6D3FD8"></i><span>Violeta: simuladores; se manejan con los botones. En su registro, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
+        <div><i style="background:#6D3FD8"></i><span>Violeta: lo que se maneja con botones, simuladores y comprobaciones. En el registro de un simulador, verde es un método al que llama Android y naranja, lo que hace tu código.</span></div>
         <div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama.</span></div>
-        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte.</span></div>
+        <div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte, o lo que no se hace.</span></div>
       </div>
     </div></header>
     <section class="chapter" id="s1">
       <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
-<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg><b>Crear la base de datos</b><span>La clase que la crea la primera vez y la actualiza cuando cambia.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg><b>Versiones</b><span>Cómo cambiar las tablas sin perder los datos de quien ya tiene la aplicación.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 2 12l6 6"/><path d="m16 6 6 6-6 6"/></svg><b>Insertar</b><span>Guardar una fila con <code>ContentValues</code> e <code>insert()</code>.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M13 9a2 2 0 0 1 4 0v3"/><path d="M17 11a2 2 0 0 1 4 0v4a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-3l-3-5a2 2 0 0 1 3-2l2 2"/></svg><b>Consultar</b><span>Pedir filas con <code>query()</code> y recorrerlas con un cursor.</span></div></div><p>La aplicación tiene tres campos para una ciudad, su población y su superficie. <em>Insertar</em> la guarda en la base de datos y <em>Mostrar</em> enseña la primera ciudad de la tabla.</p>
+<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg><b>Por qué una base de datos</b><span>Cuándo no bastan las preferencias y qué es una tabla.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg><b>Crear y actualizar</b><span>La clase que crea la base de datos la primera vez y la actualiza cuando cambian sus tablas.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6 2 12l6 6"/><path d="m16 6 6 6-6 6"/></svg><b>Insertar</b><span>Guardar una fila con <code>ContentValues</code> e <code>insert()</code>.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M13 9a2 2 0 0 1 4 0v3"/><path d="M17 11a2 2 0 0 1 4 0v4a6 6 0 0 1-6 6h-2a6 6 0 0 1-5-3l-3-5a2 2 0 0 1 3-2l2 2"/></svg><b>Consultar</b><span>Pedir filas con <code>query()</code> y recorrerlas con un cursor.</span></div></div><p>La aplicación de la rama tiene tres campos para una ciudad, su población y su superficie. <em>Insertar</em> la guarda en la base de datos y <em>Mostrar</em> enseña la primera ciudad de la tabla.</p>
     </section>
     <section class="chapter" id="s2">
-      <div class="chapter-head"><span class="chapter-num">2</span><h2>Conceptos</h2></div>
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>El problema: muchos datos con la misma forma</h2></div>
 
-      <h3 id="s2-1"><span class="sn">2.1</span>Una base de datos dentro de la aplicación</h3>
-      <p><strong>SQLite</strong> es una base de datos relacional que viene incluida en Android. No hay servidor: toda la base de datos es un fichero dentro de la aplicación. Se usa para datos con estructura, como una lista de ciudades, cuando no bastan unos pares clave-valor.</p>
-      <p>Esta rama usa tres clases de Android:</p>
+      <h3 id="s2-1"><span class="sn">2.1</span>Cuando las preferencias no bastan</h3>
+      <p>En la rama 3.1 guardaste un email en las preferencias. Ahora quieres guardar una lista de ciudades, cada una con su población y su superficie. Con preferencias tendrías que inventar una clave para cada dato de cada ciudad, y llevar la cuenta de cuántas hay:</p>
+      <figure>
+<svg viewBox="0 0 720 280" role="img" aria-label="A la izquierda, tres ciudades guardadas en preferencias con claves numeradas y un contador aparte. A la derecha, las mismas ciudades en una tabla con tres columnas y una fila por ciudad."><rect x="0" y="10" width="330" height="260" rx="14" fill="#FDF1DD"/><text x="165" y="38" text-anchor="middle" font-size="14" fill="#B26A00" font-weight="700">En preferencias: así no</text><text x="24" y="68" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">numCiudades → 3</text><text x="24" y="92" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">ciudad1_nombre → &quot;Granada&quot;</text><text x="24" y="116" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">ciudad1_poblacion → 232000</text><text x="24" y="140" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">ciudad1_superficie → 88.02</text><text x="24" y="164" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">ciudad2_nombre → &quot;Jaén&quot;</text><text x="24" y="188" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">ciudad2_poblacion → 111000</text><text x="24" y="212" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">…</text><text x="24" y="236" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">ciudad3_superficie → 398.25</text><rect x="390" y="10" width="330" height="260" rx="14" fill="#E2F4EA"/><text x="555" y="38" text-anchor="middle" font-size="14" fill="#0A5C33" font-weight="700">En una tabla</text><rect x="400" y="54" width="310" height="30" rx="6" fill="#0A5C33"/><text x="410" y="74" text-anchor="start" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text><text x="520" y="74" text-anchor="start" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">poblation</text><text x="624" y="74" text-anchor="start" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">surface</text><rect x="400" y="88" width="310" height="30" rx="6" fill="#fff"/><text x="410" y="108" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Granada</text><text x="520" y="108" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">232000</text><text x="624" y="108" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">88.02</text><rect x="400" y="122" width="310" height="30" rx="6" fill="#fff"/><text x="410" y="142" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Jaén</text><text x="520" y="142" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">111000</text><text x="624" y="142" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">424.3</text><rect x="400" y="156" width="310" height="30" rx="6" fill="#fff"/><text x="410" y="176" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Málaga</text><text x="520" y="176" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">592000</text><text x="624" y="176" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">398.25</text><text x="555" y="220" text-anchor="middle" font-size="12" fill="#0A5C33">Buscar, ordenar o borrar una fila</text><text x="555" y="240" text-anchor="middle" font-size="12" fill="#0A5C33">es una consulta, no un lío de claves.</text></svg>
+<figcaption>Con preferencias, cada dato de cada ciudad necesita su propia clave, y hay que llevar la cuenta aparte. En una tabla, cada ciudad es una fila.</figcaption>
+</figure>
+      <p>Y eso es lo fácil. Ordenar las ciudades por población, buscar las que tienen más de cien mil habitantes o borrar la segunda obligaría a leer todas las claves y reescribirlas a mano. Para muchos datos con la misma forma se usa una <strong>base de datos</strong>.</p>
+      <h3 id="s2-2"><span class="sn">2.2</span>Tablas, filas y columnas</h3>
+      <p>Una base de datos relacional guarda los datos en <strong>tablas</strong>, como las que diseñaste en Bases de datos. Recuerda las tres palabras que vas a leer en toda la rama:</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="Partes de una tabla: el nombre de la tabla db_ciudades, las columnas cityName, poblation y surface con su tipo, y cada fila, que es una ciudad."><text x="20" y="26" text-anchor="start" font-size="14" fill="#17211C" font-weight="700">Tabla db_ciudades</text><rect x="150" y="40" width="170" height="44" rx="8" fill="#0A5C33"/><text x="235" y="60" text-anchor="middle" font-size="12" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text><text x="235" y="76" text-anchor="middle" font-size="10.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">TEXT</text><rect x="330" y="40" width="170" height="44" rx="8" fill="#0A5C33"/><text x="415" y="60" text-anchor="middle" font-size="12" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">poblation</text><text x="415" y="76" text-anchor="middle" font-size="10.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">INTEGER</text><rect x="510" y="40" width="170" height="44" rx="8" fill="#0A5C33"/><text x="595" y="60" text-anchor="middle" font-size="12" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">surface</text><text x="595" y="76" text-anchor="middle" font-size="10.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">REAL</text><rect x="150" y="92" width="170" height="34" rx="8" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="235" y="114" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Granada</text><rect x="330" y="92" width="170" height="34" rx="8" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="415" y="114" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">232000</text><rect x="510" y="92" width="170" height="34" rx="8" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="595" y="114" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">88.02</text><rect x="150" y="132" width="170" height="34" rx="8" fill="#EFE9FC" stroke="#6D3FD8" stroke-width="1.8"/><text x="235" y="154" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Jaén</text><rect x="330" y="132" width="170" height="34" rx="8" fill="#EFE9FC" stroke="#6D3FD8" stroke-width="1.8"/><text x="415" y="154" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">111000</text><rect x="510" y="132" width="170" height="34" rx="8" fill="#EFE9FC" stroke="#6D3FD8" stroke-width="1.8"/><text x="595" y="154" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">424.3</text><rect x="150" y="172" width="170" height="34" rx="8" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="235" y="194" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Málaga</text><rect x="330" y="172" width="170" height="34" rx="8" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="415" y="194" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">592000</text><rect x="510" y="172" width="170" height="34" rx="8" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="595" y="194" text-anchor="middle" font-size="12" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">398.25</text><text x="140" y="66" text-anchor="end" font-size="12" fill="#0A5C33" font-weight="700">columnas →</text><text x="140" y="150" text-anchor="end" font-size="12" fill="#6D3FD8" font-weight="700">una fila →</text><text x="140" y="168" text-anchor="end" font-size="11" fill="#6D3FD8">(una ciudad)</text><text x="360" y="236" text-anchor="middle" font-size="12" fill="#56655D" font-style="italic">Cada columna tiene un tipo; cada fila tiene un valor para cada columna.</text></svg>
+<figcaption>Una tabla de la base de datos de la rama, con tres ciudades de ejemplo.</figcaption>
+</figure>
+      <div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg><b>Tabla</b><span>Un conjunto de datos con la misma forma: aquí, las ciudades.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg><b>Columna</b><span>Cada dato que se guarda de todas ellas, con su tipo: el nombre, la población, la superficie.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg><b>Fila</b><span>Cada elemento concreto, con un valor para cada columna: Granada, 232000, 88.02.</span></div></div>
+      <h3 id="s2-3"><span class="sn">2.3</span>SQLite</h3>
+      <div class="box clave"><span class="box-label">SQLite</span><p>Una base de datos relacional que viene incluida en Android. No hay servidor: toda la base de datos es un fichero dentro de la aplicación, que solo ella puede leer. Se maneja con SQL, como cualquier otra.</p></div>
+      <div class="box conocer"><span class="box-label">Hoy en día</span><p>La documentación de Android recomienda usar <strong>Room</strong>, una biblioteca que funciona sobre SQLite, porque las clases de esta rama son de bajo nivel: el SQL no se comprueba al compilar y hay que escribir mucho código repetitivo. Aquí se usan directamente para entender qué ocurre por debajo. También recomienda abrir la base de datos fuera del hilo principal; este ejemplo no lo hace, para no complicarlo.</p></div>
+      <div class="comp" data-tipo="empareja"><div class="comp-head">Comprueba · Empareja</div><p class="q">¿Qué es cada cosa en la base de datos de la rama?</p><div class="fila"><span><code>db_ciudades</code></span><select data-r="Una tabla" aria-label="db_ciudades"><option value="">Elige…</option><option value="La base de datos entera, un fichero">La base de datos entera, un fichero</option><option value="Una columna">Una columna</option><option value="Una fila">Una fila</option><option value="Una tabla">Una tabla</option></select></div><div class="fila"><span><code>poblation</code></span><select data-r="Una columna" aria-label="poblation"><option value="">Elige…</option><option value="La base de datos entera, un fichero">La base de datos entera, un fichero</option><option value="Una columna">Una columna</option><option value="Una fila">Una fila</option><option value="Una tabla">Una tabla</option></select></div><div class="fila"><span>Málaga, 592000, 398.25</span><select data-r="Una fila" aria-label="Málaga, 592000, 398.25"><option value="">Elige…</option><option value="La base de datos entera, un fichero">La base de datos entera, un fichero</option><option value="Una columna">Una columna</option><option value="Una fila">Una fila</option><option value="Una tabla">Una tabla</option></select></div><div class="fila"><span><code>db_dam</code>, en la carpeta de la aplicación</span><select data-r="La base de datos entera, un fichero" aria-label="db_dam, en la carpeta de la aplicación"><option value="">Elige…</option><option value="La base de datos entera, un fichero">La base de datos entera, un fichero</option><option value="Una columna">Una columna</option><option value="Una fila">Una fila</option><option value="Una tabla">Una tabla</option></select></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>La base de datos es el fichero <code>db_dam</code>. Dentro está la tabla <code>db_ciudades</code>, con tres columnas, y cada ciudad que insertas es una fila.</div></div>
+
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>Las clases de la rama</h2></div>
+
+      <p>Para trabajar con SQLite, Android da tres clases. La rama añade una propia, <code>DBAccess</code>, que reúne todo lo que toca la base de datos:</p>
+      <figure>
+<svg viewBox="0 0 720 240" role="img" aria-label="MainActivity llama a los métodos de DBAccess. DBAccess hereda de SQLiteOpenHelper y abre la base de datos, un SQLiteDatabase sobre el fichero db_dam. Una consulta devuelve un Cursor con las filas."><defs><marker id="sq2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="30" width="160" height="90" rx="14" fill="#E2F4EA"/><text x="80" y="66" text-anchor="middle" font-size="13" fill="#0A5C33" font-weight="700">MainActivity</text><text x="80" y="88" text-anchor="middle" font-size="11.5" fill="#0A5C33">pide y muestra</text><rect x="200" y="30" width="180" height="90" rx="14" fill="#0E8A4B"/><text x="290" y="62" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">DBAccess</text><text x="290" y="82" text-anchor="middle" font-size="11" fill="#fff">extends</text><text x="290" y="100" text-anchor="middle" font-size="11" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">SQLiteOpenHelper</text><rect x="420" y="30" width="160" height="90" rx="14" fill="#E7F0FD"/><text x="500" y="66" text-anchor="middle" font-size="12.5" fill="#174EA6" font-weight="700">SQLiteDatabase</text><text x="500" y="88" text-anchor="middle" font-size="11.5" fill="#174EA6">la conexión abierta</text><rect x="620" y="30" width="100" height="90" rx="14" fill="#6D3FD8"/><text x="670" y="66" text-anchor="middle" font-size="13" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">db_dam</text><text x="670" y="88" text-anchor="middle" font-size="11.5" fill="#fff">el fichero</text><line x1="164" y1="60" x2="196" y2="60" stroke="#56655D" stroke-width="2" marker-end="url(#sq2)"/><line x1="384" y1="60" x2="416" y2="60" stroke="#56655D" stroke-width="2" marker-end="url(#sq2)"/><line x1="584" y1="60" x2="616" y2="60" stroke="#56655D" stroke-width="2" marker-end="url(#sq2)"/><rect x="200" y="160" width="380" height="60" rx="14" fill="#EFE9FC"/><text x="390" y="186" text-anchor="middle" font-size="13" fill="#6D3FD8" font-weight="700">Cursor</text><text x="390" y="206" text-anchor="middle" font-size="11.5" fill="#6D3FD8">las filas que devuelve una consulta</text><path d="M 500 124 C 500 140, 470 150, 450 156" fill="none" stroke="#6D3FD8" stroke-width="2" marker-end="url(#sq2)"/><path d="M 220 190 C 120 190, 80 160, 80 124" fill="none" stroke="#6D3FD8" stroke-width="2" marker-end="url(#sq2)"/><text x="530" y="148" text-anchor="start" font-size="11" fill="#6D3FD8" style="font-family:'JetBrains Mono', Consolas, monospace">query()</text><text x="100" y="196" text-anchor="end" font-size="11" fill="#6D3FD8">se recorre</text></svg>
+<figcaption>La actividad nunca escribe SQL: se lo pide a <code>DBAccess</code>, que es quien abre la base de datos y trabaja con ella.</figcaption>
+</figure>
       <div class="table-wrap"><table>
 <thead><tr><th>Clase</th><th>Para qué</th></tr></thead>
 <tbody>
@@ -116,39 +185,22 @@
 <tr><td class="mono">Cursor</td><td>El resultado de una consulta, que se recorre fila a fila.</td></tr>
 </tbody>
 </table></div>
-      <p>Y la aplicación tiene dos clases propias: <code>DBAccess</code>, con todo lo que toca la base de datos, y <code>MainActivity</code>, que solo llama a sus métodos y nunca escribe SQL.</p>
-      <div class="box conocer"><span class="box-label">Hoy en día</span><p>La documentación de Android recomienda usar <strong>Room</strong>, una biblioteca que funciona sobre SQLite, porque estas clases son de bajo nivel: el SQL no se comprueba al compilar y hay que escribir mucho código repetitivo. Aquí se usan directamente para entender qué ocurre por debajo. También recomienda abrir la base de datos fuera del hilo principal; este ejemplo no lo hace, para no complicarlo.</p></div>
-      <h3 id="s2-2"><span class="sn">2.2</span>Las versiones de la base de datos</h3>
-      <p>Imagina que publicas tu aplicación y después necesitas otra columna. Los usuarios que ya la tienen guardan sus datos en la tabla antigua: no puedes borrarla, y <code>onCreate()</code> no se va a ejecutar, porque la base de datos ya existe. Por eso cada base de datos tiene un <strong>número de versión</strong>.</p>
+      <div class="box conocer"><span class="box-label">Una comparación</span><p><code>DBAccess</code> es como el encargado de un archivo. La actividad no entra al archivo: le pide al encargado «guarda esta ciudad» o «dame la primera». Él abre los cajones (<code>SQLiteDatabase</code>) y le devuelve una bandeja con lo que ha encontrado (el <code>Cursor</code>).</p></div>
+      <p>Así, <code>MainActivity</code> solo llama a métodos como <code>insert()</code> o <code>getFirstCity()</code> y nunca escribe SQL. Si mañana cambias la tabla, solo cambias <code>DBAccess</code>.</p>
+
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>Crear y actualizar: las versiones</h2></div>
+
+      <h3 id="s4-1"><span class="sn">4.1</span>onCreate(): la primera vez</h3>
+      <p>La base de datos no existe hasta que la aplicación la pide por primera vez. En ese momento Android llama a <code>onCreate()</code> de tu <code>SQLiteOpenHelper</code>, y ahí se crean las tablas con <code>CREATE TABLE</code>. Después ya existe, y <code>onCreate()</code> no se vuelve a ejecutar nunca.</p>
+      <h3 id="s4-2"><span class="sn">4.2</span>onUpgrade(): cuando cambian las tablas</h3>
+      <p>Imagina que publicas tu aplicación y después necesitas otra columna. Los usuarios que ya la tienen guardan sus datos en la tabla antigua: no puedes borrarla, y <code>onCreate()</code> no se va a ejecutar, porque la base de datos ya existe. Por eso cada base de datos tiene un <strong>número de versión</strong>, y cuando subes ese número Android llama a <code>onUpgrade()</code>.</p>
       <figure>
-<svg viewBox="0 0 720 250" role="img" aria-label="Al pedir acceso a la base de datos, Android mira la versión instalada. Si no existe, llama a onCreate. Si es menor que DB_VERSION, llama a onUpgrade. Si es igual, no llama a ninguno. En los tres casos devuelve la base de datos lista para usar.">
-  <defs><marker id="sq1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
-  <rect x="0" y="75" width="170" height="90" rx="14" fill="#E2F4EA"/>
-  <text x="85" y="110" text-anchor="middle" font-size="11" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace">getWritableDatabase()</text>
-  <text x="85" y="134" text-anchor="middle" font-size="12" fill="#0A5C33">pides acceso</text>
-  <rect x="250" y="10" width="220" height="60" rx="14" fill="#0E8A4B"/>
-  <text x="360" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">No existe</text>
-  <text x="360" y="55" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onCreate()</text>
-  <rect x="250" y="90" width="220" height="60" rx="14" fill="#0E8A4B"/>
-  <text x="360" y="115" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">Versión menor que DB_VERSION</text>
-  <text x="360" y="135" text-anchor="middle" font-size="11.5" fill="#fff" font-family="'JetBrains Mono', Consolas, monospace">onUpgrade()</text>
-  <rect x="250" y="170" width="220" height="60" rx="14" fill="#E7F0FD"/>
-  <text x="360" y="195" text-anchor="middle" font-size="12" font-weight="700" fill="#174EA6">Versión igual</text>
-  <text x="360" y="215" text-anchor="middle" font-size="12" fill="#174EA6">no se llama a ninguno</text>
-  <rect x="550" y="75" width="170" height="90" rx="14" fill="#6D3FD8"/>
-  <text x="635" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Base de datos</text>
-  <text x="635" y="134" text-anchor="middle" font-size="12" fill="#fff">lista para usar</text>
-  <g stroke="#56655D" stroke-width="2" marker-end="url(#sq1)">
-    <line x1="174" y1="105" x2="246" y2="44"/>
-    <line x1="174" y1="120" x2="246" y2="120"/>
-    <line x1="174" y1="135" x2="246" y2="196"/>
-    <line x1="474" y1="44" x2="546" y2="105"/>
-    <line x1="474" y1="120" x2="546" y2="120"/>
-    <line x1="474" y1="196" x2="546" y2="135"/>
-  </g>
-</svg>
+<svg viewBox="0 0 720 250" role="img" aria-label="Al pedir acceso a la base de datos, Android mira la versión instalada. Si no existe, llama a onCreate. Si es menor que DB_VERSION, llama a onUpgrade. Si es igual, no llama a ninguno. En los tres casos devuelve la base de datos lista para usar."><defs><marker id="sq3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="75" width="170" height="90" rx="14" fill="#E2F4EA"/><text x="85" y="110" text-anchor="middle" font-size="11" fill="#0A5C33" style="font-family:'JetBrains Mono', Consolas, monospace">getWritableDatabase()</text><text x="85" y="134" text-anchor="middle" font-size="12" fill="#0A5C33">pides acceso</text><rect x="250" y="10" width="220" height="60" rx="14" fill="#0E8A4B"/><text x="360" y="35" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">No existe</text><text x="360" y="55" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onCreate()</text><rect x="250" y="90" width="220" height="60" rx="14" fill="#0E8A4B"/><text x="360" y="115" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">Versión menor que DB_VERSION</text><text x="360" y="135" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onUpgrade()</text><rect x="250" y="170" width="220" height="60" rx="14" fill="#E7F0FD"/><text x="360" y="195" text-anchor="middle" font-size="12" fill="#174EA6" font-weight="700">Versión igual</text><text x="360" y="215" text-anchor="middle" font-size="12" fill="#174EA6">no se llama a ninguno</text><rect x="550" y="75" width="170" height="90" rx="14" fill="#6D3FD8"/><text x="635" y="110" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">Base de datos</text><text x="635" y="134" text-anchor="middle" font-size="12" fill="#fff">lista para usar</text><line x1="174" y1="105" x2="246" y2="44" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="174" y1="120" x2="246" y2="120" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="174" y1="135" x2="246" y2="196" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="474" y1="44" x2="546" y2="105" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="474" y1="120" x2="546" y2="120" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="474" y1="196" x2="546" y2="135" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/></svg>
 <figcaption>Android decide por ti cuál de los dos métodos ejecutar, comparando la versión instalada con la que indica tu código.</figcaption>
 </figure>
+      <div class="box conocer"><span class="box-label">Como reformar una casa habitada</span><p>No puedes tirar la casa y construir otra, porque dentro están los muebles de quien vive en ella. Haces las reformas que le falten, en orden: a quien tiene la casa de hace dos reformas, le haces las dos; a quien solo le falta la última, solo esa.</p></div>
       <div class="sim" id="simSql">
         <div class="sim-head"><b>Actualiza la base de datos</b><span>elige de qué versión viene el usuario</span></div>
         <div class="sim-body">
@@ -164,12 +216,95 @@
         </div>
       </div>
       <div class="box clave"><span class="box-label">Cada cambio, en dos sitios</span><p><code>onCreate()</code> crea la última versión, para los usuarios nuevos. <code>onUpgrade()</code> lleva a la última versión a quienes ya tienen la aplicación. Si cambias la tabla y olvidas uno de los dos, la aplicación falla solo a una parte de los usuarios.</p></div>
+      <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">La aplicación tiene <code>DB_VERSION = 3</code>. Un usuario que tenía instalada la versión 2 actualiza la aplicación. ¿Qué se ejecuta?</p><div class="opciones"><button class="opt" type="button"><code>onCreate()</code>, porque la tabla cambia.</button><button class="opt" type="button"><code>onUpgrade()</code>, empezando por el <code>case 1</code>.</button><button class="opt" type="button">Nada: la base de datos ya existe.</button><button class="opt" type="button" data-ok><code>onUpgrade()</code>, solo el <code>case 2</code>.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>La base de datos ya existe, así que <code>onCreate()</code> no se ejecuta. Como su versión, 2, es menor que 3, Android llama a <code>onUpgrade()</code> con <code>oldVersion = 2</code>: el <code>switch</code> entra por el <code>case 2</code>, porque la columna del <code>case 1</code> ya la tenía.</div></div>
 
     </section>
-    <section class="chapter" id="s3">
-      <div class="chapter-head"><span class="chapter-num">3</span><h2>El código paso a paso</h2></div>
-<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 25. Del 1 al 21 están en <code>Resources/DBAccess.java</code>, y del 22 al 25, en <code>controllers/MainActivity.java</code>.</p>
-      <h3 id="s3-1"><span class="sn">TODO 1-3</span>La clase y su constructor</h3>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>Insertar y consultar</h2></div>
+
+      <h3 id="s5-1"><span class="sn">5.1</span>Insertar con ContentValues</h3>
+      <p>Para insertar una fila podrías escribir el <code>INSERT</code> en SQL, pegando los valores a un <code>String</code>. Es fácil equivocarse con las comillas y, si el valor lo escribe el usuario, peligroso. Android da una forma más segura: un <code>ContentValues</code>, que guarda los datos de la fila como pares columna-valor.</p>
+      <figure>
+<svg viewBox="0 0 720 230" role="img" aria-label="Un ContentValues guarda pares columna-valor: cityName Granada, poblation 232000 y surface 88.02. insert los convierte en una fila nueva de la tabla y devuelve su número."><defs><marker id="sq4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="20" width="300" height="190" rx="14" fill="#E2F4EA"/><text x="150" y="46" text-anchor="middle" font-size="13" fill="#0A5C33" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">ContentValues values</text><rect x="16" y="64" width="130" height="36" rx="8" fill="#0E8A4B"/><text x="81" y="87" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text><rect x="154" y="64" width="130" height="36" rx="8" fill="#fff" stroke="#0E8A4B" stroke-width="1.8"/><text x="219" y="87" text-anchor="middle" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">&quot;Granada&quot;</text><rect x="16" y="110" width="130" height="36" rx="8" fill="#0E8A4B"/><text x="81" y="133" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">poblation</text><rect x="154" y="110" width="130" height="36" rx="8" fill="#fff" stroke="#0E8A4B" stroke-width="1.8"/><text x="219" y="133" text-anchor="middle" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">232000</text><rect x="16" y="156" width="130" height="36" rx="8" fill="#0E8A4B"/><text x="81" y="179" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">surface</text><rect x="154" y="156" width="130" height="36" rx="8" fill="#fff" stroke="#0E8A4B" stroke-width="1.8"/><text x="219" y="179" text-anchor="middle" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">88.02f</text><line x1="304" y1="115" x2="400" y2="115" stroke="#6D3FD8" stroke-width="2" marker-end="url(#sq4)"/><text x="352" y="104" text-anchor="middle" font-size="11.5" fill="#6D3FD8" style="font-family:'JetBrains Mono', Consolas, monospace">insert()</text><rect x="404" y="70" width="316" height="30" rx="6" fill="#0A5C33"/><text x="414" y="90" text-anchor="start" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text><text x="524" y="90" text-anchor="start" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">poblation</text><text x="628" y="90" text-anchor="start" font-size="11.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">surface</text><rect x="404" y="104" width="316" height="30" rx="6" fill="#EFE9FC" stroke="#6D3FD8" stroke-width="1.8"/><text x="414" y="124" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Granada</text><text x="524" y="124" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">232000</text><text x="628" y="124" text-anchor="start" font-size="11.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">88.02</text><text x="562" y="166" text-anchor="middle" font-size="12" fill="#56655D">devuelve el número de la fila nueva,</text><text x="562" y="184" text-anchor="middle" font-size="12" fill="#56655D">o -1 si no se ha podido insertar</text></svg>
+<figcaption>Cada <code>put()</code> rellena una columna; <code>insert()</code> convierte el conjunto en una fila.</figcaption>
+</figure>
+      <p>Es parecido a las preferencias de la rama 3.1: cada valor va con un nombre, que aquí es el de su columna.</p>
+      <h3 id="s5-2"><span class="sn">5.2</span>Consultar con query()</h3>
+      <p>Para leer se usa <code>query()</code>, que recibe por separado cada parte de un <code>SELECT</code>. Los parámetros que no se usan van a <code>null</code>:</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Parámetro de query()</th><th>Equivale en SQL a</th><th>En la rama</th></tr></thead>
+<tbody>
+<tr><td>1. La tabla</td><td><code>FROM</code></td><td><code>DB_TABLE_NAME</code></td></tr>
+<tr><td>2. Las columnas</td><td><code>SELECT</code></td><td><code>cols</code>: solo la ciudad</td></tr>
+<tr><td>3 y 4. La condición y sus argumentos</td><td><code>WHERE</code></td><td><code>null</code>: todas las filas</td></tr>
+<tr><td>5. El agrupamiento</td><td><code>GROUP BY</code></td><td><code>null</code></td></tr>
+<tr><td>6. La condición del grupo</td><td><code>HAVING</code></td><td><code>null</code></td></tr>
+<tr><td>7. El orden</td><td><code>ORDER BY</code></td><td><code>null</code></td></tr>
+</tbody>
+</table></div>
+      <div class="sim" id="simTabla">
+        <div class="sim-head"><b>Inserta y consulta</b><span>la tabla db_ciudades</span></div>
+        <div class="sim-body">
+          <p>Lo que hacen los dos botones de la aplicación. Inserta algunas ciudades, prueba con un campo vacío y pulsa <em>Mostrar</em>.</p>
+          <div class="campos">
+            <label class="campo">Ciudad<input type="text" id="tbCiudad" value="Granada"></label>
+            <label class="campo">Población<input type="text" id="tbPob" value="232000" inputmode="numeric"></label>
+            <label class="campo">Superficie<input type="text" id="tbSup" value="88.02" inputmode="decimal"></label>
+          </div>
+          <div class="btns"><button class="btn" id="tbInsertar" type="button">Insertar</button><button class="btn ghost" id="tbMostrar" type="button">Mostrar</button><button class="btn ghost" id="tbVaciar" type="button">Desinstalar la app</button></div>
+          <div class="sim-row">
+            <div class="panel"><table class="tabla-sim"><thead><tr><th>cityName</th><th>poblation</th><th>surface</th></tr></thead><tbody id="tbFilas"></tbody></table><div class="why" id="tbWhy"></div></div>
+            <div class="panel"><ul class="log" id="tbLog" aria-label="Registro de inserciones y consultas" style="margin-top:0"></ul></div>
+          </div>
+        </div>
+      </div>
+      <div class="comp" data-tipo="vf"><div class="comp-head">Comprueba · Verdadero o falso</div><div style="margin-top:10px"><div class="fila" data-r="v"><span><code>insert()</code> devuelve <code>-1</code> si no ha podido insertar la fila.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>Con <code>ContentValues</code> hay que escribir el <code>INSERT</code> en SQL.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Si a <code>query()</code> se le pasa <code>null</code> como condición, devuelve todas las filas.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>Al cerrar la aplicación se vacía la tabla.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden><code>insert()</code> devuelve el número de la fila nueva, o <code>-1</code> si falla. Con <code>ContentValues</code> no se escribe SQL: Android construye la sentencia. Sin condición, la consulta trae todas las filas. Los datos están en un fichero: siguen ahí al cerrar la aplicación.</div></div>
+
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Recorrer el resultado: el cursor</h2></div>
+
+      <p><code>query()</code> no devuelve una lista, sino un <strong>cursor</strong>: un marcador que recorre las filas del resultado, una a una. Empieza <em>antes</em> de la primera fila, así que lo primero es moverlo.</p>
+      <figure>
+<svg viewBox="0 -16 720 216" role="img" aria-label="El cursor empieza antes de la primera fila. moveToFirst lo coloca en la primera. moveToNext lo lleva a la siguiente, y devuelve false al pasar de la última."><defs><marker id="sq5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="240" y="16" width="300" height="38" rx="6" fill="#E2F4EA"/><text x="256" y="40" text-anchor="start" font-size="12.5" fill="#17211C">Granada</text><rect x="240" y="60" width="300" height="38" rx="6" fill="#E2F4EA"/><text x="256" y="84" text-anchor="start" font-size="12.5" fill="#17211C">Jaén</text><rect x="240" y="104" width="300" height="38" rx="6" fill="#E2F4EA"/><text x="256" y="128" text-anchor="start" font-size="12.5" fill="#17211C">Málaga</text><text x="240" y="6" text-anchor="start" font-size="11" fill="#56655D">el cursor empieza aquí, antes de la primera fila</text><text x="205" y="40" text-anchor="end" font-size="11" fill="#0A5C33" style="font-family:'JetBrains Mono', Consolas, monospace">moveToFirst() → true</text><text x="205" y="84" text-anchor="end" font-size="11" fill="#0A5C33" style="font-family:'JetBrains Mono', Consolas, monospace">moveToNext() → true</text><text x="205" y="128" text-anchor="end" font-size="11" fill="#0A5C33" style="font-family:'JetBrains Mono', Consolas, monospace">moveToNext() → true</text><text x="205" y="172" text-anchor="end" font-size="11" fill="#0A5C33" style="font-family:'JetBrains Mono', Consolas, monospace">moveToNext() → false</text><line x1="210" y1="35" x2="236" y2="35" stroke="#56655D" stroke-width="2" marker-end="url(#sq5)"/><line x1="210" y1="79" x2="236" y2="79" stroke="#56655D" stroke-width="2" marker-end="url(#sq5)"/><line x1="210" y1="123" x2="236" y2="123" stroke="#56655D" stroke-width="2" marker-end="url(#sq5)"/><text x="256" y="172" text-anchor="start" font-size="12" fill="#56655D">ya no hay más filas: termina el bucle</text></svg>
+<figcaption>Un cursor es un marcador que recorre las filas del resultado. Sobre la fila en la que está se leen sus columnas.</figcaption>
+</figure>
+      <div class="box conocer"><span class="box-label">Como el dedo que sigue una lista</span><p>Para leer la lista de clase en voz alta pones el dedo en la primera línea, lees los datos de esa línea y lo bajas a la siguiente. Cuando el dedo pasa de la última, has terminado. El cursor es ese dedo: solo se puede leer la fila sobre la que está.</p></div>
+      <div class="table-wrap"><table>
+<thead><tr><th>Método</th><th>Qué hace</th></tr></thead>
+<tbody>
+<tr><td class="mono">moveToFirst()</td><td>Coloca el cursor en la primera fila. Devuelve <code>false</code> si no hay ninguna.</td></tr>
+<tr><td class="mono">moveToNext()</td><td>Lo pasa a la fila siguiente. Devuelve <code>false</code> si ya estaba en la última.</td></tr>
+<tr><td class="mono">getString(i), getInt(i), getFloat(i)…</td><td>Leen la columna <code>i</code> de la fila actual, contando desde 0 y en el orden en que se pidieron las columnas.</td></tr>
+<tr><td class="mono">close()</td><td>Libera el cursor cuando ya no hace falta.</td></tr>
+</tbody>
+</table></div>
+      <div class="sim" id="simCursor">
+        <div class="sim-head"><b>Mueve el cursor</b><span>recorre el resultado de una consulta</span></div>
+        <div class="sim-body">
+          <p>Es el resultado de pedir las tres columnas de todas las ciudades. El cursor empieza antes de la primera fila. Muévelo y lee las columnas de la fila en la que está.</p>
+          <div class="btns"><button class="btn" id="cuPrimera" type="button">moveToFirst()</button><button class="btn" id="cuSiguiente" type="button">moveToNext()</button><button class="btn ghost" id="cuS0" type="button">getString(0)</button><button class="btn ghost" id="cuI1" type="button">getInt(1)</button><button class="btn ghost" id="cuF2" type="button">getFloat(2)</button><button class="btn ghost" id="cuReset" type="button">Nueva consulta</button></div>
+          <div class="sim-row">
+            <div class="panel"><table class="tabla-sim"><thead><tr><th>0 · cityName</th><th>1 · poblation</th><th>2 · surface</th></tr></thead><tbody id="cuFilas"></tbody></table><div class="why" id="cuWhy"></div></div>
+            <div class="panel"><ul class="log" id="cuLog" aria-label="Registro del cursor" style="margin-top:0"></ul></div>
+          </div>
+        </div>
+      </div>
+      <p>Para recorrer todas las filas se combinan los dos movimientos en un <code>do-while</code>: si hay primera fila, se lee y se pasa a la siguiente mientras queden.</p>
+      <div class="code"><div class="code-bar">El patrón para recorrer un cursor</div>
+<pre><code class="lang-java">if(cursor.moveToFirst()){
+    do{
+        resultCities.add(cursor.getString(0));
+    }while(cursor.moveToNext());
+}
+cursor.close();</code></pre></div>
+      <div class="comp" data-tipo="empareja"><div class="comp-head">Comprueba · Ordena</div><p class="q">Ordena los pasos para leer todas las ciudades de la tabla.</p><div class="fila"><span>Leer la fila actual con <code>cursor.getString(0)</code></span><select data-r="3" aria-label="Leer la fila actual con cursor.getString(0)"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="fila"><span>Cerrar el cursor con <code>cursor.close()</code></span><select data-r="5" aria-label="Cerrar el cursor con cursor.close()"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="fila"><span>Pedir las filas con <code>db.query(…)</code></span><select data-r="1" aria-label="Pedir las filas con db.query(…)"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="fila"><span>Repetir mientras <code>cursor.moveToNext()</code> devuelva <code>true</code></span><select data-r="4" aria-label="Repetir mientras cursor.moveToNext() devuelva true"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="fila"><span>Comprobar que <code>cursor.moveToFirst()</code> devuelve <code>true</code></span><select data-r="2" aria-label="Comprobar que cursor.moveToFirst() devuelve true"><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Primero la consulta, que da el cursor. Se coloca en la primera fila comprobando que existe, se lee y se avanza mientras queden filas. Al final, se cierra.</div></div>
+
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>El código paso a paso</h2></div>
+<p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van numerados del 1 al 25. Del 1 al 21 están en <code>Resources/DBAccess.java</code>, y del 22 al 25, en <code>controllers/MainActivity.java</code>. Lo que ya has visto en los apartados anteriores aquí solo se sitúa en el código.</p>
+      <h3 id="s7-1"><span class="sn">TODO 1-3</span>La clase y su constructor</h3>
       <div class="code"><div class="code-bar">DBAccess.java</div>
 <pre><code class="lang-java">public class DBAccess extends SQLiteOpenHelper {
 
@@ -180,7 +315,7 @@
         super(context, DB_NAME, null, DB_VERSION);
     }</code></pre></div>
       <p>El constructor le pasa a la clase padre el contexto, el nombre del fichero y la versión. El tercer parámetro es para casos avanzados y normalmente es <code>null</code>. Los nombres de la tabla y de las columnas también están en constantes: así solo se escriben una vez.</p>
-      <h3 id="s3-2"><span class="sn">TODO 4-6</span>onCreate(): crear la tabla</h3>
+      <h3 id="s7-2"><span class="sn">TODO 4-6</span>onCreate(): crear la tabla</h3>
       <div class="code"><div class="code-bar">DBAccess.java</div>
 <pre><code class="lang-java">@Override
 public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -195,7 +330,7 @@ public void onCreate(SQLiteDatabase sqLiteDatabase) {
       <div class="code"><div class="code-bar">SQL que se ejecuta</div>
 <pre><code class="lang-java">CREATE TABLE db_ciudades(cityName TEXT,poblation INTEGER,surface REAL)</code></pre></div>
       <p><code>execSQL()</code> ejecuta una sentencia que no devuelve filas. Los comentarios del código enseñan cómo era esta sentencia en las versiones 1 y 2.</p>
-      <h3 id="s3-3"><span class="sn">TODO 7-8</span>onUpgrade(): el switch sin break</h3>
+      <h3 id="s7-3"><span class="sn">TODO 7-8</span>onUpgrade(): el switch sin break</h3>
       <div class="code"><div class="code-bar">DBAccess.java</div>
 <pre><code class="lang-java">@Override
 public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
@@ -208,7 +343,7 @@ public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVers
 }</code></pre></div>
       <div class="box clave"><span class="box-label">Aquí la falta de break es a propósito</span><p>Un <code>switch</code> sin <code>break</code> sigue ejecutando los <code>case</code> siguientes. Es justo lo que se necesita: el usuario empieza en la versión que tiene y aplica, en orden, todos los cambios que le faltan. Con un <code>break</code>, quien viene de la versión 1 se quedaría sin la columna <code>surface</code>.</p></div>
       <p><code>ALTER TABLE ... ADD COLUMN</code> añade una columna sin tocar las filas que ya existen.</p>
-      <h3 id="s3-4"><span class="sn">TODO 9-13</span>Insertar una fila</h3>
+      <h3 id="s7-4"><span class="sn">TODO 9-13</span>Insertar una fila</h3>
       <div class="code"><div class="code-bar">DBAccess.java</div>
 <pre><code class="lang-java">SQLiteDatabase db = this.getWritableDatabase();
 
@@ -224,12 +359,12 @@ db.close();</code></pre></div>
 <thead><tr><th>Paso</th><th>Qué hace</th></tr></thead>
 <tbody>
 <tr><td class="mono">getWritableDatabase()</td><td>Abre la conexión para escribir. Es aquí, la primera vez, cuando se ejecuta <code>onCreate()</code> u <code>onUpgrade()</code>.</td></tr>
-<tr><td class="mono">ContentValues</td><td>Guarda los datos de la fila como pares columna-valor. No hay que escribir SQL ni preocuparse de las comillas.</td></tr>
+<tr><td class="mono">ContentValues</td><td>Los datos de la fila, como pares columna-valor (apartado 5.1).</td></tr>
 <tr><td class="mono">insert(tabla, null, valores)</td><td>Inserta la fila. Devuelve su número, o <code>-1</code> si ha fallado.</td></tr>
 <tr><td class="mono">close()</td><td>Cierra la conexión.</td></tr>
 </tbody>
 </table></div>
-      <h3 id="s3-5"><span class="sn">TODO 14-19</span>Consultar: la primera ciudad</h3>
+      <h3 id="s7-5"><span class="sn">TODO 14-19</span>Consultar: la primera ciudad</h3>
       <div class="code"><div class="code-bar">DBAccess.java</div>
 <pre><code class="lang-java">SQLiteDatabase db = this.getReadableDatabase();
 String[] cols = new String[]{ CITY_COLUMN };
@@ -241,57 +376,15 @@ if(cursor.moveToFirst()) {
 
 cursor.close();
 db.close();</code></pre></div>
-      <div class="table-wrap"><table>
-<thead><tr><th>Parámetro de query()</th><th>Equivale en SQL a</th><th>Aquí</th></tr></thead>
-<tbody>
-<tr><td>1. La tabla</td><td><code>FROM</code></td><td><code>DB_TABLE_NAME</code></td></tr>
-<tr><td>2. Las columnas</td><td><code>SELECT</code></td><td><code>cols</code>: solo la ciudad</td></tr>
-<tr><td>3 y 4. La condición y sus argumentos</td><td><code>WHERE</code></td><td><code>null</code>: todas las filas</td></tr>
-<tr><td>5. El agrupamiento</td><td><code>GROUP BY</code></td><td><code>null</code></td></tr>
-<tr><td>6. La condición del grupo</td><td><code>HAVING</code></td><td><code>null</code></td></tr>
-<tr><td>7. El orden</td><td><code>ORDER BY</code></td><td><code>null</code></td></tr>
-</tbody>
-</table></div>
-      <figure>
-<svg viewBox="0 -16 720 216" role="img" aria-label="El cursor empieza antes de la primera fila. moveToFirst lo coloca en la primera. moveToNext lo lleva a la siguiente, y devuelve false al pasar de la última.">
-  <defs><marker id="sq2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs>
-  <g font-size="12.5" fill="#17211C">
-    <rect x="240" y="16" width="300" height="38" rx="6" fill="#E2F4EA"/><text x="256" y="40">Granada</text>
-    <rect x="240" y="60" width="300" height="38" rx="6" fill="#E2F4EA"/><text x="256" y="84">Jaén</text>
-    <rect x="240" y="104" width="300" height="38" rx="6" fill="#E2F4EA"/><text x="256" y="128">Málaga</text>
-  </g>
-  <text x="225" y="10" text-anchor="end" font-size="11" fill="#56655D">el cursor empieza aquí, antes de la primera fila</text>
-  <g font-size="11" fill="#0A5C33" font-family="'JetBrains Mono', Consolas, monospace" text-anchor="end">
-    <text x="205" y="40">moveToFirst() → true</text>
-    <text x="205" y="84">moveToNext() → true</text>
-    <text x="205" y="128">moveToNext() → true</text>
-    <text x="205" y="172">moveToNext() → false</text>
-  </g>
-  <g stroke="#56655D" stroke-width="2" marker-end="url(#sq2)">
-    <line x1="210" y1="35" x2="236" y2="35"/>
-    <line x1="210" y1="79" x2="236" y2="79"/>
-    <line x1="210" y1="123" x2="236" y2="123"/>
-  </g>
-  <text x="256" y="172" font-size="12" fill="#56655D">ya no hay más filas: termina el bucle</text>
-</svg>
-<figcaption>Un cursor es un marcador que recorre las filas del resultado. Sobre la fila en la que está se leen sus columnas.</figcaption>
-</figure>
       <p><code>getString(0)</code> lee la columna 0 <strong>del resultado</strong>, no de la tabla: la posición corresponde al array <code>cols</code>, que aquí solo tiene una.</p>
-      <h3 id="s3-6"><span class="sn">TODO 20-21</span>Recorrer todas las filas</h3>
-      <p><code>getAllCities()</code> no se usa en la pantalla, pero es el patrón que vas a necesitar casi siempre:</p>
-      <div class="code"><div class="code-bar">DBAccess.java</div>
-<pre><code class="lang-java">if(cursor.moveToFirst()){
-    do{
-        resultCities.add(cursor.getString(0));
-    }while(cursor.moveToNext());
-}</code></pre></div>
-      <p>Los comentarios de ese método enseñan cómo se filtraría con una condición: cada <code>?</code> se sustituye por un valor del array de argumentos. Es la forma correcta de meter en una consulta un dato escrito por el usuario, porque Android lo trata como un valor y no como parte de la sentencia.</p>
-      <h3 id="s3-7"><span class="sn">TODO 22</span>Crear el acceso en la actividad</h3>
+      <h3 id="s7-6"><span class="sn">TODO 20-21</span>Recorrer todas las filas</h3>
+      <p><code>getAllCities()</code> no se usa en la pantalla, pero tiene el patrón del apartado 6, el que vas a necesitar casi siempre. Sus comentarios enseñan cómo se filtraría con una condición: cada <code>?</code> se sustituye por un valor del array de argumentos. Es la forma correcta de meter en una consulta un dato escrito por el usuario, porque Android lo trata como un valor y no como parte de la sentencia.</p>
+      <h3 id="s7-7"><span class="sn">TODO 22</span>Crear el acceso en la actividad</h3>
       <div class="code"><div class="code-bar">MainActivity.java</div>
 <pre><code class="lang-java">mDB = new DBAccess(this);
 mDB.getVersionDB();</code></pre></div>
       <p>Crear el objeto no abre nada: la base de datos se abre al pedir acceso, y aquí eso ocurre dentro de <code>getVersionDB()</code>.</p>
-      <h3 id="s3-8"><span class="sn">TODO 23-24</span>Insertar desde el botón</h3>
+      <h3 id="s7-8"><span class="sn">TODO 23-24</span>Insertar desde el botón</h3>
       <div class="code"><div class="code-bar">MainActivity.java</div>
 <pre><code class="lang-java">if(city.isEmpty() || textoPobl.isEmpty() || textoSurf.isEmpty()){
     myToast(&quot;Rellena los tres campos&quot;);
@@ -305,17 +398,17 @@ if(mDB.insert(city, pobl, surf) != -1){
     myToast(&quot;Ciudad insertada correctamente&quot;);
 }</code></pre></div>
       <p>Un <code>EditText</code> siempre da texto, pero las columnas son números, así que hay que convertirlo. <code>parseInt()</code> con un texto vacío lanza una excepción que cerraría la aplicación: por eso se comprueba antes. El <code>inputType</code> del layout (<code>number</code> y <code>numberDecimal</code>) evita además que se puedan escribir letras.</p>
-      <h3 id="s3-9"><span class="sn">TODO 25</span>Mostrar la primera ciudad</h3>
+      <h3 id="s7-9"><span class="sn">TODO 25</span>Mostrar la primera ciudad</h3>
       <p><code>getFirstCity()</code> devuelve <code>null</code> cuando la tabla está vacía, y la actividad lo comprueba antes de usarlo.</p>
       <div class="box conocer"><span class="box-label">Lo que este ejemplo simplifica</span><p>Como indica la cabecera de <code>MainActivity</code>, la tabla no tiene clave primaria y solo se muestra una ciudad. Además, no hay una clase <code>Ciudad</code>: los datos viajan sueltos. En una aplicación real estas tres cosas se harían de otra forma, y las tienes en «Para practicar».</p></div>
 
     </section>
-    <section class="chapter" id="s4">
-      <div class="chapter-head"><span class="chapter-num">4</span><h2>Pruébalo</h2></div>
+    <section class="chapter" id="s8">
+      <div class="chapter-head"><span class="chapter-num">8</span><h2>Pruébalo</h2></div>
 <ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>) y pulsa <strong>Mostrar</strong>. La tabla está vacía, así que aparece el aviso de que no se ha podido recuperar.</li><li>Pulsa <strong>Insertar</strong> con los campos vacíos. Aparece «Rellena los tres campos».</li><li>Rellena los tres campos y pulsa <strong>Insertar</strong>. Después, <strong>Mostrar</strong>: aparece tu ciudad.</li><li>Inserta otra ciudad y pulsa <strong>Mostrar</strong>. Sigue saliendo la primera, porque es lo que hace el método.</li><li>Cierra la aplicación del todo y ábrela. Al pulsar <strong>Mostrar</strong>, los datos siguen ahí.</li><li>Abre la base de datos con <em>View → Tool Windows → App Inspection</em>, pestaña <em>Database Inspector</em>. Ahí está la tabla con todas sus filas.</li><li>Abre <strong>Logcat</strong> y filtra por <code>tag:DB</code>. Verás «Tablas creadas» solo la primera vez que se instala la aplicación.</li></ol>
     </section>
-    <section class="chapter" id="s5">
-      <div class="chapter-head"><span class="chapter-num">5</span><h2>Errores comunes</h2></div>
+    <section class="chapter" id="s9">
+      <div class="chapter-head"><span class="chapter-num">9</span><h2>Errores comunes</h2></div>
 <div class="table-wrap"><table>
 <thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
 <tbody>
@@ -329,8 +422,8 @@ if(mDB.insert(city, pobl, surf) != -1){
 </tbody>
 </table></div>
     </section>
-    <section class="chapter" id="s6">
-      <div class="chapter-head"><span class="chapter-num">6</span><h2>Para practicar</h2></div>
+    <section class="chapter" id="s10">
+      <div class="chapter-head"><span class="chapter-num">10</span><h2>Para practicar</h2></div>
 <p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_3_2</code>.</p>
       <ol class="steps">
         <li>Cambia <strong>Mostrar</strong> para que enseñe todas las ciudades, con <code>getAllCities()</code>.</li>
@@ -364,51 +457,207 @@ function pulsacionLarga(boton, alLargo, alCorto){
 }
 
 
-var log = registro("sqLog");
-var OPCIONES = [
-  {t: "Instalación nueva", v: 0},
-  {t: "Viene de la versión 1", v: 1},
-  {t: "Viene de la versión 2", v: 2},
-  {t: "Ya tiene la versión 3", v: 3}
-];
-var COLS = ["cityName TEXT", "poblation INTEGER", "surface REAL"];
-function pintaCols(cuantas, nuevas){
-  var html = "";
-  COLS.forEach(function(col, i){
-    if(i < cuantas) html += "<tr><td class=\"mono\">" + col + (i >= cuantas - nuevas ? " <b style=\"color:#0E8A4B\">nueva</b>" : "") + "</td></tr>";
+document.querySelectorAll(".comp").forEach(function(caja){
+  var tipo = caja.getAttribute("data-tipo");
+  var resultado = caja.querySelector(".comp-res");
+  var explicacion = caja.querySelector(".comp-exp");
+  caja.querySelectorAll(".opt").forEach(function(opcion){
+    opcion.addEventListener("click", function(){
+      caja.querySelectorAll(".opt").forEach(function(otra){ otra.classList.remove("sel", "bien", "mal"); });
+      opcion.classList.add("sel");
+    });
   });
-  $("sqCols").innerHTML = html;
-}
-function ejecuta(version){
-  log.limpiar();
-  if(version === 0){
-    log.met("onCreate(db)");
-    log.acc("CREATE TABLE db_ciudades (cityName, poblation, surface)");
-    pintaCols(3, 3);
-    $("sqWhy").innerHTML = "No había base de datos: <code>onCreate()</code> la crea directamente en su última versión. <code>onUpgrade()</code> no se ejecuta.";
-  } else if(version === 3){
-    log.nota("La versión instalada coincide con DB_VERSION.");
-    pintaCols(3, 0);
-    $("sqWhy").innerHTML = "No hay nada que hacer: no se llama a ninguno de los dos métodos.";
-  } else {
-    log.met("onUpgrade(db, " + version + ", 3)");
-    log.nota("switch(" + version + ")");
-    if(version === 1){
-      log.acc("case 1: ALTER TABLE … ADD COLUMN poblation INTEGER");
-      log.nota("sin break: sigue por el siguiente case");
+  caja.querySelectorAll(".vf").forEach(function(grupo){
+    grupo.querySelectorAll("button").forEach(function(boton){
+      boton.addEventListener("click", function(){
+        grupo.querySelectorAll("button").forEach(function(otro){ otro.classList.remove("sel"); });
+        boton.classList.add("sel");
+        grupo.closest(".fila").classList.remove("bien", "mal");
+      });
+    });
+  });
+  caja.querySelectorAll("select").forEach(function(lista){
+    lista.addEventListener("change", function(){ lista.classList.remove("bien", "mal"); });
+  });
+  caja.querySelector(".comp-ok").addEventListener("click", function(){
+    var total = 0, aciertos = 0, faltan = 0;
+    caja.querySelectorAll(".bien, .mal").forEach(function(marcada){ marcada.classList.remove("bien", "mal"); });
+    if(tipo === "elige"){
+      total = 1;
+      var elegida = caja.querySelector(".opt.sel");
+      if(!elegida){ faltan = 1; }
+      else { var correcta = elegida.hasAttribute("data-ok"); elegida.classList.add(correcta ? "bien" : "mal"); if(correcta) aciertos = 1; }
+    } else if(tipo === "vf"){
+      caja.querySelectorAll(".fila").forEach(function(fila){
+        total++;
+        var marcado = fila.querySelector(".vf button.sel");
+        if(!marcado){ faltan++; return; }
+        var correcta = marcado.getAttribute("data-v") === fila.getAttribute("data-r");
+        fila.classList.add(correcta ? "bien" : "mal");
+        if(correcta) aciertos++;
+      });
+    } else {
+      caja.querySelectorAll("select").forEach(function(lista){
+        total++;
+        if(!lista.value){ faltan++; return; }
+        var correcta = lista.value === lista.getAttribute("data-r");
+        lista.classList.add(correcta ? "bien" : "mal");
+        if(correcta) aciertos++;
+      });
     }
-    log.acc("case 2: ALTER TABLE … ADD COLUMN surface REAL");
-    pintaCols(3, 3 - version);
-    $("sqWhy").innerHTML = version === 1 ? "Entra por <code>case 1</code> y, como no hay <code>break</code>, sigue por <code>case 2</code>: se aplican los dos cambios en orden." : "Entra directamente por <code>case 2</code>: la primera columna ya la tenía. Sus datos no se tocan.";
-  }
-}
-OPCIONES.forEach(function(opcion){
-  var boton = document.createElement("button");
-  boton.type = "button"; boton.className = "btn ghost"; boton.textContent = opcion.t;
-  boton.addEventListener("click", function(){ ejecuta(opcion.v); });
-  $("sqVers").appendChild(boton);
+    if(faltan){ resultado.className = "comp-res ko"; resultado.textContent = "Contesta todo antes de comprobar."; return; }
+    explicacion.hidden = false;
+    if(aciertos === total){ resultado.className = "comp-res ok"; resultado.textContent = "¡Correcto!"; }
+    else { resultado.className = "comp-res ko"; resultado.textContent = aciertos + " de " + total + " bien. Revisa lo marcado en rojo."; }
+  });
+  caja.querySelector(".comp-reset").addEventListener("click", function(){
+    caja.querySelectorAll(".sel, .bien, .mal").forEach(function(marcada){ marcada.classList.remove("sel", "bien", "mal"); });
+    caja.querySelectorAll("select").forEach(function(lista){ lista.value = ""; });
+    resultado.textContent = ""; resultado.className = "comp-res";
+    explicacion.hidden = true;
+  });
 });
-ejecuta(1);
+
+function escapa(texto){ var div = document.createElement("div"); div.textContent = texto; return div.innerHTML; }
+
+/* --- 1. inserta y consulta --- */
+(function(){
+  var log = registro("tbLog"), filas = [];
+  function pinta(){
+    var html = "";
+    filas.forEach(function(f){ html += "<tr><td>" + escapa(f[0]) + "</td><td>" + f[1] + "</td><td>" + f[2] + "</td></tr>"; });
+    $("tbFilas").innerHTML = html || '<tr class="antes"><td colspan="3">La tabla está vacía.</td></tr>';
+  }
+  $("tbInsertar").addEventListener("click", function(){
+    var ciudad = $("tbCiudad").value.trim(), pob = $("tbPob").value.trim(), sup = $("tbSup").value.trim();
+    if(!ciudad || !pob || !sup){
+      log.nota("Toast: Rellena los tres campos");
+      $("tbWhy").innerHTML = "La actividad comprueba los campos antes de convertirlos: <code>parseInt(\"\")</code> cerraría la aplicación con <code>NumberFormatException</code>.";
+      return;
+    }
+    if(!/^\d+$/.test(pob) || !/^\d+([.]\d+)?$/.test(sup)){
+      log.nota("La población es un entero y la superficie, un número con punto decimal.");
+      $("tbWhy").innerHTML = "En la aplicación esto no puede pasar: el <code>inputType</code> de los campos solo deja escribir números.";
+      return;
+    }
+    log.acc('values.put("cityName", "' + ciudad + '")');
+    log.acc('values.put("poblation", ' + pob + ')');
+    log.acc('values.put("surface", ' + sup + 'f)');
+    filas.push([ciudad, pob, String(parseFloat(sup))]);
+    log.acc('db.insert("db_ciudades", null, values) → ' + filas.length);
+    log.nota("Equivale a: INSERT INTO db_ciudades (cityName, poblation, surface) VALUES ('" + ciudad + "', " + pob + ", " + sup + ")");
+    log.nota("Toast: Ciudad insertada correctamente");
+    $("tbWhy").innerHTML = "<code>insert()</code> devuelve el número de la fila nueva, " + filas.length + ". Si fallase, devolvería <code>-1</code>.";
+    pinta();
+  });
+  $("tbMostrar").addEventListener("click", function(){
+    log.acc('db.query("db_ciudades", {"cityName"}, null, null, null, null, null)');
+    if(filas.length === 0){
+      log.acc("cursor.moveToFirst() → false");
+      log.nota("Toast: Problema al recuperar la ciudad");
+      $("tbWhy").innerHTML = "No hay filas, así que <code>moveToFirst()</code> devuelve <code>false</code> y <code>getFirstCity()</code> devuelve <code>null</code>.";
+      return;
+    }
+    log.acc("cursor.moveToFirst() → true");
+    log.acc('cursor.getString(0) → "' + filas[0][0] + '"');
+    $("tbWhy").innerHTML = "Muestra <strong>" + escapa(filas[0][0]) + "</strong>. Aunque haya más filas, el método solo lee la primera.";
+  });
+  $("tbVaciar").addEventListener("click", function(){
+    filas = []; log.limpiar(); log.nota("Al desinstalar se borra el fichero db_dam."); pinta();
+    $("tbWhy").innerHTML = "La tabla vuelve a estar vacía. Cerrar la aplicación no la vacía: desinstalarla sí.";
+  });
+  pinta();
+  $("tbWhy").innerHTML = "Pulsa Insertar.";
+})();
+
+/* --- 2. versiones --- */
+(function(){
+  var log = registro("sqLog");
+  var OPCIONES = [
+    {t: "Instalación nueva", v: 0},
+    {t: "Viene de la versión 1", v: 1},
+    {t: "Viene de la versión 2", v: 2},
+    {t: "Ya tiene la versión 3", v: 3}
+  ];
+  var COLS = ["cityName TEXT", "poblation INTEGER", "surface REAL"];
+  function pintaCols(cuantas, nuevas){
+    var html = "";
+    COLS.forEach(function(col, i){
+      if(i < cuantas) html += '<tr><td class="mono">' + col + (i >= cuantas - nuevas ? ' <b style="color:#0E8A4B">nueva</b>' : "") + "</td></tr>";
+    });
+    $("sqCols").innerHTML = html;
+  }
+  function ejecuta(version){
+    log.limpiar();
+    if(version === 0){
+      log.met("onCreate(db)");
+      log.acc("CREATE TABLE db_ciudades (cityName, poblation, surface)");
+      pintaCols(3, 3);
+      $("sqWhy").innerHTML = "No había base de datos: <code>onCreate()</code> la crea directamente en su última versión. <code>onUpgrade()</code> no se ejecuta.";
+    } else if(version === 3){
+      log.nota("La versión instalada coincide con DB_VERSION.");
+      pintaCols(3, 0);
+      $("sqWhy").innerHTML = "No hay nada que hacer: no se llama a ninguno de los dos métodos.";
+    } else {
+      log.met("onUpgrade(db, " + version + ", 3)");
+      log.nota("switch(" + version + ")");
+      if(version === 1){
+        log.acc("case 1: ALTER TABLE … ADD COLUMN poblation INTEGER");
+        log.nota("sin break: sigue por el siguiente case");
+      }
+      log.acc("case 2: ALTER TABLE … ADD COLUMN surface REAL");
+      pintaCols(3, 3 - version);
+      $("sqWhy").innerHTML = version === 1 ? "Entra por <code>case 1</code> y, como no hay <code>break</code>, sigue por <code>case 2</code>: se aplican los dos cambios en orden." : "Entra directamente por <code>case 2</code>: la primera columna ya la tenía. Sus datos no se tocan.";
+    }
+  }
+  OPCIONES.forEach(function(opcion){
+    var boton = document.createElement("button");
+    boton.type = "button"; boton.className = "btn ghost"; boton.textContent = opcion.t;
+    boton.addEventListener("click", function(){ ejecuta(opcion.v); });
+    $("sqVers").appendChild(boton);
+  });
+  ejecuta(1);
+})();
+
+/* --- 3. el cursor --- */
+(function(){
+  var log = registro("cuLog");
+  var FILAS = [["Granada", 232000, "88.02"], ["Jaén", 111000, "424.3"], ["Málaga", 592000, "398.25"]];
+  var posicion = -1;
+  function pinta(){
+    var html = '<tr class="antes' + (posicion === -1 ? " cursor" : "") + '"><td colspan="3">antes de la primera fila</td></tr>';
+    FILAS.forEach(function(f, i){ html += "<tr" + (posicion === i ? ' class="cursor"' : "") + "><td>" + f[0] + "</td><td>" + f[1] + "</td><td>" + f[2] + "</td></tr>"; });
+    html += '<tr class="despues' + (posicion === FILAS.length ? " cursor" : "") + '"><td colspan="3">después de la última fila</td></tr>';
+    $("cuFilas").innerHTML = html;
+  }
+  function mueve(metodo, destino){
+    posicion = destino;
+    var dentro = posicion >= 0 && posicion < FILAS.length;
+    log.acc("cursor." + metodo + "() → " + dentro);
+    $("cuWhy").innerHTML = dentro ? "El cursor está en la fila " + posicion + ": ya se pueden leer sus columnas." : "No hay más filas: devuelve <code>false</code>. En un bucle, aquí es donde termina.";
+    pinta();
+  }
+  function lee(metodo, columna){
+    var llamada = "cursor." + metodo + "(" + columna + ")";
+    if(posicion < 0 || posicion >= FILAS.length){
+      log.acc(llamada + " → CursorIndexOutOfBoundsException");
+      log.nota("Index " + posicion + " requested, with a size of " + FILAS.length);
+      $("cuWhy").innerHTML = "El cursor no está sobre ninguna fila: la aplicación se cerraría. Antes de leer hay que moverlo, y comprobar que el movimiento ha devuelto <code>true</code>.";
+      return;
+    }
+    var valor = FILAS[posicion][columna];
+    log.acc(llamada + " → " + (columna === 0 ? '"' + valor + '"' : valor));
+    $("cuWhy").innerHTML = "El número es la posición de la columna <strong>en el resultado</strong>, no en la tabla: aquí coinciden porque se han pedido las tres en orden.";
+  }
+  $("cuPrimera").addEventListener("click", function(){ mueve("moveToFirst", 0); });
+  $("cuSiguiente").addEventListener("click", function(){ mueve("moveToNext", Math.min(posicion + 1, FILAS.length)); });
+  $("cuS0").addEventListener("click", function(){ lee("getString", 0); });
+  $("cuI1").addEventListener("click", function(){ lee("getInt", 1); });
+  $("cuF2").addEventListener("click", function(){ lee("getFloat", 2); });
+  $("cuReset").addEventListener("click", function(){ posicion = -1; log.limpiar(); log.acc("db.query(…) → un cursor nuevo"); $("cuWhy").innerHTML = "El cursor nuevo está antes de la primera fila. Prueba a leer sin moverlo."; pinta(); });
+  pinta();
+  $("cuWhy").innerHTML = "El cursor está antes de la primera fila. Prueba a leer sin moverlo.";
+})();
 
 })();
 </script>

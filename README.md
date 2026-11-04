@@ -8,7 +8,7 @@ versión** y cómo se insertan y se consultan filas con **ContentValues** y **Cu
 
 | Apuntes | Fichero | Para qué |
 |---|---|---|
-| 📘 **UD 3.2 · SQLite** | [`recursos/html/UD_3_2_SQLite.html`](recursos/html/UD_3_2_SQLite.html) | Lo de esta rama, explicado sobre su código: crear la tabla, las versiones, insertar y consultar. Con un simulador de las actualizaciones. |
+| 📘 **UD 3.2 · SQLite** | [`recursos/html/UD_3_2_SQLite.html`](recursos/html/UD_3_2_SQLite.html) | Cuándo usar una base de datos, tablas y filas, las clases de Android, las versiones, insertar, consultar, el cursor y el código de la rama. Con tres simuladores y comprobaciones. |
 | 📗 **UD2 · La interfaz de usuario** | [`recursos/html/UD02_Interfaz_Usuario.html`](recursos/html/UD02_Interfaz_Usuario.html) | Para consultar lo que ya has visto. |
 
 Ábrelos en el navegador desde tu copia del proyecto: en Android Studio, botón
