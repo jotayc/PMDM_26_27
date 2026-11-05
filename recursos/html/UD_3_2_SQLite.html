@@ -115,6 +115,45 @@
   .settings-row{ display: block; width: 100%; text-align: left; border: 0; background: none; padding: 9px 14px; font: 14px var(--font-body); color: var(--ink); cursor: pointer; border-bottom: 1px solid #EEE; }
   .settings-row small{ display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
   .settings-cat{ font: 600 11.5px var(--font-body); color: #6200EE; padding: 12px 14px 4px; }
+
+  /* ---------- Piezas del apartado de versiones ---------- */
+  .sim-fig{ background: #fff; border-radius: 12px; padding: 10px; margin: 12px 0; }
+  .sim-fig svg{ display: block; width: 100%; height: auto; }
+  .tarjeta{ background: #fff; border-radius: 12px; padding: 10px 12px 12px; border: 1.5px solid #D9CCF7; margin-bottom: 10px; }
+  .tarjeta h4{ margin: 0 0 8px; font: 700 12.5px var(--font-body); color: var(--sim); text-transform: uppercase; letter-spacing: .04em; }
+  .chip{ display: inline-block; font: 600 12px var(--font-mono); border-radius: 8px; padding: 3px 8px; background: var(--green-soft); color: var(--green-deep); margin: 0 4px 4px 0; }
+  .chip.nueva{ background: var(--sim); color: #fff; }
+  .placa{ display: inline-block; font: 700 12.5px var(--font-mono); background: #fff; border: 2px solid var(--green-deep); color: var(--green-deep); border-radius: 8px; padding: 3px 10px; }
+  .placa.mal{ border-color: #C5221F; color: #C5221F; background: #FCE8E6; }
+  .pulso{ animation: pulso .8s ease 2; }
+  @keyframes pulso{ 50%{ box-shadow: 0 0 0 5px rgba(109,63,216,.35); } }
+  .tabla-sim th.nueva{ background: var(--sim); }
+  .tabla-sim td.nulo{ color: var(--muted); font-style: italic; }
+  .tabla-sim tr.sale td{ animation: sale .9s forwards; }
+  @keyframes sale{ to{ opacity: 0; background: #FCE8E6; } }
+  .tabla-sim tr.entra td{ animation: entra 1.2s; }
+  @keyframes entra{ from{ background: #DCCEFA; } }
+  .tabla-sim tr.falla td{ background: #FCE8E6; color: #C5221F; }
+  .tabla-sim tr.vacia td{ color: var(--muted); font-style: italic; font-family: var(--font-body); }
+  .flujo .n, .flujo .a, #esSvg .a{ transition: opacity .3s; }
+  .flujo.activo .n:not(.on), .flujo.activo .a:not(.on){ opacity: .22; }
+  .flujo .n.on rect, .flujo .n.on polygon{ stroke: var(--sim); stroke-width: 3; }
+  .flujo .a.on path, #esSvg .a.on path{ stroke: var(--sim); }
+  .flujo .a.on text, #esSvg .a.on text{ fill: var(--sim); }
+  #esSvg .esc.on rect{ fill: #D3EFDF; }
+  #esFicha{ transition: transform .7s ease-in-out; }
+  .codigo span{ display: block; border-radius: 4px; padding: 0 4px; }
+  .codigo span.on{ background: rgba(109,63,216,.55); color: #fff; }
+  .codigo span.ya{ background: rgba(109,63,216,.18); }
+  @media (max-width: 700px){
+    .sim-fig{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .sim-fig svg{ min-width: 660px; }
+    .sim-fig::before{ content: "Desliza el dibujo hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pulso, .tabla-sim tr.sale td, .tabla-sim tr.entra td{ animation: none; }
+    #esFicha, .flujo .n, .flujo .a, #esSvg .a{ transition: none; }
+  }
 </style>
 </head>
 <body>
@@ -125,7 +164,7 @@
       <div class="brand-text"><b>UD 3.2 · SQLite</b><span>PMDM · 2º DAM</span></div>
     </div>
     <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_3_2_SQLite.html" aria-current="page">UD 3.2 · SQLite</a></li></ul>
-    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>El problema: muchos datos con la misma forma</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Cuando no bastan las preferencias</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Tablas, filas y columnas</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">SQLite</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>Las clases de la rama</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Crear y actualizar: las versiones</a></li><li class="sub"><a href="#s4-1" data-nav data-target="s4-1">onCreate()</a></li><li class="sub"><a href="#s4-2" data-nav data-target="s4-2">onUpgrade()</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Insertar y consultar</a></li><li class="sub"><a href="#s5-1" data-nav data-target="s5-1">ContentValues</a></li><li class="sub"><a href="#s5-2" data-nav data-target="s5-2">query()</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Recorrer el resultado: el cursor</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>El código paso a paso</a></li><li class="sub"><a href="#s7-1" data-nav data-target="s7-1">TODO 1-3</a></li><li class="sub"><a href="#s7-2" data-nav data-target="s7-2">TODO 4-6</a></li><li class="sub"><a href="#s7-3" data-nav data-target="s7-3">TODO 7-8</a></li><li class="sub"><a href="#s7-4" data-nav data-target="s7-4">TODO 9-13</a></li><li class="sub"><a href="#s7-5" data-nav data-target="s7-5">TODO 14-19</a></li><li class="sub"><a href="#s7-6" data-nav data-target="s7-6">TODO 20-21</a></li><li class="sub"><a href="#s7-7" data-nav data-target="s7-7">TODO 22</a></li><li class="sub"><a href="#s7-8" data-nav data-target="s7-8">TODO 23-24</a></li><li class="sub"><a href="#s7-9" data-nav data-target="s7-9">TODO 25</a></li><li><a href="#s8" data-nav data-target="s8"><span class="n">08</span>Pruébalo</a></li><li><a href="#s9" data-nav data-target="s9"><span class="n">09</span>Errores comunes</a></li><li><a href="#s10" data-nav data-target="s10"><span class="n">10</span>Para practicar</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>El problema: muchos datos con la misma forma</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">Cuando no bastan las preferencias</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Tablas, filas y columnas</a></li><li class="sub"><a href="#s2-3" data-nav data-target="s2-3">SQLite</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>Las clases de la rama</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Crear y actualizar: las versiones</a></li><li class="sub"><a href="#s4-1" data-nav data-target="s4-1">onCreate()</a></li><li class="sub"><a href="#s4-2" data-nav data-target="s4-2">El problema</a></li><li class="sub"><a href="#s4-3" data-nav data-target="s4-3">El número de versión</a></li><li class="sub"><a href="#s4-4" data-nav data-target="s4-4">onUpgrade()</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>Insertar y consultar</a></li><li class="sub"><a href="#s5-1" data-nav data-target="s5-1">ContentValues</a></li><li class="sub"><a href="#s5-2" data-nav data-target="s5-2">query()</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Recorrer el resultado: el cursor</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>El código paso a paso</a></li><li class="sub"><a href="#s7-1" data-nav data-target="s7-1">TODO 1-3</a></li><li class="sub"><a href="#s7-2" data-nav data-target="s7-2">TODO 4-6</a></li><li class="sub"><a href="#s7-3" data-nav data-target="s7-3">TODO 7-8</a></li><li class="sub"><a href="#s7-4" data-nav data-target="s7-4">TODO 9-13</a></li><li class="sub"><a href="#s7-5" data-nav data-target="s7-5">TODO 14-19</a></li><li class="sub"><a href="#s7-6" data-nav data-target="s7-6">TODO 20-21</a></li><li class="sub"><a href="#s7-7" data-nav data-target="s7-7">TODO 22</a></li><li class="sub"><a href="#s7-8" data-nav data-target="s7-8">TODO 23-24</a></li><li class="sub"><a href="#s7-9" data-nav data-target="s7-9">TODO 25</a></li><li><a href="#s8" data-nav data-target="s8"><span class="n">08</span>Pruébalo</a></li><li><a href="#s9" data-nav data-target="s9"><span class="n">09</span>Errores comunes</a></li><li><a href="#s10" data-nav data-target="s10"><span class="n">10</span>Para practicar</a></li></ul>
   </nav>
   <div class="scrim" id="scrim"></div>
   <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
@@ -194,28 +233,81 @@
 
       <h3 id="s4-1"><span class="sn">4.1</span>onCreate(): la primera vez</h3>
       <p>La base de datos no existe hasta que la aplicación la pide por primera vez. En ese momento Android llama a <code>onCreate()</code> de tu <code>SQLiteOpenHelper</code>, y ahí se crean las tablas con <code>CREATE TABLE</code>. Después ya existe, y <code>onCreate()</code> no se vuelve a ejecutar nunca.</p>
-      <h3 id="s4-2"><span class="sn">4.2</span>onUpgrade(): cuando cambian las tablas</h3>
-      <p>Imagina que publicas tu aplicación y después necesitas otra columna. Los usuarios que ya la tienen guardan sus datos en la tabla antigua: no puedes borrarla, y <code>onCreate()</code> no se va a ejecutar, porque la base de datos ya existe. Por eso cada base de datos tiene un <strong>número de versión</strong>, y cuando subes ese número Android llama a <code>onUpgrade()</code>.</p>
+      <h3 id="s4-2"><span class="sn">4.2</span>El problema: tu código cambia, el fichero del móvil no</h3>
+      <p>Imagina que publicas la aplicación con una tabla que solo guarda el nombre de la ciudad. Ana la instala y guarda Granada y Jaén. Un mes después añades la población a tu <code>CREATE TABLE</code> y publicas la versión nueva. Ana la actualiza desde la tienda. ¿Qué tabla tiene ahora en su móvil?</p>
       <figure>
-<svg viewBox="0 0 720 250" role="img" aria-label="Al pedir acceso a la base de datos, Android mira la versión instalada. Si no existe, llama a onCreate. Si es menor que DB_VERSION, llama a onUpgrade. Si es igual, no llama a ninguno. En los tres casos devuelve la base de datos lista para usar."><defs><marker id="sq3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="75" width="170" height="90" rx="14" fill="#E2F4EA"/><text x="85" y="110" text-anchor="middle" font-size="11" fill="#0A5C33" style="font-family:'JetBrains Mono', Consolas, monospace">getWritableDatabase()</text><text x="85" y="134" text-anchor="middle" font-size="12" fill="#0A5C33">pides acceso</text><rect x="250" y="10" width="220" height="60" rx="14" fill="#0E8A4B"/><text x="360" y="35" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">No existe</text><text x="360" y="55" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onCreate()</text><rect x="250" y="90" width="220" height="60" rx="14" fill="#0E8A4B"/><text x="360" y="115" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">Versión menor que DB_VERSION</text><text x="360" y="135" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onUpgrade()</text><rect x="250" y="170" width="220" height="60" rx="14" fill="#E7F0FD"/><text x="360" y="195" text-anchor="middle" font-size="12" fill="#174EA6" font-weight="700">Versión igual</text><text x="360" y="215" text-anchor="middle" font-size="12" fill="#174EA6">no se llama a ninguno</text><rect x="550" y="75" width="170" height="90" rx="14" fill="#6D3FD8"/><text x="635" y="110" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">Base de datos</text><text x="635" y="134" text-anchor="middle" font-size="12" fill="#fff">lista para usar</text><line x1="174" y1="105" x2="246" y2="44" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="174" y1="120" x2="246" y2="120" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="174" y1="135" x2="246" y2="196" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="474" y1="44" x2="546" y2="105" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="474" y1="120" x2="546" y2="120" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><line x1="474" y1="196" x2="546" y2="135" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/></svg>
-<figcaption>Android decide por ti cuál de los dos métodos ejecutar, comparando la versión instalada con la que indica tu código.</figcaption>
+<svg viewBox="0 0 720 290" role="img" aria-label="Arriba, tu código: la primera versión crea la tabla solo con cityName y en octubre le añades poblation. Abajo, el móvil de Ana: guardó Granada y Jaén con la primera versión y, al actualizar la aplicación, su fichero sigue teniendo solo cityName. Código y fichero ya no coinciden."><defs><marker id="sq3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><text x="2" y="70" text-anchor="start" font-size="13" fill="#17211C" font-weight="700">Tu código</text><text x="2" y="88" text-anchor="start" font-size="11" fill="#56655D">lo que publicas</text><text x="2" y="210" text-anchor="start" font-size="13" fill="#17211C" font-weight="700">Móvil de Ana</text><text x="2" y="228" text-anchor="start" font-size="11" fill="#56655D">lo que tiene guardado</text><text x="225" y="16" text-anchor="middle" font-size="11.5" fill="#56655D">Septiembre</text><text x="535" y="16" text-anchor="middle" font-size="11.5" fill="#56655D">Octubre</text><rect x="140" y="28" width="170" height="96" rx="14" fill="#E2F4EA"/><text x="225" y="52" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Primera versión</text><text x="225" y="76" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">CREATE TABLE</text><text x="225" y="96" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">(cityName)</text><rect x="450" y="28" width="170" height="96" rx="14" fill="#E2F4EA"/><text x="535" y="52" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Versión nueva</text><text x="535" y="76" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">CREATE TABLE</text><text x="535" y="96" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">(cityName, poblation)</text><line x1="314" y1="76" x2="446" y2="76" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><text x="380" y="66" text-anchor="middle" font-size="11" fill="#56655D">añades poblation</text><rect x="140" y="150" width="170" height="128" rx="14" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="225" y="172" text-anchor="middle" font-size="12.5" fill="#17211C" font-weight="700">Fichero db_dam</text><rect x="154" y="184" width="142" height="24" rx="5" fill="#0A5C33"/><text x="225" y="201" text-anchor="middle" font-size="11" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text><rect x="154" y="210" width="142" height="24" rx="5" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="225" y="227" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Granada</text><rect x="154" y="238" width="142" height="24" rx="5" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="225" y="255" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Jaén</text><rect x="450" y="150" width="170" height="128" rx="14" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="535" y="172" text-anchor="middle" font-size="12.5" fill="#17211C" font-weight="700">Fichero db_dam</text><rect x="464" y="184" width="142" height="24" rx="5" fill="#0A5C33"/><text x="535" y="201" text-anchor="middle" font-size="11" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text><rect x="464" y="210" width="142" height="24" rx="5" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="535" y="227" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Granada</text><rect x="464" y="238" width="142" height="24" rx="5" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="535" y="255" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Jaén</text><line x1="225" y1="126" x2="225" y2="147" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><text x="233" y="141" text-anchor="start" font-size="11" fill="#56655D">Ana la instala</text><line x1="535" y1="126" x2="535" y2="147" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><text x="543" y="141" text-anchor="start" font-size="11" fill="#56655D">llega a su móvil</text><line x1="314" y1="214" x2="446" y2="214" stroke="#56655D" stroke-width="2" marker-end="url(#sq3)"/><text x="380" y="204" text-anchor="middle" font-size="11" fill="#56655D">Ana actualiza la app</text><text x="380" y="232" text-anchor="middle" font-size="11" fill="#B26A00" font-weight="700">el fichero no cambia</text><path d="M622 76 H678 V116" fill="none" stroke="#B26A00" stroke-width="2" stroke-dasharray="5 4"/><path d="M678 172 V214 H622" fill="none" stroke="#B26A00" stroke-width="2" stroke-dasharray="5 4"/><rect x="636" y="118" width="84" height="52" rx="14" fill="#FDF1DD"/><text x="678" y="140" text-anchor="middle" font-size="11.5" fill="#B26A00" font-weight="700">no</text><text x="678" y="158" text-anchor="middle" font-size="11.5" fill="#B26A00" font-weight="700">coinciden</text></svg>
+<figcaption>Al actualizar una aplicación se sustituye su código, pero sus datos se quedan como estaban. El código nuevo espera la columna <code>poblation</code> y la tabla del móvil de Ana no la tiene.</figcaption>
 </figure>
-      <div class="box conocer"><span class="box-label">Como reformar una casa habitada</span><p>No puedes tirar la casa y construir otra, porque dentro están los muebles de quien vive en ella. Haces las reformas que le falten, en orden: a quien tiene la casa de hace dos reformas, le haces las dos; a quien solo le falta la última, solo esa.</p></div>
-      <div class="sim" id="simSql">
-        <div class="sim-head"><b>Actualiza la base de datos</b><span>elige de qué versión viene el usuario</span></div>
+      <p>Al actualizar, el móvil de Ana recibe el código nuevo, pero el fichero <code>db_dam</code> es suyo y se queda como estaba. Su <code>onCreate()</code> no se vuelve a ejecutar, porque el fichero ya existe, así que nadie crea la columna nueva. Prueba las dos soluciones que se te ocurrirían primero:</p>
+      <div class="sim" id="simAna">
+        <div class="sim-head"><b>El móvil de Ana</b><span>publicas una versión con una columna nueva</span></div>
         <div class="sim-body">
-          <p>Un móvil tiene instalada una versión antigua de la aplicación y el usuario la actualiza a la que tiene <code>DB_VERSION = 3</code>. Elige la versión de partida y mira qué ejecuta el <code>switch</code>.</p>
-          <div class="btns" id="sqVers"></div>
-          <div class="sim-row">
-            <div class="panel" style="min-width:230px">
-              <div class="table-wrap" style="margin:0"><table><thead><tr><th>Columnas de la tabla</th></tr></thead><tbody id="sqCols"></tbody></table></div>
-              <div class="why" id="sqWhy"></div>
+          <p>Ana tiene la primera versión de la aplicación y ha guardado dos ciudades. Publicas la versión nueva, cuyo <code>CREATE TABLE</code> ya incluye <code>poblation</code>. Elige qué haces con la base de datos de Ana al actualizar y mira qué pasa cuando después guarda Málaga.</p>
+          <div class="sel" id="anaOpc"><button type="button" aria-pressed="false" data-op="nada">No hacer nada más</button><button type="button" aria-pressed="false" data-op="borrar">Borrar la tabla y crearla de nuevo</button></div>
+          <div class="sim-row" style="margin-top:12px">
+            <div class="panel">
+              <div class="tarjeta" id="anaApp"><h4>La aplicación de Ana</h4><div id="anaCodigo"></div></div>
+              <div class="tarjeta" id="anaFich"><h4>Su fichero db_dam</h4><table class="tabla-sim"><thead id="anaCab"></thead><tbody id="anaFilas"></tbody></table></div>
             </div>
-            <div class="panel"><ul class="log" id="sqLog" aria-label="Lo que se ejecuta" style="margin-top:0"></ul></div>
+            <div class="panel"><ul class="log" id="anaLog" aria-label="Lo que ocurre en el móvil de Ana" style="margin-top:0"></ul><div class="why" id="anaWhy"></div></div>
+          </div>
+          <div class="btns"><button class="btn ghost" id="anaReset" type="button">Volver a empezar</button></div>
+        </div>
+      </div>
+      <p>Ninguna de las dos sirve: con la primera la aplicación deja de funcionar y con la segunda se pierden los datos. Hace falta saber <strong>qué versión de la tabla tiene cada móvil</strong> y hacer solo los cambios que le faltan, sin tocar sus filas. Y no todos los móviles están igual: unos tienen la primera versión, otros la segunda y otros instalan hoy por primera vez.</p>
+      <h3 id="s4-3"><span class="sn">4.3</span>La solución de Android: el número de versión</h3>
+      <div class="box conocer"><span class="box-label">Como reformar una casa habitada</span><p>No puedes tirar la casa y construir otra, porque dentro están los muebles de quien vive en ella. Lo que se hace es llevar en la puerta una placa con el número de la última reforma hecha. Cuando hay reformas nuevas, se mira la placa y se hacen solo las que faltan, en orden: a quien tiene la casa de hace dos reformas, se le hacen las dos; a quien solo le falta la última, solo esa.</p></div>
+      <p>Android hace lo mismo. Dentro del propio fichero de la base de datos guarda un <strong>número de versión</strong>: es la placa. En tu código, la versión que necesitas va en la constante <code>DB_VERSION</code>, que le pasas a <code>SQLiteOpenHelper</code>. Cada vez que cambias las tablas, subes ese número.</p>
+      <figure>
+<svg viewBox="0 0 720 232" role="img" aria-label="A la izquierda, tu código nuevo con DB_VERSION igual a 3. A la derecha, el fichero de Ana, que lleva apuntada la versión 1. En medio, SQLiteOpenHelper compara los dos números: 1 es menor que 3, así que a Ana le faltan cambios."><defs><marker id="sq6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="50" width="190" height="100" rx="14" fill="#0E8A4B"/><text x="95" y="80" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">Tu código nuevo</text><text x="95" y="106" text-anchor="middle" font-size="13" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">DB_VERSION = 3</text><text x="95" y="130" text-anchor="middle" font-size="11" fill="#fff">la versión que necesita</text><rect x="240" y="50" width="220" height="100" rx="14" fill="#E2F4EA"/><text x="350" y="78" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">SQLiteOpenHelper</text><text x="350" y="102" text-anchor="middle" font-size="12" fill="#0A5C33">compara los dos números</text><text x="350" y="126" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">1 es menor que 3</text><rect x="510" y="10" width="210" height="180" rx="14" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="615" y="34" text-anchor="middle" font-size="12.5" fill="#17211C" font-weight="700">Fichero db_dam de Ana</text><rect x="555" y="46" width="120" height="30" rx="6" fill="#fff" stroke="#0A5C33" stroke-width="1.8"/><text x="615" y="66" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">versión 1</text><rect x="526" y="90" width="178" height="24" rx="5" fill="#0A5C33"/><text x="615" y="107" text-anchor="middle" font-size="11" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text><rect x="526" y="118" width="178" height="24" rx="5" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="615" y="135" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Granada</text><rect x="526" y="146" width="178" height="24" rx="5" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="615" y="163" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">Jaén</text><line x1="194" y1="100" x2="236" y2="100" stroke="#56655D" stroke-width="2" marker-end="url(#sq6)"/><line x1="552" y1="62" x2="464" y2="84" stroke="#56655D" stroke-width="2" marker-end="url(#sq6)"/><text x="360" y="218" text-anchor="middle" font-size="12" fill="#56655D" font-style="italic">Cuando termina de hacer los cambios que faltan, Android cambia el número del fichero a 3.</text></svg>
+<figcaption>La versión viaja dentro del propio fichero. Así, en cada móvil, Android sabe qué versión de las tablas tiene y cuál necesita tu código.</figcaption>
+</figure>
+      <p>Cada vez que la aplicación abre la base de datos, <code>SQLiteOpenHelper</code> compara los dos números y decide qué método llamar:</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Lo que encuentra</th><th>Lo que hace</th></tr></thead>
+<tbody>
+<tr><td>No hay fichero</td><td>Llama a <code>onCreate()</code>, que crea las tablas.</td></tr>
+<tr><td>Su versión es menor que <code>DB_VERSION</code></td><td>Llama a <code>onUpgrade()</code>, que hace los cambios que faltan.</td></tr>
+<tr><td>Su versión es igual que <code>DB_VERSION</code></td><td>Nada: la base de datos está al día.</td></tr>
+<tr><td>Su versión es mayor que <code>DB_VERSION</code></td><td>Llama a <code>onDowngrade()</code>, que por defecto da error: Android no sabe deshacer cambios.</td></tr>
+</tbody>
+</table></div>
+      <p>Después de <code>onCreate()</code> o de <code>onUpgrade()</code>, Android cambia el número del fichero por el de <code>DB_VERSION</code>: la próxima vez ya coinciden y no se hace nada. Sigue el camino con cada móvil:</p>
+      <div class="sim" id="simDecide">
+        <div class="sim-head"><b>¿Qué hace Android al abrir?</b><span>cinco móviles, una misma aplicación con DB_VERSION = 3</span></div>
+        <div class="sim-body">
+          <p>Todos estos móviles abren la aplicación nueva, que tiene <code>DB_VERSION = 3</code>. Elige uno y sigue el camino que toma Android.</p>
+          <div class="sel" id="fjMoviles"></div>
+          <div class="sim-fig"><svg class="flujo" id="fjSvg" viewBox="0 0 720 300" role="img" aria-label="Al abrir la base de datos, Android mira si existe el fichero. Si no existe, llama a onCreate. Si existe, compara su versión con DB_VERSION: si es menor llama a onUpgrade, si es igual no hace nada y si es mayor llama a onDowngrade, que da error."><defs><marker id="fjG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker><marker id="fjV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6D3FD8"/></marker></defs><g class="n" id="fjAbre"><rect x="0" y="118" width="140" height="68" rx="12" fill="#E2F4EA"/><text x="70" y="146" text-anchor="middle" font-size="12" fill="#0A5C33" font-weight="700">Tu código abre</text><text x="70" y="164" text-anchor="middle" font-size="12" fill="#0A5C33" font-weight="700">la base de datos</text></g><g class="a" id="fjA1"><path d="M140 152 H170" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#fjG)"/></g><g class="n" id="fjExiste"><polygon points="174,152 236,104 298,152 236,200" fill="#fff" stroke="#56655D" stroke-width="1.8"/><text x="236" y="148" text-anchor="middle" font-size="12" fill="#17211C" font-weight="700">¿Existe el</text><text x="236" y="164" text-anchor="middle" font-size="12" fill="#17211C" font-weight="700">fichero?</text></g><g class="a" id="fjNo"><path d="M236 104 V45 H326" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#fjG)"/><text x="244" y="80" font-size="11.5" fill="#56655D">no</text></g><g class="n" id="fjCrea"><rect x="330" y="14" width="180" height="62" rx="12" fill="#0E8A4B"/><text x="420" y="40" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">onCreate()</text><text x="420" y="60" text-anchor="middle" font-size="11.5" fill="#fff">crea las tablas</text></g><g class="a" id="fjSi"><path d="M298 152 H326" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#fjG)"/><text x="312" y="144" text-anchor="middle" font-size="11.5" fill="#56655D">sí</text></g><g class="n" id="fjCompara"><rect x="330" y="118" width="180" height="68" rx="12" fill="#fff" stroke="#56655D" stroke-width="1.8"/><text x="420" y="146" text-anchor="middle" font-size="12" fill="#17211C" font-weight="700">Compara su versión</text><text x="420" y="164" text-anchor="middle" font-size="12" fill="#17211C" font-weight="700">con DB_VERSION</text></g><g class="a" id="fjMenor"><path d="M510 140 C 532 140, 534 83, 556 83" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#fjG)"/></g><g class="a" id="fjIgualA"><path d="M510 153 H556" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#fjG)"/></g><g class="a" id="fjMayor"><path d="M510 166 C 532 166, 534 223, 556 223" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#fjG)"/></g><g class="n" id="fjSube"><rect x="560" y="52" width="160" height="62" rx="12" fill="#0E8A4B"/><text x="640" y="70" text-anchor="middle" font-size="11" fill="#fff">si es menor</text><text id="fjSubeTxt" x="640" y="89" text-anchor="middle" font-size="12" fill="#fff" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">onUpgrade()</text><text x="640" y="106" text-anchor="middle" font-size="11" fill="#fff">hace lo que falta</text></g><g class="n" id="fjIgual"><rect x="560" y="122" width="160" height="62" rx="12" fill="#E7F0FD"/><text x="640" y="146" text-anchor="middle" font-size="11" fill="#174EA6">si es igual</text><text x="640" y="166" text-anchor="middle" font-size="12.5" fill="#174EA6" font-weight="700">nada que hacer</text></g><g class="n" id="fjBaja"><rect x="560" y="192" width="160" height="62" rx="12" fill="#FDF1DD"/><text x="640" y="210" text-anchor="middle" font-size="11" fill="#B26A00">si es mayor</text><text x="640" y="229" text-anchor="middle" font-size="12.5" fill="#B26A00" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">onDowngrade()</text><text x="640" y="246" text-anchor="middle" font-size="11" fill="#B26A00">error</text></g><text x="360" y="288" text-anchor="middle" font-size="12" fill="#56655D" font-style="italic">Después de onCreate() o de onUpgrade(), Android apunta DB_VERSION en el fichero.</text></svg></div>
+          <div class="sim-row">
+            <div class="panel"><ul class="log" id="fjLog" aria-label="Lo que hace Android" style="margin-top:0;height:120px"></ul></div>
+            <div class="panel"><div class="why" id="fjWhy" style="margin-top:0"></div></div>
+          </div>
+        </div>
+      </div>
+      <h3 id="s4-4"><span class="sn">4.4</span>onUpgrade(): una escalera de cambios</h3>
+      <p><code>onUpgrade()</code> recibe dos números: <code>oldVersion</code>, el que tiene el fichero, y <code>newVersion</code>, el de tu código. Piensa en las versiones como una escalera: cada escalón es una versión de la tabla y cada subida, el cambio que lleva de una a la siguiente. Cada usuario empieza en el escalón de su versión y tiene que subir todos los que le quedan.</p>
+      <p>En código, la escalera es un <code>switch</code> sobre <code>oldVersion</code> con un <code>case</code> por subida. El <code>switch</code> entra por el <code>case</code> de la versión que tiene el usuario y, como <strong>no lleva <code>break</code></strong>, sigue ejecutando los <code>case</code> de debajo hasta el final. Cada cambio usa <code>ALTER TABLE … ADD COLUMN</code>, que ya conoces de Bases de datos: añade la columna sin tocar las filas que había.</p>
+      <div class="sim" id="simEscalera">
+        <div class="sim-head"><b>Sube la escalera</b><span>cada usuario empieza en su versión</span></div>
+        <div class="sim-body">
+          <p>Elige un usuario y pulsa <em>Abrir la aplicación nueva</em>. Fíjate en qué <code>case</code> entra, por cuáles pasa y qué les ocurre a sus ciudades. Después marca la casilla del <code>break</code> y repite con Ana.</p>
+          <div class="sel" id="esUsuarios"></div>
+          <div class="checks" style="margin-top:10px"><label><input type="checkbox" id="esBreak"><span>Poner <code>break</code> al final de cada <code>case</code></span></label></div>
+          <div class="btns"><button class="btn" id="esAbrir" type="button">Abrir la aplicación nueva</button></div>
+          <div class="sim-fig"><svg id="esSvg" viewBox="0 0 720 262" role="img" aria-label="Una escalera de tres escalones: versión 1 con cityName, versión 2 con poblation y versión 3 con surface. Para subir del 1 al 2 se ejecuta el case 1 y del 2 al 3, el case 2. Quien no tiene fichero llega directamente arriba con onCreate."><defs><marker id="esG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker><marker id="esV" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6D3FD8"/></marker></defs><line x1="10" y1="250" x2="710" y2="250" stroke="#DCE6E0" stroke-width="2"/><g class="esc" id="esPaso1"><rect x="30" y="180" width="170" height="70" fill="#E2F4EA" stroke="#fff" stroke-width="2"/><text x="115" y="203" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Versión 1</text><text x="115" y="222" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">cityName</text></g><g class="esc" id="esPaso2"><rect x="200" y="120" width="170" height="130" fill="#E2F4EA" stroke="#fff" stroke-width="2"/><text x="285" y="143" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Versión 2</text><text x="285" y="162" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">cityName,</text><text x="285" y="178" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">poblation</text></g><g class="esc" id="esPaso3"><rect x="370" y="60" width="170" height="190" fill="#E2F4EA" stroke="#fff" stroke-width="2"/><text x="455" y="83" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Versión 3</text><text x="455" y="102" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">cityName,</text><text x="455" y="118" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">poblation,</text><text x="455" y="134" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">surface</text></g><g class="a" id="esC1"><path d="M185 176 C 190 140, 200 122, 214 116" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#esG)"/><text x="176" y="100" text-anchor="end" font-size="11" fill="#56655D" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">case 1:</text><text x="176" y="116" text-anchor="end" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">+ poblation</text></g><g class="a" id="esC2"><path d="M355 116 C 360 80, 370 62, 384 56" fill="none" stroke="#56655D" stroke-width="2" marker-end="url(#esG)"/><text x="346" y="40" text-anchor="end" font-size="11" fill="#56655D" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">case 2:</text><text x="346" y="56" text-anchor="end" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">+ surface</text></g><rect x="575" y="204" width="140" height="40" rx="10" fill="#fff" stroke="#DCE6E0" stroke-width="1.8"/><text x="645" y="229" text-anchor="middle" font-size="12" fill="#17211C" font-weight="700">Sin fichero</text><g class="a" id="esCrea"><path d="M600 202 V70 H546" fill="none" stroke="#56655D" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#esG)"/><text x="612" y="128" text-anchor="start" font-size="11" fill="#56655D" font-weight="700" style="font-family:'JetBrains Mono', Consolas, monospace">onCreate()</text><text x="612" y="144" text-anchor="start" font-size="11" fill="#56655D">directamente</text><text x="612" y="160" text-anchor="start" font-size="11" fill="#56655D">a la versión 3</text></g><g id="esFicha" style="transform:translate(115px,166px)"><rect x="-32" y="-12" width="64" height="24" rx="12" fill="#6D3FD8"/><text id="esFichaTxt" x="0" y="4" text-anchor="middle" font-size="11.5" fill="#fff" font-weight="700">Ana</text></g></svg></div>
+          <div class="sim-row">
+            <div class="panel">
+              <div class="tarjeta"><h4 id="esTitFich">Fichero de Ana</h4><div id="esPlaca" class="placa"></div><table class="tabla-sim" style="margin-top:8px"><thead id="esCab"></thead><tbody id="esFilas"></tbody></table></div>
+              <div class="tarjeta"><h4>onUpgrade(), con las constantes sustituidas</h4><pre class="fichero codigo" id="esCodigo" style="margin:0"></pre></div>
+            </div>
+            <div class="panel"><ul class="log" id="esLog" aria-label="Lo que se ejecuta" style="margin-top:0"></ul><div class="why" id="esWhy"></div></div>
           </div>
         </div>
       </div>
       <div class="box clave"><span class="box-label">Cada cambio, en dos sitios</span><p><code>onCreate()</code> crea la última versión, para los usuarios nuevos. <code>onUpgrade()</code> lleva a la última versión a quienes ya tienen la aplicación. Si cambias la tabla y olvidas uno de los dos, la aplicación falla solo a una parte de los usuarios.</p></div>
+      <div class="comp" data-tipo="vf"><div class="comp-head">Comprueba · Verdadero o falso</div><div style="margin-top:10px"><div class="fila" data-r="v"><span>Si cambias el <code>CREATE TABLE</code> y no subes <code>DB_VERSION</code>, quienes ya tienen la aplicación se quedan con la tabla antigua.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span><code>ALTER TABLE … ADD COLUMN</code> borra las filas que ya había en la tabla.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>Quien instala la aplicación por primera vez pasa por todos los <code>case</code> de <code>onUpgrade()</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Con un <code>break</code> en cada <code>case</code>, quien viene de la versión 1 se queda sin la columna <code>surface</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Si no subes la versión, Android ve que coincide y no llama a <code>onUpgrade()</code>. <code>ADD COLUMN</code> conserva las filas, con <code>NULL</code> en la columna nueva. Quien instala por primera vez no tiene fichero: pasa por <code>onCreate()</code>, no por <code>onUpgrade()</code>. Con <code>break</code>, el <code>switch</code> sale después del primer <code>case</code> que ejecuta.</div></div>
       <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">La aplicación tiene <code>DB_VERSION = 3</code>. Un usuario que tenía instalada la versión 2 actualiza la aplicación. ¿Qué se ejecuta?</p><div class="opciones"><button class="opt" type="button"><code>onCreate()</code>, porque la tabla cambia.</button><button class="opt" type="button"><code>onUpgrade()</code>, empezando por el <code>case 1</code>.</button><button class="opt" type="button">Nada: la base de datos ya existe.</button><button class="opt" type="button" data-ok><code>onUpgrade()</code>, solo el <code>case 2</code>.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>La base de datos ya existe, así que <code>onCreate()</code> no se ejecuta. Como su versión, 2, es menor que 3, Android llama a <code>onUpgrade()</code> con <code>oldVersion = 2</code>: el <code>switch</code> entra por el <code>case 2</code>, porque la columna del <code>case 1</code> ya la tenía.</div></div>
 
     </section>
@@ -570,53 +662,289 @@ function escapa(texto){ var div = document.createElement("div"); div.textContent
   $("tbWhy").innerHTML = "Pulsa Insertar.";
 })();
 
-/* --- 2. versiones --- */
-(function(){
-  var log = registro("sqLog");
-  var OPCIONES = [
-    {t: "Instalación nueva", v: 0},
-    {t: "Viene de la versión 1", v: 1},
-    {t: "Viene de la versión 2", v: 2},
-    {t: "Ya tiene la versión 3", v: 3}
-  ];
-  var COLS = ["cityName TEXT", "poblation INTEGER", "surface REAL"];
-  function pintaCols(cuantas, nuevas){
-    var html = "";
-    COLS.forEach(function(col, i){
-      if(i < cuantas) html += '<tr><td class="mono">' + col + (i >= cuantas - nuevas ? ' <b style="color:#0E8A4B">nueva</b>' : "") + "</td></tr>";
+/* Ejecuta una lista de pasos, uno cada cierto tiempo. Devuelve una función que los cancela. */
+function enSecuencia(pasos, pausa){
+  var temporizadores = [];
+  pasos.forEach(function(paso, i){ temporizadores.push(setTimeout(paso, i * pausa)); });
+  return function(){ temporizadores.forEach(clearTimeout); };
+}
+function realza(elemento){ elemento.classList.remove("pulso"); void elemento.offsetWidth; elemento.classList.add("pulso"); }
+function pintaTabla(cabecera, cuerpo, columnas, nuevas, filas, vacia){
+  cabecera.innerHTML = "<tr>" + columnas.map(function(col){ return "<th" + (nuevas.indexOf(col) >= 0 ? ' class="nueva"' : "") + ">" + col + "</th>"; }).join("") + "</tr>";
+  var html = "";
+  filas.forEach(function(fila){
+    html += "<tr" + (fila.clase ? ' class="' + fila.clase + '"' : "") + ">";
+    columnas.forEach(function(col, i){
+      var valor = fila.datos[i];
+      html += valor === undefined || valor === null ? '<td class="nulo">NULL</td>' : "<td>" + escapa(String(valor)) + "</td>";
     });
-    $("sqCols").innerHTML = html;
-  }
-  function ejecuta(version){
-    log.limpiar();
-    if(version === 0){
-      log.met("onCreate(db)");
-      log.acc("CREATE TABLE db_ciudades (cityName, poblation, surface)");
-      pintaCols(3, 3);
-      $("sqWhy").innerHTML = "No había base de datos: <code>onCreate()</code> la crea directamente en su última versión. <code>onUpgrade()</code> no se ejecuta.";
-    } else if(version === 3){
-      log.nota("La versión instalada coincide con DB_VERSION.");
-      pintaCols(3, 0);
-      $("sqWhy").innerHTML = "No hay nada que hacer: no se llama a ninguno de los dos métodos.";
-    } else {
-      log.met("onUpgrade(db, " + version + ", 3)");
-      log.nota("switch(" + version + ")");
-      if(version === 1){
-        log.acc("case 1: ALTER TABLE … ADD COLUMN poblation INTEGER");
-        log.nota("sin break: sigue por el siguiente case");
-      }
-      log.acc("case 2: ALTER TABLE … ADD COLUMN surface REAL");
-      pintaCols(3, 3 - version);
-      $("sqWhy").innerHTML = version === 1 ? "Entra por <code>case 1</code> y, como no hay <code>break</code>, sigue por <code>case 2</code>: se aplican los dos cambios en orden." : "Entra directamente por <code>case 2</code>: la primera columna ya la tenía. Sus datos no se tocan.";
-    }
-  }
-  OPCIONES.forEach(function(opcion){
-    var boton = document.createElement("button");
-    boton.type = "button"; boton.className = "btn ghost"; boton.textContent = opcion.t;
-    boton.addEventListener("click", function(){ ejecuta(opcion.v); });
-    $("sqVers").appendChild(boton);
+    html += "</tr>";
   });
-  ejecuta(1);
+  cuerpo.innerHTML = html || '<tr class="vacia"><td colspan="' + columnas.length + '">' + vacia + "</td></tr>";
+}
+
+/* --- 2. el problema: el móvil de Ana --- */
+(function(){
+  var log = registro("anaLog"), cancela = function(){};
+  function estadoInicial(){
+    cancela(); log.limpiar();
+    $("anaCodigo").innerHTML = '<span class="chip">primera versión</span><br><span class="chip">CREATE TABLE (cityName)</span>';
+    pintaTabla($("anaCab"), $("anaFilas"), ["cityName"], [], [{datos: ["Granada"]}, {datos: ["Jaén"]}], "");
+    document.querySelectorAll("#anaOpc button").forEach(function(boton){ boton.setAttribute("aria-pressed", "false"); });
+    $("anaWhy").innerHTML = "Ana tiene dos ciudades guardadas con la primera versión. Elige qué haces al publicar la nueva.";
+  }
+  function actualiza(){
+    log.nota("Ana actualiza la aplicación desde la tienda.");
+    $("anaCodigo").innerHTML = '<span class="chip nueva">versión nueva</span><br><span class="chip nueva">CREATE TABLE (cityName, poblation)</span>';
+    realza($("anaApp"));
+  }
+  var GUARDA = "INSERT INTO db_ciudades (cityName, poblation) VALUES ('Málaga', 592000)";
+  function nadaMas(){
+    cancela = enSecuencia([
+      actualiza,
+      function(){
+        log.nota("El fichero db_dam ya existe: onCreate() no se ejecuta.");
+        realza($("anaFich"));
+        $("anaWhy").innerHTML = "El código ha cambiado, pero el fichero de Ana es el de siempre: su tabla sigue teniendo solo <code>cityName</code>.";
+      },
+      function(){
+        log.acc("Ana guarda Málaga: " + GUARDA);
+        pintaTabla($("anaCab"), $("anaFilas"), ["cityName"], [], [{datos: ["Granada"]}, {datos: ["Jaén"]}, {datos: ["Málaga: no se guarda"], clase: "falla"}], "");
+      },
+      function(){
+        log.nota("Error: table db_ciudades has no column named poblation");
+        $("anaWhy").innerHTML = "<strong>La aplicación de Ana ya no puede guardar ciudades.</strong> El código usa una columna que su tabla no tiene, y nadie la ha creado. A quien instale la aplicación desde cero sí le funciona, porque su <code>onCreate()</code> crea la tabla nueva: el fallo solo lo ven los usuarios que ya la tenían.";
+      }
+    ], 1100);
+  }
+  function borrar(){
+    cancela = enSecuencia([
+      actualiza,
+      function(){
+        log.acc("DROP TABLE db_ciudades");
+        pintaTabla($("anaCab"), $("anaFilas"), ["cityName"], [], [{datos: ["Granada"], clase: "sale"}, {datos: ["Jaén"], clase: "sale"}], "");
+      },
+      function(){
+        log.acc("CREATE TABLE db_ciudades (cityName, poblation)");
+        pintaTabla($("anaCab"), $("anaFilas"), ["cityName", "poblation"], ["poblation"], [], "La tabla nueva está vacía.");
+        realza($("anaFich"));
+      },
+      function(){
+        log.acc("Ana guarda Málaga: " + GUARDA);
+        pintaTabla($("anaCab"), $("anaFilas"), ["cityName", "poblation"], [], [{datos: ["Málaga", 592000], clase: "entra"}], "");
+        $("anaWhy").innerHTML = "Málaga se guarda, <strong>pero Granada y Jaén han desaparecido</strong>. Ana ha perdido todo lo que tenía. Desinstalar la aplicación y volver a instalarla tiene el mismo efecto.";
+      }
+    ], 1100);
+  }
+  document.querySelectorAll("#anaOpc button").forEach(function(boton){
+    boton.addEventListener("click", function(){
+      estadoInicial();
+      boton.setAttribute("aria-pressed", "true");
+      $("anaWhy").innerHTML = "Mira el registro…";
+      if(boton.getAttribute("data-op") === "nada") nadaMas(); else borrar();
+    });
+  });
+  $("anaReset").addEventListener("click", estadoInicial);
+  estadoInicial();
+})();
+
+/* --- 3. qué hace Android al abrir --- */
+(function(){
+  var log = registro("fjLog"), cancela = function(){}, svg = $("fjSvg");
+  var MOVILES = [
+    {t: "Marta: no tiene la aplicación", v: 0},
+    {t: "Ana: versión 1", v: 1},
+    {t: "Luis: versión 2", v: 2},
+    {t: "Pedro: versión 3", v: 3},
+    {t: "Tú, en pruebas: versión 4", v: 4}
+  ];
+  function apaga(){
+    cancela();
+    svg.querySelectorAll(".on").forEach(function(pieza){ pieza.classList.remove("on"); });
+    svg.querySelectorAll(".a path").forEach(function(camino){ camino.setAttribute("marker-end", "url(#fjG)"); });
+    $("fjSubeTxt").textContent = "onUpgrade()";
+  }
+  function enciende(id){
+    var pieza = $(id);
+    pieza.classList.add("on");
+    if(pieza.classList.contains("a")) pieza.querySelector("path").setAttribute("marker-end", "url(#fjV)");
+  }
+  function recorre(movil){
+    apaga(); log.limpiar();
+    svg.classList.add("activo");
+    var v = movil.v, camino = ["fjAbre", "fjA1", "fjExiste"], final;
+    log.nota(v === 0 ? "No hay fichero db_dam." : "Fichero: versión " + v + " · DB_VERSION = 3");
+    if(v === 0){
+      camino.push("fjNo", "fjCrea");
+      final = function(){
+        log.met("onCreate(db)"); log.acc("CREATE TABLE db_ciudades (cityName, poblation, surface)"); log.nota("Android apunta la versión 3 en el fichero.");
+        $("fjWhy").innerHTML = "Marta no tenía fichero: <code>onCreate()</code> crea las tablas directamente en su última versión y Android apunta un 3. No pasa por <code>onUpgrade()</code>.";
+      };
+    } else {
+      camino.push("fjSi", "fjCompara");
+      if(v < 3){
+        camino.push("fjMenor", "fjSube");
+        final = function(){
+          $("fjSubeTxt").textContent = "onUpgrade(db, " + v + ", 3)";
+          log.met("onUpgrade(db, " + v + ", 3)"); log.nota("Android apunta la versión 3 en el fichero.");
+          $("fjWhy").innerHTML = "El fichero dice " + v + " y tu código necesita 3. Android llama a <code>onUpgrade()</code> y le pasa los dos números, para que tu código sepa qué cambios faltan. Al terminar, apunta un 3.";
+        };
+      } else if(v === 3){
+        camino.push("fjIgualA", "fjIgual");
+        final = function(){
+          log.nota("Coinciden: no se llama a ningún método.");
+          $("fjWhy").innerHTML = "Las dos versiones coinciden: Android no llama a nada. Es lo que pasa casi siempre, cada vez que se abre la aplicación.";
+        };
+      } else {
+        camino.push("fjMayor", "fjBaja");
+        final = function(){
+          log.met("onDowngrade(db, 4, 3)");
+          log.nota("SQLiteException: Can't downgrade database from version 4 to 3");
+          $("fjWhy").innerHTML = "Instalaste una prueba con <code>DB_VERSION = 4</code> y has vuelto al código que tiene 3. Android no sabe deshacer cambios: por defecto <code>onDowngrade()</code> lanza una excepción y la aplicación se cierra. Mientras desarrollas, se arregla desinstalándola.";
+        };
+      }
+    }
+    var pasos = camino.map(function(id){ return function(){ enciende(id); }; });
+    pasos.push(final);
+    $("fjWhy").innerHTML = "Sigue el camino en el diagrama…";
+    cancela = enSecuencia(pasos, 380);
+  }
+  MOVILES.forEach(function(movil){
+    var boton = document.createElement("button");
+    boton.type = "button"; boton.textContent = movil.t; boton.setAttribute("aria-pressed", "false");
+    boton.addEventListener("click", function(){
+      document.querySelectorAll("#fjMoviles button").forEach(function(otro){ otro.setAttribute("aria-pressed", "false"); });
+      boton.setAttribute("aria-pressed", "true");
+      recorre(movil);
+    });
+    $("fjMoviles").appendChild(boton);
+  });
+  $("fjWhy").innerHTML = "Elige un móvil.";
+})();
+
+/* --- 4. la escalera de onUpgrade --- */
+(function(){
+  var log = registro("esLog"), cancela = function(){};
+  var COLUMNAS = ["cityName", "poblation", "surface"];
+  var USUARIOS = [
+    {nombre: "Ana", v: 1, filas: [["Granada"], ["Jaén"]]},
+    {nombre: "Luis", v: 2, filas: [["Córdoba", 320000], ["Huelva", 142000]]},
+    {nombre: "Marta", v: 0, filas: []},
+    {nombre: "Pedro", v: 3, filas: [["Málaga", 592000, "398.25"]]}
+  ];
+  var SQL = {1: 'db.execSQL("ALTER TABLE db_ciudades ADD COLUMN poblation INTEGER");', 2: 'db.execSQL("ALTER TABLE db_ciudades ADD COLUMN surface REAL");'};
+  var POSICIONES = {0: [645, 186], 1: [115, 166], 2: [285, 106], 3: [455, 46]};
+  var usuario = USUARIOS[0];
+  function conBreak(){ return $("esBreak").checked; }
+  function pintaCodigo(){
+    var lineas = [["sw", "switch(oldVersion){"], ["c1", "    case 1:"], ["e1", "        " + SQL[1]]];
+    if(conBreak()) lineas.push(["b1", "        break;"]);
+    lineas.push(["c2", "    case 2:"], ["e2", "        " + SQL[2]]);
+    if(conBreak()) lineas.push(["b2", "        break;"]);
+    lineas.push(["fin", "}"]);
+    $("esCodigo").innerHTML = lineas.map(function(linea){ return '<span id="esL' + linea[0] + '">' + escapa(linea[1]) + "</span>"; }).join("");
+  }
+  function marcaLinea(id){
+    document.querySelectorAll("#esCodigo span.on").forEach(function(otra){ otra.classList.remove("on"); otra.classList.add("ya"); });
+    $("esL" + id).classList.add("on");
+  }
+  function mueveFicha(version){
+    var punto = POSICIONES[version];
+    $("esFicha").style.transform = "translate(" + punto[0] + "px," + punto[1] + "px)";
+    [1, 2, 3].forEach(function(n){ $("esPaso" + n).classList.toggle("on", n === version); });
+  }
+  function placa(version, mal){
+    $("esPlaca").textContent = version === 0 ? "no hay fichero" : "versión " + version;
+    $("esPlaca").className = "placa" + (mal ? " mal" : "");
+  }
+  function tabla(cuantas, nuevas, clase){
+    if(usuario.v === 0 && cuantas === 0){ pintaTabla($("esCab"), $("esFilas"), ["—"], [], [], "Todavía no hay tabla."); return; }
+    var filas = usuario.filas.map(function(fila){ return {datos: fila, clase: clase}; });
+    pintaTabla($("esCab"), $("esFilas"), COLUMNAS.slice(0, cuantas), nuevas, filas, "La tabla está vacía.");
+  }
+  function inicio(){
+    cancela(); log.limpiar(); pintaCodigo();
+    document.querySelectorAll("#esSvg .a.on").forEach(function(pieza){ pieza.classList.remove("on"); });
+    document.querySelectorAll("#esSvg .a path").forEach(function(camino){ camino.setAttribute("marker-end", "url(#esG)"); });
+    $("esFichaTxt").textContent = usuario.nombre;
+    $("esTitFich").textContent = "Fichero de " + usuario.nombre;
+    mueveFicha(usuario.v); placa(usuario.v, false); tabla(usuario.v, [], "");
+    $("esAbrir").disabled = false;
+    $("esWhy").innerHTML = usuario.v === 0 ? "Marta instala la aplicación por primera vez: no tiene fichero." : usuario.nombre + " tiene la versión " + usuario.v + " de la tabla. Pulsa <em>Abrir la aplicación nueva</em>.";
+  }
+  function enciendeSubida(id){
+    $(id).classList.add("on");
+    $(id).querySelector("path").setAttribute("marker-end", "url(#esV)");
+  }
+  function abre(){
+    inicio();
+    $("esAbrir").disabled = true;
+    var v = usuario.v, pasos = [], nombre = usuario.nombre;
+    pasos.push(function(){ log.nota(v === 0 ? "No hay fichero db_dam." : "Fichero de " + nombre + ": versión " + v + " · DB_VERSION = 3"); });
+    if(v === 0){
+      pasos.push(function(){ enciendeSubida("esCrea"); log.met("onCreate(db)"); log.acc("CREATE TABLE db_ciudades (cityName, poblation, surface)"); mueveFicha(3); tabla(3, [], ""); });
+      pasos.push(function(){
+        placa(3, false); log.nota("Android apunta la versión 3 en el fichero.");
+        $("esWhy").innerHTML = "Marta no pasa por la escalera: <code>onCreate()</code> crea la tabla ya con sus tres columnas. Por eso <code>onCreate()</code> tiene que crear siempre la última versión." + (conBreak() ? " El <code>break</code> no le afecta: no ejecuta <code>onUpgrade()</code>." : "");
+      });
+    } else if(v === 3){
+      pasos.push(function(){
+        log.nota("Coinciden: no se llama a onUpgrade().");
+        $("esWhy").innerHTML = "Pedro ya está arriba: no hay nada que cambiar y sus datos siguen como estaban.";
+      });
+    } else {
+      pasos.push(function(){ log.met("onUpgrade(db, " + v + ", 3)"); marcaLinea("sw"); log.nota("switch(" + v + "): entra por el case " + v); });
+      var corta = false;
+      for(var paso = v; paso <= 2 && !corta; paso++){
+        (function(numero){
+          pasos.push(function(){ marcaLinea("c" + numero); });
+          pasos.push(function(){
+            marcaLinea("e" + numero); enciendeSubida("esC" + numero);
+            log.acc(SQL[numero].replace('db.execSQL("', "").replace('");', ""));
+            mueveFicha(numero + 1); tabla(numero + 1, [COLUMNAS[numero]], "");
+          });
+          if(conBreak()){
+            pasos.push(function(){ marcaLinea("b" + numero); log.nota("break: sale del switch"); });
+          } else if(numero < 2){
+            pasos.push(function(){ log.nota("sin break: sigue por el case " + (numero + 1)); });
+          }
+        })(paso);
+        if(conBreak()) corta = true;
+      }
+      var llega = conBreak() ? v + 1 : 3;
+      pasos.push(function(){
+        marcaLinea("fin");
+        log.nota("Android apunta la versión 3 en el fichero.");
+        placa(3, llega < 3);
+        if(llega < 3){
+          log.nota("Al guardar una ciudad: table db_ciudades has no column named surface");
+          $("esWhy").innerHTML = "<strong>Con <code>break</code>, Ana se queda en la versión 2</strong> y sin <code>surface</code>. Pero Android apunta igualmente un 3, así que <code>onUpgrade()</code> no se volverá a ejecutar: cada vez que guarde una ciudad, fallará.";
+        } else if(conBreak()){
+          $("esWhy").innerHTML = "A Luis el <code>break</code> no le afecta, porque su <code>case</code> es el último. Por eso este fallo se escapa en las pruebas: solo lo sufren quienes vienen de versiones más antiguas. Prueba con Ana.";
+        } else if(v === 1){
+          $("esWhy").innerHTML = "Ana entra por <code>case 1</code> y, como no hay <code>break</code>, sigue por <code>case 2</code>: sube los dos escalones en orden. <strong>Sus ciudades siguen ahí</strong>; en las columnas nuevas tienen <code>NULL</code>, «sin valor», hasta que se rellenen.";
+        } else {
+          $("esWhy").innerHTML = "Luis entra directamente por <code>case 2</code>, porque <code>poblation</code> ya la tenía. Sube un solo escalón y sus ciudades siguen ahí.";
+        }
+      });
+    }
+    pasos.push(function(){ $("esAbrir").disabled = false; });
+    cancela = enSecuencia(pasos, 850);
+  }
+  USUARIOS.forEach(function(persona, i){
+    var boton = document.createElement("button");
+    boton.type = "button"; boton.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+    boton.textContent = persona.nombre + (persona.v === 0 ? ": instalación nueva" : ": versión " + persona.v);
+    boton.addEventListener("click", function(){
+      document.querySelectorAll("#esUsuarios button").forEach(function(otro){ otro.setAttribute("aria-pressed", "false"); });
+      boton.setAttribute("aria-pressed", "true");
+      usuario = persona; inicio();
+    });
+    $("esUsuarios").appendChild(boton);
+  });
+  $("esBreak").addEventListener("change", inicio);
+  $("esAbrir").addEventListener("click", abre);
+  inicio();
 })();
 
 /* --- 3. el cursor --- */
