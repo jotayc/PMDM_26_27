@@ -182,16 +182,8 @@
     </section>
     <section class="chapter" id="s3">
       <div class="chapter-head"><span class="chapter-num">3</span><h2>AsyncTask: una tarea en cuatro métodos</h2></div>
-      <p><code>AsyncTask</code> es una clase abstracta de Android. Para usarla se crea una clase que herede de ella y se escriben sus métodos. En la rama es una clase interna de <code>MainActivity</code>, para que pueda usar sus botones y su texto:</p>
-      <div class="code"><div class="code-bar">MainActivity.java · TODO 4</div>
-<pre><code class="lang-java">private class PublishTask extends AsyncTask&lt;Void, Integer, Void&gt; {
-    // los cuatro métodos
-}</code></pre></div>
+      <p><code>AsyncTask</code> es una clase abstracta de Android. Para usarla se crea una clase que herede de ella y se escriben sus métodos. En la rama es una clase interna de <code>MainActivity</code>, <code>PublishTask</code>, para que pueda usar sus botones y su texto.</p>
       <h3 id="s3-1"><span class="sn">3.1</span>Cuatro métodos, dos hilos</h3>
-      <figure>
-<svg viewBox="0 0 720 300" role="img" aria-label="Los cuatro métodos de AsyncTask en dos carriles. onPreExecute, onProgressUpdate y onPostExecute se ejecutan en el hilo principal; doInBackground, en el secundario. Cada publishProgress del secundario provoca un onProgressUpdate en el principal."><defs><marker id="at1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="20" width="720" height="90" rx="12" fill="#E2F4EA"/><rect x="0" y="170" width="720" height="90" rx="12" fill="#E7F0FD"/><text x="14" y="60" font-size="13" fill="#0A5C33" font-weight="700">Hilo</text><text x="14" y="78" font-size="13" fill="#0A5C33" font-weight="700">principal</text><text x="14" y="210" font-size="13" fill="#174EA6" font-weight="700">Hilo</text><text x="14" y="228" font-size="13" fill="#174EA6" font-weight="700">secundario</text><rect x="104" y="45" width="140" height="40" rx="10" fill="#0E8A4B"/><text x="174" y="70" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onPreExecute()</text><rect x="320" y="45" width="170" height="40" rx="10" fill="#0E8A4B"/><text x="405" y="70" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onProgressUpdate(i)</text><rect x="574" y="45" width="136" height="40" rx="10" fill="#0E8A4B"/><text x="642" y="70" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onPostExecute()</text><rect x="210" y="195" width="340" height="40" rx="10" fill="#fff" stroke="#1A73E8" stroke-width="1.6"/><text x="380" y="220" text-anchor="middle" font-size="11.5" fill="#174EA6" style="font-family:'JetBrains Mono', Consolas, monospace">doInBackground(): sleep, publishProgress(i)…</text><line x1="190" y1="89" x2="226" y2="191" stroke="#56655D" stroke-width="2" marker-end="url(#at1)"/><line x1="405" y1="191" x2="405" y2="89" stroke="#56655D" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#at1)"/><text x="412" y="145" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">publishProgress(i)</text><line x1="550" y1="200" x2="620" y2="89" stroke="#56655D" stroke-width="2" marker-end="url(#at1)"/><text x="600" y="160" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">return</text><text x="140" y="145" font-size="11" fill="#56655D">después</text><text x="360" y="288" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Tú escribes los cuatro métodos; AsyncTask decide en qué hilo se ejecuta cada uno.</text></svg>
-<figcaption>El recorrido de una tarea. Solo <code>doInBackground()</code> va en el hilo secundario.</figcaption>
-</figure>
       <div class="table-wrap"><table>
 <thead><tr><th>Método</th><th>Hilo</th><th>Para qué</th></tr></thead>
 <tbody>
@@ -201,28 +193,19 @@
 <tr><td><code>onPostExecute()</code></td><td>principal</td><td>Recoger el resultado cuando <code>doInBackground()</code> termina: en la rama, devolver los botones a su estado.</td></tr>
 </tbody>
 </table></div>
+      <figure>
+<svg viewBox="0 0 720 300" role="img" aria-label="Los cuatro métodos de AsyncTask en dos carriles. onPreExecute, onProgressUpdate y onPostExecute se ejecutan en el hilo principal; doInBackground, en el secundario. Cada publishProgress del secundario provoca un onProgressUpdate en el principal."><defs><marker id="at1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="20" width="720" height="90" rx="12" fill="#E2F4EA"/><rect x="0" y="170" width="720" height="90" rx="12" fill="#E7F0FD"/><text x="14" y="60" font-size="13" fill="#0A5C33" font-weight="700">Hilo</text><text x="14" y="78" font-size="13" fill="#0A5C33" font-weight="700">principal</text><text x="14" y="210" font-size="13" fill="#174EA6" font-weight="700">Hilo</text><text x="14" y="228" font-size="13" fill="#174EA6" font-weight="700">secundario</text><rect x="104" y="45" width="140" height="40" rx="10" fill="#0E8A4B"/><text x="174" y="70" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onPreExecute()</text><rect x="320" y="45" width="170" height="40" rx="10" fill="#0E8A4B"/><text x="405" y="70" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onProgressUpdate(i)</text><rect x="574" y="45" width="136" height="40" rx="10" fill="#0E8A4B"/><text x="642" y="70" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onPostExecute()</text><rect x="210" y="195" width="340" height="40" rx="10" fill="#fff" stroke="#1A73E8" stroke-width="1.6"/><text x="380" y="220" text-anchor="middle" font-size="11.5" fill="#174EA6" style="font-family:'JetBrains Mono', Consolas, monospace">doInBackground(): sleep, publishProgress(i)…</text><line x1="190" y1="89" x2="226" y2="191" stroke="#56655D" stroke-width="2" marker-end="url(#at1)"/><line x1="405" y1="191" x2="405" y2="89" stroke="#56655D" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#at1)"/><text x="412" y="145" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">publishProgress(i)</text><line x1="550" y1="200" x2="620" y2="89" stroke="#56655D" stroke-width="2" marker-end="url(#at1)"/><text x="600" y="160" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">return</text><text x="140" y="145" font-size="11" fill="#56655D">después</text><text x="360" y="288" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Tú escribes los cuatro métodos; AsyncTask decide en qué hilo se ejecuta cada uno.</text></svg>
+<figcaption>El recorrido de una tarea. Solo <code>doInBackground()</code> va en el hilo secundario.</figcaption>
+</figure>
       <div class="box conocer"><span class="box-label">Como encargar un mueble</span><p>En la tienda te toman nota y te dan un resguardo (<code>onPreExecute()</code>). El mueble se hace en el taller, lejos del mostrador, que sigue atendiendo a otros clientes (<code>doInBackground()</code>). De vez en cuando el taller avisa a la tienda de cómo va (<code>publishProgress()</code>) y la tienda te llama para contártelo (<code>onProgressUpdate()</code>). Al acabar, te lo entregan en la tienda (<code>onPostExecute()</code>). Tú solo hablas con la tienda: con el hilo principal.</p></div>
-      <div class="sim" id="simTarea">
-        <div class="sim-head"><b>Sigue la tarea</b><span>los cuatro métodos y su hilo</span></div>
-        <div class="sim-body">
-          <p>Pulsa <em>Contar</em> y mira en qué carril se ejecuta cada método. Repite pulsando <em>Cancelar</em> a mitad. Al final, prueba a ejecutar otra vez la misma tarea. Cuenta hasta 10; el aspecto es aproximado.</p>
-          <div class="sim-row">
-            <div class="phone"><div class="phone-bar"></div><div class="screen" id="taScreen"><div class="appbar"><span class="ttl">PMDM</span></div><div class="canvas" style="flex-direction:column;gap:18px"><button class="droid" id="taContar" type="button">Contar</button><div class="grande" id="taTexto" style="font-size:20px">Hello World!</div><button class="droid off" id="taCancelar" type="button" aria-disabled="true">Cancelar</button></div></div></div>
-            <div class="panel">
-              <div class="carriles">
-                <div class="carril princ"><b>Hilo principal</b><span class="hace" id="taPrinc">libre</span></div>
-                <div class="carril secu" id="taSecuCarril"><b>Hilo secundario</b><span class="hace" id="taSecu">sin tarea</span></div>
-              </div>
-              <div class="btns"><button class="btn ghost" id="taOtraVez" type="button">mTask.execute() otra vez</button><button class="btn ghost" id="taReiniciar" type="button">Reiniciar</button></div>
-              <div class="why" id="taWhy">Pulsa Contar en el móvil.</div>
-              <ul class="log" id="taLog" aria-label="Registro del simulador de la tarea"></ul>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="comp" data-tipo="empareja"><div class="comp-head">Comprueba · Empareja</div><p class="q">¿En qué hilo se ejecuta cada método?</p><div class="fila"><span><code>onPostExecute()</code></span><select data-r="Hilo principal" aria-label="onPostExecute()"><option value="">Elige…</option><option value="Hilo principal">Hilo principal</option><option value="Hilo secundario">Hilo secundario</option></select></div><div class="fila"><span><code>doInBackground()</code></span><select data-r="Hilo secundario" aria-label="doInBackground()"><option value="">Elige…</option><option value="Hilo principal">Hilo principal</option><option value="Hilo secundario">Hilo secundario</option></select></div><div class="fila"><span><code>onPreExecute()</code></span><select data-r="Hilo principal" aria-label="onPreExecute()"><option value="">Elige…</option><option value="Hilo principal">Hilo principal</option><option value="Hilo secundario">Hilo secundario</option></select></div><div class="fila"><span><code>onProgressUpdate()</code></span><select data-r="Hilo principal" aria-label="onProgressUpdate()"><option value="">Elige…</option><option value="Hilo principal">Hilo principal</option><option value="Hilo secundario">Hilo secundario</option></select></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Todo lo que toca la pantalla va en el principal: preparar, enseñar el progreso y recoger el resultado. Solo el trabajo lento va en el secundario.</div></div>
       <h3 id="s3-2"><span class="sn">3.2</span>Los tres tipos</h3>
-      <p>Entre los <code>&lt; &gt;</code> de <code>AsyncTask</code> van tres tipos, siempre en el mismo orden. Cada uno decide los parámetros o el valor de dos métodos:</p>
+      <p>Al declarar la clase, entre los <code>&lt; &gt;</code> de <code>AsyncTask</code> van tres tipos, siempre en el mismo orden:</p>
+      <div class="code"><div class="code-bar">MainActivity.java · TODO 4</div>
+<pre><code class="lang-java">private class PublishTask extends AsyncTask&lt;Void, Integer, Void&gt; {
+    // los cuatro métodos
+}</code></pre></div>
+      <p>Cada tipo decide los parámetros o el valor de dos métodos:</p>
       <figure>
 <svg viewBox="0 0 720 240" role="img" aria-label="Los tres tipos de AsyncTask Void, Integer, Void y dónde aparece cada uno: el primero en execute y doInBackground, el segundo en publishProgress y onProgressUpdate, el tercero en el return de doInBackground y en onPostExecute."><text x="205" y="56" text-anchor="end" font-size="15" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">AsyncTask&lt;</text><rect x="212" y="30" width="96" height="40" rx="10" fill="#6D3FD8"/><text x="260" y="56" text-anchor="middle" font-size="14" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">Void</text><text x="318" y="56" text-anchor="middle" font-size="15" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">,</text><rect x="328" y="30" width="110" height="40" rx="10" fill="#0E8A4B"/><text x="383" y="56" text-anchor="middle" font-size="14" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">Integer</text><text x="448" y="56" text-anchor="middle" font-size="15" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">,</text><rect x="458" y="30" width="96" height="40" rx="10" fill="#1A73E8"/><text x="506" y="56" text-anchor="middle" font-size="14" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">Void</text><text x="562" y="56" font-size="15" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">&gt;</text><line x1="260" y1="74" x2="125" y2="108" stroke="#6D3FD8" stroke-width="1.8"/><line x1="383" y1="74" x2="360" y2="108" stroke="#0E8A4B" stroke-width="1.8"/><line x1="506" y1="74" x2="600" y2="108" stroke="#1A73E8" stroke-width="1.8"/><rect x="5" y="110" width="236" height="110" rx="12" fill="#EFE9FC"/><text x="123" y="134" text-anchor="middle" font-size="12.5" fill="#6D3FD8" font-weight="700">Params: lo que recibe</text><text x="123" y="164" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">execute()</text><text x="123" y="190" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">doInBackground(Void... voids)</text><rect x="246" y="110" width="236" height="110" rx="12" fill="#E2F4EA"/><text x="364" y="134" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Progress: lo que informa</text><text x="364" y="164" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">publishProgress(i)</text><text x="364" y="190" text-anchor="middle" font-size="10.5" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">onProgressUpdate(Integer... values)</text><rect x="487" y="110" width="228" height="110" rx="12" fill="#E7F0FD"/><text x="601" y="134" text-anchor="middle" font-size="12.5" fill="#174EA6" font-weight="700">Result: lo que devuelve</text><text x="601" y="164" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">return null;</text><text x="601" y="190" text-anchor="middle" font-size="11" fill="#17211C" style="font-family:'JetBrains Mono', Consolas, monospace">onPostExecute(Void unused)</text></svg>
 <figcaption><code>AsyncTask&lt;Params, Progress, Result&gt;</code> en la rama. <code>Void</code> con mayúscula indica que ese tipo no se usa.</figcaption>
@@ -253,8 +236,27 @@ mTask.execute();</code></pre></div>
       <div class="code"><div class="code-bar">MainActivity.java · TODO 3</div>
 <pre><code class="lang-java">mTask.cancel(true);</code></pre></div>
       <p><code>cancel(true)</code> hace dos cosas: marca la tarea como cancelada, de forma que <code>isCancelled()</code> pasa a devolver <code>true</code>, e interrumpe el hilo secundario, que si está dentro de <code>sleep()</code> se despierta con una <code>InterruptedException</code>. El bucle de la rama comprueba <code>!isCancelled()</code> en cada vuelta, así que sale, y <code>doInBackground()</code> termina.</p>
-      <p>Cuando una tarea cancelada termina, AsyncTask <strong>no llama a <code>onPostExecute()</code></strong>: llama a <code>onCancelled()</code>. En la rama, ese método muestra el aviso «Proceso cancelado» y devuelve los botones a su estado.</p>
-      <div class="comp" data-tipo="vf"><div class="comp-head">Comprueba · Verdadero o falso</div><div style="margin-top:10px"><div class="fila" data-r="f"><span>Se puede llamar dos veces a <code>execute()</code> sobre la misma instancia si la primera ya ha terminado.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Después de <code>cancel(true)</code>, se llama a <code>onCancelled()</code> y no a <code>onPostExecute()</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>Dentro de <code>doInBackground()</code> se puede llamar a <code>setText()</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Cada <code>publishProgress()</code> hace que se ejecute <code>onProgressUpdate()</code> en el hilo principal.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Una instancia solo se ejecuta una vez, haya terminado o no. <code>doInBackground()</code> va en el hilo secundario, así que no puede tocar vistas: para eso está <code>publishProgress()</code>.</div></div>
+      <p><code>cancel()</code> no espera a que la tarea acabe ni la detiene a la fuerza: la marca y la interrumpe, y es <code>doInBackground()</code> quien tiene que comprobar <code>isCancelled()</code> y salir. Cuando una tarea cancelada termina, AsyncTask <strong>no llama a <code>onPostExecute()</code></strong>: llama a <code>onCancelled()</code>. En la rama, ese método muestra el aviso «Proceso cancelado» y devuelve los botones a su estado.</p>
+      <p>Con todo esto, sigue una tarea completa en el simulador.</p>
+      <div class="sim" id="simTarea">
+        <div class="sim-head"><b>Sigue la tarea</b><span>los cuatro métodos y su hilo</span></div>
+        <div class="sim-body">
+          <p>Pulsa <em>Contar</em> y mira en qué carril se ejecuta cada método. Repite pulsando <em>Cancelar</em> a mitad. Al final, prueba a ejecutar otra vez la misma instancia. Cuenta hasta 10; el aspecto es aproximado.</p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="taScreen"><div class="appbar"><span class="ttl">PMDM</span></div><div class="canvas" style="flex-direction:column;gap:18px"><button class="droid" id="taContar" type="button">Contar</button><div class="grande" id="taTexto" style="font-size:20px">Hello World!</div><button class="droid off" id="taCancelar" type="button" aria-disabled="true">Cancelar</button></div></div></div>
+            <div class="panel">
+              <div class="carriles">
+                <div class="carril princ"><b>Hilo principal</b><span class="hace" id="taPrinc">libre</span></div>
+                <div class="carril secu" id="taSecuCarril"><b>Hilo secundario</b><span class="hace" id="taSecu">sin tarea</span></div>
+              </div>
+              <div class="btns"><button class="btn ghost" id="taOtraVez" type="button">mTask.execute() otra vez</button><button class="btn ghost" id="taReiniciar" type="button">Reiniciar</button></div>
+              <div class="why" id="taWhy">Pulsa Contar en el móvil.</div>
+              <ul class="log" id="taLog" aria-label="Registro del simulador de la tarea"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comp" data-tipo="vf"><div class="comp-head">Comprueba · Verdadero o falso</div><div style="margin-top:10px"><div class="fila" data-r="f"><span>Se puede llamar dos veces a <code>execute()</code> sobre la misma instancia si la primera ya ha terminado.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Después de <code>cancel(true)</code>, se llama a <code>onCancelled()</code> y no a <code>onPostExecute()</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>Dentro de <code>doInBackground()</code> se puede llamar a <code>setText()</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Mientras la tarea no está cancelada, cada <code>publishProgress()</code> hace que se ejecute <code>onProgressUpdate()</code> en el hilo principal.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Una instancia solo se ejecuta una vez, haya terminado o no. <code>doInBackground()</code> va en el hilo secundario, así que no puede tocar vistas: para eso está <code>publishProgress()</code>.</div></div>
 
     </section>
     <section class="chapter" id="s5">
@@ -262,7 +264,7 @@ mTask.execute();</code></pre></div>
       <p>La documentación de Android marca <code>AsyncTask</code> como obsoleta desde la API 30 y da los motivos: provoca fugas de memoria, llamadas que se pierden y fallos al cambiar la configuración, como al girar el móvil. Con la rama se ve bien.</p>
       <h3 id="s5-1"><span class="sn">5.1</span>Qué pasa al girar el móvil</h3>
       <p>Al girar, Android destruye la actividad y crea otra nueva. La tarea no se entera: es un objeto de la actividad vieja y sigue llamando a <code>onProgressUpdate()</code> sobre el texto de la pantalla destruida. En el emulador, la pantalla nueva vuelve a «Hello World!» y en el Logcat siguen saliendo las líneas <code>OnPublish</code>.</p>
-      <p>Hay más: AsyncTask ejecuta las tareas <strong>de una en una</strong>. Si en la pantalla nueva pulsas Contar, los botones cambian (<code>onPreExecute()</code> se ejecuta enseguida), pero el texto no se mueve: la tarea nueva espera a que termine la vieja, hasta cien segundos.</p>
+      <p>Hay más: lanzadas con <code>execute()</code>, las tareas se ejecutan <strong>de una en una</strong> (existe otro método, <code>executeOnExecutor()</code>, para ejecutarlas a la vez). Si en la pantalla nueva pulsas Contar, los botones cambian (<code>onPreExecute()</code> se ejecuta enseguida), pero el texto no se mueve: la tarea nueva espera a que termine la vieja, algo más de cien segundos.</p>
       <div class="sim" id="simGiroAT">
         <div class="sim-head"><b>Gira con una AsyncTask</b><span>lo que pasa con el código de la rama</span></div>
         <div class="sim-body">
@@ -279,9 +281,20 @@ mTask.execute();</code></pre></div>
         </div>
       </div>
       <div class="box consejo"><span class="box-label">Por eso se llama fuga</span><p>Mientras la tarea vieja siga viva, guarda una referencia a su actividad, con todas sus vistas, y el recolector de basura no puede liberarla, aunque nadie la vea. Una clase interna como <code>PublishTask</code> siempre guarda una referencia a la actividad que la contiene.</p></div>
-      <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">Con el código de la rama, pulsas Contar, giras el móvil y pulsas Contar en la pantalla nueva. ¿Qué ves en los segundos siguientes?</p><div class="opciones"><button class="opt" type="button" data-ok>Cambian los botones; el texto no avanza.</button><button class="opt" type="button">La cuenta sigue por donde iba la anterior.</button><button class="opt" type="button">La cuenta empieza desde 0 % y avanza.</button><button class="opt" type="button">La aplicación se cierra con una excepción.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>La tarea nueva ejecuta <code>onPreExecute()</code> al momento, pero espera a que acabe la vieja, que sigue contando para la pantalla destruida. No hay excepción: los métodos de las dos tareas se ejecutan en el hilo principal.</div></div>
+      <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">Con el código de la rama, pulsas Contar, giras el móvil y pulsas Contar en la pantalla nueva. ¿Qué ves en los segundos siguientes?</p><div class="opciones"><button class="opt" type="button" data-ok>Cambian los botones; el texto no avanza.</button><button class="opt" type="button">La cuenta sigue por donde iba la anterior.</button><button class="opt" type="button">La cuenta empieza desde 0 % y avanza.</button><button class="opt" type="button">La aplicación se cierra con una excepción.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>La tarea nueva ejecuta <code>onPreExecute()</code> al momento, pero espera a que acabe la vieja, que sigue contando para la pantalla destruida. No hay excepción: las actualizaciones de las dos tareas (<code>onProgressUpdate()</code>, <code>onPostExecute()</code>) se ejecutan en el hilo principal.</div></div>
       <h3 id="s5-2"><span class="sn">5.2</span>Hoy en día: ExecutorService y Handler</h3>
-      <p>Para Java, la documentación de Android recomienda las clases estándar de <code>java.util.concurrent</code>: un <strong><code>ExecutorService</code></strong> que ejecuta el trabajo en un hilo secundario y un <strong><code>Handler</code></strong> del hilo principal al que se le mandan los cambios de la pantalla. Este es el mismo contador escrito así, compilado y probado en el emulador:</p>
+      <p>Para Java, la documentación de Android recomienda las clases estándar de <code>java.util.concurrent</code>: un <strong><code>ExecutorService</code></strong> que ejecuta el trabajo en un hilo secundario y un <strong><code>Handler</code></strong> unido al hilo principal, al que se le mandan los cambios de la pantalla. Estas son las piezas:</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>Pieza</th><th>Qué es</th><th>Equivale en AsyncTask a</th></tr></thead>
+<tbody>
+<tr><td><code>Executors.newSingleThreadExecutor()</code></td><td>Crea un ejecutor con un hilo secundario que se reutiliza para todas las tareas.</td><td>el hilo de las tareas</td></tr>
+<tr><td><code>ejecutor.execute(new Runnable() { … })</code></td><td>Manda el trabajo al hilo secundario.</td><td><code>execute()</code> y <code>doInBackground()</code></td></tr>
+<tr><td><code>new Handler(Looper.getMainLooper())</code></td><td>Un manejador para enviar encargos al hilo principal. <code>Looper.getMainLooper()</code> devuelve el bucle que atiende la cola del hilo principal.</td><td>—</td></tr>
+<tr><td><code>manejador.post(new Runnable() { … })</code></td><td>Deja un encargo en la cola del hilo principal, que lo ejecuta en cuanto puede.</td><td><code>publishProgress()</code> y <code>onProgressUpdate()</code></td></tr>
+<tr><td><code>ejecutor.shutdownNow()</code></td><td>Cierra el ejecutor: descarta el trabajo pendiente e intenta interrumpir el que está en marcha. El contador para porque atiende esa interrupción en su <code>catch</code>.</td><td><code>cancel(true)</code>, para todo el ejecutor</td></tr>
+</tbody>
+</table></div>
+      <p>Y este es el mismo contador escrito así, compilado y probado en el emulador:</p>
       <div class="code"><div class="code-bar">MainActivity.java · cómo se haría hoy (no está en la rama)</div>
 <pre><code class="lang-java">private final ExecutorService ejecutor = Executors.newSingleThreadExecutor();
 private final Handler manejador = new Handler(Looper.getMainLooper());
@@ -313,17 +326,7 @@ protected void onDestroy() {
     super.onDestroy();
     ejecutor.shutdownNow();
 }</code></pre></div>
-      <div class="table-wrap"><table>
-<thead><tr><th>Pieza</th><th>Qué es</th><th>Equivale en AsyncTask a</th></tr></thead>
-<tbody>
-<tr><td><code>Executors.newSingleThreadExecutor()</code></td><td>Crea un ejecutor con un hilo secundario que se reutiliza para todas las tareas.</td><td>el hilo de las tareas</td></tr>
-<tr><td><code>ejecutor.execute(new Runnable() { … })</code></td><td>Manda el trabajo al hilo secundario.</td><td><code>execute()</code> y <code>doInBackground()</code></td></tr>
-<tr><td><code>new Handler(Looper.getMainLooper())</code></td><td>Un manejador unido a la cola del hilo principal. <code>Looper.getMainLooper()</code> es esa cola.</td><td>—</td></tr>
-<tr><td><code>manejador.post(new Runnable() { … })</code></td><td>Deja un encargo en la cola del hilo principal, que lo ejecuta en cuanto puede.</td><td><code>publishProgress()</code> y <code>onProgressUpdate()</code></td></tr>
-<tr><td><code>ejecutor.shutdownNow()</code></td><td>Para el ejecutor e interrumpe lo que esté haciendo.</td><td><code>cancel(true)</code></td></tr>
-</tbody>
-</table></div>
-      <p>Lo que cambia es que ahora el código decide cuándo se para el trabajo: en <code>onDestroy()</code>, al destruirse la actividad, se para el ejecutor y no queda nada contando para una pantalla que no se ve. En Kotlin, en lugar de todo esto se usan <em>corrutinas</em>.</p>
+      <p>Lo que cambia es que ahora el código decide cuándo se para el trabajo: en <code>onDestroy()</code>, al destruirse la actividad, se cierra el ejecutor y no queda nada contando para una pantalla que no se ve. Eso no conserva la cuenta al girar: la pantalla nueva empieza de cero. En Kotlin, en lugar de todo esto se usan <em>corrutinas</em>.</p>
       <div class="box conocer"><span class="box-label">Hoy en día</span><p>Para código nuevo: <code>ExecutorService</code> y <code>Handler</code> en Java, corrutinas en Kotlin. AsyncTask, solo para entender y mantener código que ya existe.</p></div>
       <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">En el código de hoy, ¿qué hace <code>manejador.post(new Runnable() { … })</code>?</p><div class="opciones"><button class="opt" type="button">Ejecuta el <code>Runnable</code> en un hilo secundario nuevo.</button><button class="opt" type="button">Para el hilo secundario hasta que se pinta la pantalla.</button><button class="opt" type="button" data-ok>Deja el <code>Runnable</code> en la cola del hilo principal.</button><button class="opt" type="button">Ejecuta el <code>Runnable</code> en el hilo que lo llama.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>El <code>Handler</code> está unido a la cola del hilo principal (<code>Looper.getMainLooper()</code>). <code>post()</code> deja el encargo ahí y el hilo secundario sigue con lo suyo sin esperar.</div></div>
 
@@ -389,7 +392,7 @@ protected void onProgressUpdate(Integer... values) {
         <li>Haz que devuelva un texto: cambia <code>Result</code> a <code>String</code>, devuelve «Terminado» al final de <code>doInBackground()</code> y muéstralo en <code>onPostExecute()</code>.</li>
         <li>Añade una barra de progreso horizontal (<code>ProgressBar</code> con <code>style="?android:attr/progressBarStyleHorizontal"</code> y <code>android:max="100"</code>) y actualízala en <code>onProgressUpdate()</code>.</li>
         <li>Cancela la tarea en <code>onDestroy()</code> y comprueba al girar que ya no salen líneas <code>OnPublish</code> de la tarea vieja.</li>
-        <li>Reescribe el contador con <code>ExecutorService</code> y <code>Handler</code>, como en el apartado 5.2, y añade el botón Cancelar con <code>shutdownNow()</code>. Ojo: un ejecutor parado no admite más trabajo, así que tendrás que crear otro para volver a contar.</li>
+        <li>Reescribe el contador con <code>ExecutorService</code> y <code>Handler</code>, como en el apartado 5.2, y añade el botón Cancelar con <code>shutdownNow()</code>. Ojo: un ejecutor cerrado no admite más trabajo, así que para volver a contar tendrás que crear otro, y para eso el atributo no puede ser <code>final</code>.</li>
       </ol>
     </section>
 
@@ -489,27 +492,27 @@ function tostada(pantalla, texto){ var t = document.createElement("div"); t.clas
 (function(){
   var pantalla = $("taScreen"), contar = $("taContar"), cancelar = $("taCancelar"), texto = $("taTexto");
   var princ = $("taPrinc"), secu = $("taSecu"), carrilSecu = $("taSecuCarril"), log = $("taLog"), why = $("taWhy");
-  var estado = "ninguna", i = 0, temporizador = null, cerrada = false, FIN = 10;
+  var estado = "ninguna", i = 0, temporizador = null, cerrada = false, FIN = 10, ronda = 0;
   function hace(el, t, dormido){ el.textContent = t; if(el === secu) carrilSecu.classList.toggle("dormido", !!dormido); }
-  function reiniciar(){ clearTimeout(temporizador); estado = "ninguna"; i = 0; cerrada = false; encender(pantalla); log.innerHTML = ""; texto.textContent = "Hello World!"; boton(contar, true); boton(cancelar, false); hace(princ, "libre"); hace(secu, "sin tarea"); why.textContent = "Pulsa Contar en el móvil."; }
-  function enPrincipal(etiqueta, tarea){ hace(princ, etiqueta); anota(log, "Hilo principal · " + etiqueta, "met"); tarea(); setTimeout(function(){ if(!cerrada) hace(princ, "libre"); }, 400); }
+  function reiniciar(){ ronda++; clearTimeout(temporizador); estado = "ninguna"; i = 0; cerrada = false; encender(pantalla); log.innerHTML = ""; texto.textContent = "Hello World!"; boton(contar, true); boton(cancelar, false); hace(princ, "libre"); hace(secu, "sin tarea"); why.textContent = "Pulsa Contar en el móvil."; }
+  function enPrincipal(etiqueta, tarea){ var mia = ronda; hace(princ, etiqueta); anota(log, "Hilo principal · " + etiqueta, "met"); tarea(); setTimeout(function(){ if(!cerrada && mia === ronda) hace(princ, "libre"); }, 400); }
   function vuelta(){
     if(estado !== "corriendo") return;
     hace(secu, "doInBackground(): sleep(1000)", true);
     temporizador = setTimeout(function(){
       if(estado !== "corriendo") return;
-      var valor = i;
+      var valor = i, mia = ronda;
       hace(secu, "doInBackground(): publishProgress(" + valor + ")");
       anota(log, "Hilo secundario · publishProgress(" + valor + ")", "sec");
-      setTimeout(function(){ if(estado === "corriendo" || estado === "cancelada") enPrincipal("onProgressUpdate(" + valor + ")", function(){ texto.textContent = valor + "%"; }); }, 250);
+      setTimeout(function(){ if(mia === ronda && estado !== "ninguna") enPrincipal("onProgressUpdate(" + valor + ")", function(){ texto.textContent = valor + "%"; }); }, 250);
       i++;
       if(i > FIN){
         estado = "terminada"; hace(secu, "doInBackground(): return null", true);
         anota(log, "Hilo secundario · doInBackground() devuelve null", "sec");
-        setTimeout(function(){ enPrincipal("onPostExecute(null)", function(){ boton(contar, true); boton(cancelar, false); }); hace(secu, "sin tarea"); why.textContent = "Ha terminado: onPostExecute() ha dejado los botones como al principio. La tarea ya está gastada: si la ejecutas otra vez, la aplicación se cierra."; }, 600);
+        var fin = ronda; setTimeout(function(){ if(fin !== ronda) return; enPrincipal("onPostExecute(null)", function(){ boton(contar, true); boton(cancelar, false); }); hace(secu, "sin tarea"); why.textContent = "Ha terminado: onPostExecute() ha dejado los botones como al principio. La tarea ya está gastada: si la ejecutas otra vez, la aplicación se cierra."; }, 600);
         return;
       }
-      setTimeout(vuelta, 150);
+      setTimeout(function(){ if(mia === ronda) vuelta(); }, 150);
     }, 1000);
   }
   contar.addEventListener("click", function(){
@@ -518,7 +521,7 @@ function tostada(pantalla, texto){ var t = document.createElement("div"); t.clas
     anota(log, "onClick() · mTask = new PublishTask(); mTask.execute();", "acc");
     estado = "corriendo";
     enPrincipal("onPreExecute()", function(){ boton(contar, false); boton(cancelar, true); });
-    setTimeout(vuelta, 200);
+    var mia = ronda; setTimeout(function(){ if(mia === ronda) vuelta(); }, 200);
     why.textContent = "onPreExecute() prepara los botones en el hilo principal. Después, doInBackground() empieza en el secundario.";
   });
   cancelar.addEventListener("click", function(){
@@ -527,7 +530,7 @@ function tostada(pantalla, texto){ var t = document.createElement("div"); t.clas
     anota(log, "onClick() · mTask.cancel(true);", "acc");
     anota(log, "Hilo secundario · sleep() interrumpido; isCancelled() es true: sale del bucle y devuelve null", "sec");
     hace(secu, "doInBackground(): return null", true);
-    setTimeout(function(){ enPrincipal("onCancelled(null)", function(){ tostada(pantalla, "Proceso cancelado"); boton(contar, true); boton(cancelar, false); }); hace(secu, "sin tarea"); anota(log, "onPostExecute() no se llama", "nota"); why.textContent = "Al cancelar, AsyncTask llama a onCancelled() en lugar de onPostExecute(). El texto se queda en el último valor."; }, 500);
+    var cancelada = ronda; setTimeout(function(){ if(cancelada !== ronda) return; enPrincipal("onCancelled(null)", function(){ tostada(pantalla, "Proceso cancelado"); boton(contar, true); boton(cancelar, false); }); hace(secu, "sin tarea"); anota(log, "onPostExecute() no se llama", "nota"); why.textContent = "Al cancelar, AsyncTask llama a onCancelled() en lugar de onPostExecute(). El texto se queda en el último valor."; }, 500);
   });
   $("taOtraVez").addEventListener("click", function(){
     if(cerrada) return;
