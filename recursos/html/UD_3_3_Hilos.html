@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UD 3.3 · Hilos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..800&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pmdm.css">
+<style>
+  /* ---------- Piezas propias de esta página ---------- */
+  :root{ --sim: #6D3FD8; --sim-soft: #EFE9FC; }
+  .legend{ display: grid; gap: 6px; margin: 18px 0 0; padding: 12px 16px; background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; font-size: 14px; }
+  .legend > div{ display: grid; grid-template-columns: 14px 1fr; gap: 10px; align-items: start; }
+  .legend > div i{ margin-top: 4px; width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .legend code{ white-space: nowrap; }
+  .sim{ margin: 24px 0 28px; border-radius: var(--radius); background: var(--sim-soft); border: 1px solid #D9CCF7; overflow: hidden; }
+  .sim-head{ background: var(--sim); color: #fff; padding: 12px 18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .sim-head b{ font-family: var(--font-head); font-size: 17px; }
+  .sim-head span{ font-size: 13.5px; opacity: .9; }
+  .sim-body{ padding: 16px 18px 18px; }
+  .sim-body > p{ margin-top: 0; }
+  .sim-row{ display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+  .btns{ display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .btn{ font: 600 14px var(--font-body); border: 0; border-radius: 999px; padding: 9px 16px; background: var(--sim); color: #fff; cursor: pointer; }
+  .btn.ghost{ background: #fff; color: var(--sim); box-shadow: inset 0 0 0 1.5px var(--sim); }
+  .btn:disabled{ opacity: .4; cursor: default; }
+  .phone{ width: 248px; flex: none; background: #1D1B20; border-radius: 28px; padding: 12px 10px 16px; }
+  .phone-bar{ height: 18px; display: flex; justify-content: center; }
+  .phone-bar::before{ content: ""; width: 54px; height: 6px; border-radius: 3px; background: #3A3740; }
+  .screen{ position: relative; height: 330px; background: #fff; border-radius: 6px; overflow: hidden; transition: background .2s; touch-action: manipulation; }
+  .appbar{ height: 40px; background: #6200EE; color: #fff; font: 600 13px var(--font-body); display: flex; align-items: center; gap: 4px; padding: 0 4px 0 10px; }
+  .appbar .ttl{ flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .appbar.modo{ background: #37343D; }
+  .appbar button{ border: 0; background: none; color: #fff; font: 600 12px var(--font-body); padding: 6px 5px; cursor: pointer; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
+  .appbar button:hover{ background: rgba(255,255,255,.16); }
+  .swatch{ width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(255,255,255,.75); display: inline-block; flex: none; }
+  .canvas{ position: absolute; inset: 40px 0 0; display: flex; gap: 8px; align-items: center; justify-content: center; flex-wrap: wrap; align-content: center; padding: 10px; }
+  .droid{ font: 600 11.5px var(--font-body); text-transform: uppercase; letter-spacing: .03em; border: 0; border-radius: 6px; background: #6200EE; color: #fff; padding: 9px 9px; cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .toast{ position: absolute; left: 12px; right: 12px; bottom: 26px; background: #3C3940; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 12px; border-radius: 16px; text-align: center; z-index: 5; pointer-events: none; }
+  .snack{ position: absolute; left: 8px; right: 8px; bottom: 8px; background: #323036; color: #fff; font-size: 12px; line-height: 1.35; padding: 8px 10px; border-radius: 5px; display: flex; gap: 8px; align-items: center; z-index: 4; }
+  .snack span{ flex: 1; }
+  .snack button{ border: 0; background: none; color: #03DAC5; font: 700 11.5px var(--font-body); text-transform: uppercase; cursor: pointer; padding: 4px; }
+  .scrimx{ position: absolute; inset: 0; background: rgba(0,0,0,.42); z-index: 6; display: grid; place-items: center; padding: 14px; }
+  .dialog{ background: #fff; border-radius: 6px; padding: 14px 14px 8px; width: 100%; box-shadow: 0 6px 22px rgba(0,0,0,.35); }
+  .dialog b{ display: block; font: 600 14px var(--font-body); margin-bottom: 8px; }
+  .dialog p{ margin: 0 0 10px; font-size: 12.5px; line-height: 1.4; color: var(--muted); }
+  .dialog .acts{ display: flex; justify-content: flex-end; gap: 6px; }
+  .dialog .acts button{ border: 0; background: none; color: #6200EE; font: 700 12px var(--font-body); text-transform: uppercase; padding: 6px 8px; cursor: pointer; }
+  .pop{ position: absolute; background: #fff; border-radius: 4px; box-shadow: 0 4px 18px rgba(0,0,0,.35); z-index: 7; min-width: 118px; padding: 4px 0; }
+  .pop button{ display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: none; font: 12.5px var(--font-body); color: var(--ink); text-align: left; padding: 8px 12px; cursor: pointer; }
+  .pop button:hover{ background: var(--bg); }
+  .pop .swatch{ border-color: rgba(0,0,0,.25); }
+  .pop .head{ font: 600 11.5px var(--font-body); color: var(--muted); padding: 6px 12px 4px; }
+  .panel{ flex: 1; min-width: 260px; }
+  .panel > *:first-child{ margin-top: 0; }
+  .log{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; height: 182px; overflow-y: auto; font: 12px/1.55 var(--font-mono); margin: 10px 0 0; list-style: none; }
+  .log li{ margin: 0; padding: 1px 0; overflow-wrap: anywhere; }
+  .log li.nota{ color: #9DA0A8; font-style: italic; }
+  .log li.met{ color: #6AAB73; }
+  .log li.acc{ color: #F4A35C; }
+  .why{ background: #fff; border-radius: 12px; padding: 10px 14px; margin-top: 10px; font-size: 14.5px; min-height: 48px; }
+  .estado{ display: inline-block; font: 600 12px var(--font-mono); background: #fff; border-radius: 8px; padding: 5px 9px; margin: 2px 0; }
+  .opts{ display: grid; gap: 6px; margin: 8px 0; }
+  .opts > div{ display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #fff; border-radius: 10px; padding: 5px 10px; font-size: 14px; }
+  .opts select{ font: 12px var(--font-mono); border: 1px solid #D9CCF7; border-radius: 6px; padding: 3px; background: #fff; color: var(--ink); }
+  @media (max-width: 700px){
+    main figure{ overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    main figure svg{ min-width: 660px; }
+    main figure::before{ content: "Desliza el diagrama hacia los lados para verlo entero"; display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 8px; position: sticky; left: 0; }
+  }
+  @media (max-width: 600px){ .phone{ margin: 0 auto; } }
+
+  /* ---------- Comprobaciones ---------- */
+  .comp{ margin: 24px 0 28px; border-radius: var(--radius); background: #fff; border: 1.5px solid #D9CCF7; padding: 0 0 14px; overflow: hidden; }
+  .comp-head{ background: var(--sim-soft); color: var(--sim); font: 700 13px var(--font-body); letter-spacing: .04em; text-transform: uppercase; padding: 9px 18px; }
+  .comp > *:not(.comp-head){ margin-left: 18px; margin-right: 18px; }
+  .comp .q{ font-weight: 600; margin: 12px 18px 10px; }
+  .comp .opciones{ display: grid; gap: 8px; }
+  .comp .opt{ font: 14.5px var(--font-body); text-align: left; border: 1.5px solid var(--rule); background: #fff; color: var(--ink); border-radius: 12px; padding: 9px 12px; cursor: pointer; }
+  .comp .opt:hover{ border-color: var(--sim); }
+  .comp .opt.sel{ border-color: var(--sim); background: var(--sim-soft); }
+  .comp .fila{ display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 7px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; }
+  .comp .fila:last-of-type{ border-bottom: 0; }
+  .comp .vf{ display: inline-flex; gap: 6px; flex: none; }
+  .comp .vf button{ font: 600 13px var(--font-body); width: 38px; border: 1.5px solid var(--rule); background: #fff; border-radius: 10px; padding: 5px 0; cursor: pointer; color: var(--ink); }
+  .comp .vf button.sel{ border-color: var(--sim); background: var(--sim-soft); }
+  .comp select{ font: 13px var(--font-body); border: 1.5px solid var(--rule); border-radius: 10px; padding: 5px 6px; background: #fff; color: var(--ink); max-width: 100%; }
+  .comp .bien{ border-color: var(--green) !important; background: var(--green-soft) !important; }
+  .comp .mal{ border-color: #C5221F !important; background: #FCE8E6 !important; }
+  .comp-bar{ display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+  .comp-res{ font-weight: 600; font-size: 14px; }
+  .comp-res.ok{ color: var(--green-deep); }
+  .comp-res.ko{ color: #C5221F; }
+  .comp-exp{ margin-top: 10px; font-size: 14.5px; color: var(--muted); border-left: 3px solid #D9CCF7; padding-left: 12px; }
+  /* ---------- Piezas de los simuladores de la UD3 ---------- */
+  .checks label{ display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 0 0 8px; cursor: pointer; }
+  .checks input{ margin-top: 3px; accent-color: var(--sim); }
+  .sel{ display: inline-flex; flex-wrap: wrap; gap: 6px; }
+  .sel button{ font: 600 13px var(--font-body); border: 1.5px solid var(--sim); background: #fff; color: var(--sim); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+  .sel button[aria-pressed="true"]{ background: var(--sim); color: #fff; }
+  .campo{ display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  .campo input, .campo select{ font: 14px var(--font-body); border: 1.5px solid #D9CCF7; border-radius: 10px; padding: 6px 9px; background: #fff; color: var(--ink); min-width: 0; }
+  .campos{ display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin: 8px 0; }
+  .fichero{ background: var(--code-bg); color: var(--code-ink); border-radius: 12px; padding: 10px 12px; font: 12.5px/1.55 var(--font-mono); white-space: pre-wrap; margin: 10px 0 0; min-height: 70px; overflow-wrap: anywhere; }
+  .fichero .tag{ color: var(--tk-tag); } .fichero .str{ color: var(--tk-str); }
+  .tabla-sim{ width: 100%; border-collapse: collapse; font-size: 13.5px; background: #fff; border-radius: 10px; overflow: hidden; }
+  .tabla-sim th{ background: var(--green-deep); color: #fff; font: 600 12px var(--font-mono); text-align: left; padding: 6px 9px; }
+  .tabla-sim td{ border-top: 1px solid var(--rule); padding: 6px 9px; font-family: var(--font-mono); font-size: 12.5px; }
+  .tabla-sim tr.cursor td{ background: var(--sim-soft); box-shadow: inset 0 0 0 0 var(--sim); }
+  .tabla-sim tr.cursor td:first-child{ box-shadow: inset 4px 0 0 var(--sim); }
+  .tabla-sim tr.antes td, .tabla-sim tr.despues td{ color: var(--muted); font-style: italic; font-family: var(--font-body); }
+  .tabla-sim tr.antes.cursor td, .tabla-sim tr.despues.cursor td{ color: var(--sim); }
+  .settings-row{ display: block; width: 100%; text-align: left; border: 0; background: none; padding: 9px 14px; font: 14px var(--font-body); color: var(--ink); cursor: pointer; border-bottom: 1px solid #EEE; }
+  .settings-row small{ display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .settings-cat{ font: 600 11.5px var(--font-body); color: #6200EE; padding: 12px 14px 4px; }
+
+  /* ---------- Piezas de las ramas de hilos ---------- */
+  .code.mal{ box-shadow: inset 0 0 0 2px #C5221F; }
+  .code.mal .code-bar{ background: #C5221F; color: #fff; }
+  .code.mal .code-bar::before{ background: #fff; }
+  .log li.err{ color: #FF8A80; font-weight: 600; }
+  .log li.sec{ color: #8AB4F8; }
+  .droid:disabled{ background: #CFC6DD; color: #fff; cursor: default; }
+  .grande{ font: 600 28px var(--font-body); color: #1D1B20; text-align: center; min-height: 36px; }
+  .carriles{ display: grid; gap: 8px; margin: 10px 0 0; }
+  .carril{ background: #fff; border-radius: 12px; padding: 8px 12px; display: grid; grid-template-columns: 128px 1fr; gap: 4px 10px; align-items: center; font-size: 13.5px; }
+  .carril b{ font: 700 12.5px var(--font-body); }
+  .carril.princ b{ color: var(--green-deep); }
+  .carril.secu b{ color: #1A73E8; }
+  .carril .hace{ font: 12.5px var(--font-mono); overflow-wrap: anywhere; }
+  .carril.dormido .hace{ color: var(--muted); font-style: italic; }
+  .cola{ display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; align-items: center; }
+  .cola:empty::before{ content: "vacía"; color: var(--muted); font-size: 12.5px; font-style: italic; }
+  .ficha{ font: 600 11.5px var(--font-mono); background: var(--green-soft); color: var(--green-deep); border-radius: 999px; padding: 4px 9px; }
+  .ficha.toque{ background: #FDF1DD; color: #8A5300; }
+  .reloj{ font: 600 12.5px var(--font-mono); background: #fff; border-radius: 8px; padding: 5px 9px; display: inline-block; margin: 2px 6px 2px 0; }
+  .reloj.alerta{ background: #FCE8E6; color: #C5221F; }
+  .apagada{ position: absolute; inset: 0; background: #2B2930; color: #E6E1E5; display: grid; place-items: center; text-align: center; font-size: 13px; padding: 18px; z-index: 8; }
+  .checks.linea{ display: flex; flex-wrap: wrap; gap: 6px 16px; }
+
+  .droid.off{ background: #CFC6DD; cursor: default; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Índice">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="13" fill="#0E8A4B"/><path d="M12 27a10 10 0 0 1 20 0z" fill="#fff"/><circle cx="18" cy="23" r="1.4" fill="#0E8A4B"/><circle cx="26" cy="23" r="1.4" fill="#0E8A4B"/><path d="M15 16.5l2.2 3.2M29 16.5l-2.2 3.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <div class="brand-text"><b>UD 3.3 · Hilos</b><span>PMDM · 2º DAM</span></div>
+    </div>
+    <ul class="pages"><li><a href="como_usar.html">Cómo usar este repositorio</a></li><li><a href="guia_android_studio.html">Guía de Android Studio</a></li><li><a href="UD01_Introduccion_Android.html">UD1 · Introducción a Android</a></li><li><a href="UD02_Interfaz_Usuario.html">UD2 · La interfaz de usuario</a></li><li><a href="UD_3_3_Hilos.html" aria-current="page">UD 3.3 · Hilos</a></li></ul>
+    <ul class="navlist"><li><a href="#s1" data-nav data-target="s1"><span class="n">01</span>Qué vas a aprender</a></li><li><a href="#s2" data-nav data-target="s2"><span class="n">02</span>El problema: una tarea lenta</a></li><li class="sub"><a href="#s2-1" data-nav data-target="s2-1">El hilo principal</a></li><li class="sub"><a href="#s2-2" data-nav data-target="s2-2">Si el hilo principal se duerme</a></li><li><a href="#s3" data-nav data-target="s3"><span class="n">03</span>Un hilo secundario</a></li><li class="sub"><a href="#s3-1" data-nav data-target="s3-1">Lo que ya sabes de PSP</a></li><li class="sub"><a href="#s3-2" data-nav data-target="s3-2">La regla de las vistas</a></li><li class="sub"><a href="#s3-3" data-nav data-target="s3-3">runOnUiThread()</a></li><li class="sub"><a href="#s3-4" data-nav data-target="s3-4">El valor que viaja</a></li><li><a href="#s4" data-nav data-target="s4"><span class="n">04</span>Parar el hilo</a></li><li class="sub"><a href="#s4-1" data-nav data-target="s4-1">Cancelar</a></li><li class="sub"><a href="#s4-2" data-nav data-target="s4-2">Cuando la pantalla se destruye</a></li><li><a href="#s5" data-nav data-target="s5"><span class="n">05</span>El código paso a paso</a></li><li class="sub"><a href="#s5-1" data-nav data-target="s5-1">TODO 1-2</a></li><li class="sub"><a href="#s5-2" data-nav data-target="s5-2">TODO 3-5</a></li><li class="sub"><a href="#s5-3" data-nav data-target="s5-3">TODO 6</a></li><li class="sub"><a href="#s5-4" data-nav data-target="s5-4">TODO 9-13</a></li><li class="sub"><a href="#s5-5" data-nav data-target="s5-5">TODO 14</a></li><li><a href="#s6" data-nav data-target="s6"><span class="n">06</span>Pruébalo</a></li><li><a href="#s7" data-nav data-target="s7"><span class="n">07</span>Errores comunes</a></li><li><a href="#s8" data-nav data-target="s8"><span class="n">08</span>Para practicar</a></li></ul>
+  </nav>
+  <div class="scrim" id="scrim"></div>
+  <button class="menu-toggle" id="menuToggle" type="button">Índice</button>
+  <main>
+    <header class="hero"><div>
+      <p class="kicker">Rama UD_3_3_Hilos</p>
+      <h1>Hilos</h1>
+      <p class="lede">Un contador que tarda cien segundos en llegar al 100 %. Con esta rama verás por qué una tarea lenta congela la aplicación si la hace el hilo principal, cómo se lleva a un hilo secundario y cómo ese hilo le pide al principal que cambie la pantalla.</p>
+      <p data-autoria style="margin:0.9rem 0 0;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.55;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p>
+      <div class="legend" role="group" aria-label="Qué significa cada color">
+        <div><i style="background:#0E8A4B"></i><span>Verde: lo que hay que retener, y el hilo principal en las figuras.</span></div><div><i style="background:#1A73E8"></i><span>Azul: lo que debes conocer aunque no se use en la rama, y el hilo secundario en las figuras.</span></div><div><i style="background:#6D3FD8"></i><span>Violeta: lo que se maneja con botones, simuladores y comprobaciones. En el registro de un simulador, verde es el hilo principal, azul el secundario, naranja tu código y rojo un error.</span></div><div><i style="background:#B26A00"></i><span>Ámbar: un consejo para no equivocarte, o lo que no se hace.</span></div><div><i style="background:#C5221F"></i><span>Rojo: código que está mal a propósito, solo para ver el problema.</span></div>
+      </div>
+    </div></header>
+    <section class="chapter" id="s1">
+      <div class="chapter-head"><span class="chapter-num">1</span><h2>Qué vas a aprender</h2></div>
+<div class="tiles"><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><b>El hilo principal</b><span>Quién dibuja la pantalla y atiende los toques, y por qué no se le puede hacer esperar.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 17h16"/></svg><b>Un hilo secundario</b><span>Cómo se saca una tarea lenta del hilo principal, con lo que ya sabes de PSP.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg><b>runOnUiThread()</b><span>Cómo le pide un hilo secundario al principal que cambie la pantalla.</span></div><div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1"/></svg><b>Parar un hilo</b><span>Cancelar con interrupt() y qué hacer cuando la pantalla se destruye.</span></div></div>
+      <p>La aplicación de la rama es un contador que va del 0 % al 100 %, un punto por segundo, con un botón <em>Contar</em> y otro <em>Cancelar</em>. Cada segundo de espera hace el papel de una tarea lenta de verdad: descargar un fichero, consultar un servidor, procesar una foto. El código tiene <strong>tres versiones</strong> del contador; solo la tercera funciona bien, y las otras dos están para que veas por qué.</p>
+    </section>
+    <section class="chapter" id="s2">
+      <div class="chapter-head"><span class="chapter-num">2</span><h2>El problema: una tarea lenta</h2></div>
+      <p>Hasta ahora, todo tu código se ha ejecutado sin que te preguntaras <em>quién</em> lo ejecuta: <code>onCreate()</code>, los <code>onClick()</code> de los botones, los <code>setText()</code>… Con tareas cortas da igual. Con una tarea que tarda, no.</p>
+      <h3 id="s2-1"><span class="sn">2.1</span>El hilo principal</h3>
+      <div class="box clave"><span class="box-label">Hilo principal</span><p>Cuando Android arranca tu aplicación, crea un hilo para ella: el <strong>hilo principal</strong> (en inglés, <em>main thread</em> o <em>UI thread</em>). Ese hilo dibuja la pantalla, atiende los toques del usuario y ejecuta tus métodos: <code>onCreate()</code>, <code>onResume()</code>, los <code>onClick()</code>… Todo lo que has programado hasta ahora lo ha ejecutado él.</p></div>
+      <p>El hilo principal trabaja con una <strong>cola de encargos</strong>: dibujar la pantalla, atender un toque, ejecutar un <code>onClick()</code>. Los atiende de uno en uno y en orden. Mientras está con uno, los demás esperan.</p>
+      <figure>
+<svg viewBox="0 0 720 230" role="img" aria-label="El hilo principal atiende un encargo cada vez. Mientras ejecuta onClick() de Contar, los demás encargos (dibujar la pantalla y un toque en Cancelar) esperan en la cola."><defs><marker id="hc1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="10" width="720" height="210" rx="14" fill="#E2F4EA"/><text x="20" y="40" font-size="14" fill="#0A5C33" font-weight="700">Hilo principal</text><text x="40" y="78" font-size="12" fill="#0A5C33" font-weight="700">Atendiendo ahora</text><rect x="30" y="88" width="200" height="56" rx="12" fill="#0E8A4B"/><text x="130" y="121" text-anchor="middle" font-size="12.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">onClick() de Contar</text><text x="262" y="78" font-size="12" fill="#56655D" font-weight="700">Cola: esperan su turno</text><rect x="262" y="92" width="130" height="48" rx="24" fill="#fff" stroke="#0E8A4B" stroke-width="1.6"/><text x="327" y="121" text-anchor="middle" font-size="12" fill="#0A5C33">dibujar</text><rect x="408" y="92" width="150" height="48" rx="24" fill="#FDF1DD" stroke="#B26A00" stroke-width="1.6"/><text x="483" y="121" text-anchor="middle" font-size="12" fill="#8A5300">toque en Cancelar</text><rect x="574" y="92" width="130" height="48" rx="24" fill="#fff" stroke="#0E8A4B" stroke-width="1.6"/><text x="639" y="121" text-anchor="middle" font-size="12" fill="#0A5C33">dibujar</text><line x1="258" y1="116" x2="236" y2="116" stroke="#56655D" stroke-width="2" marker-end="url(#hc1)"/><text x="360" y="186" text-anchor="middle" font-size="12.5" fill="#17211C">Los encargos se atienden de uno en uno y en orden.</text><text x="360" y="206" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">Si uno tarda, todos los de detrás esperan: la pantalla no se dibuja y los toques no responden.</text></svg>
+<figcaption>El hilo principal y su cola. Un encargo que tarda bloquea a todos los que vienen detrás.</figcaption>
+</figure>
+      <div class="box conocer"><span class="box-label">Como el único camarero de un bar</span><p>Toma nota, sirve y cobra, de una mesa en una mesa. Si alguien le pide un guiso que tarda una hora y se queda en la cocina haciéndolo, nadie más es atendido: ni los que quieren pagar, ni los que llaman. El bar no se ha cerrado, pero lo parece.</p></div>
+      <h3 id="s2-2"><span class="sn">2.2</span>Si el hilo principal se duerme</h3>
+      <p>La primera versión del contador hace la espera dentro del <code>onClick()</code>, es decir, en el hilo principal:</p>
+      <div class="code"><div class="code-bar">MainActivity.java · versión 1 (TODO 3 y 7)</div>
+<pre><code class="lang-java">private void contarEnHiloPrincipal() {
+    for (int i = 0; i &lt;= 100; i++) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            return;
+        }
+        textoProgreso.setText(i + &quot;%&quot;);
+    }
+    restaurarBotones();
+}</code></pre></div>
+      <p><code>Thread.sleep(1000)</code> duerme un segundo al hilo que lo ejecuta, que aquí es el principal. Durante los cien segundos del bucle no dibuja la pantalla ni atiende ningún toque: los <code>setText()</code> cambian el texto, pero dibujarlo es otro encargo de la cola que no llega hasta el final.</p>
+      <div class="sim" id="simUno">
+        <div class="sim-head"><b>Un solo hilo para todo</b><span>la versión 1, con la espera en el hilo principal</span></div>
+        <div class="sim-body">
+          <p>Pulsa <em>Contar</em> y, mientras cuenta, toca <em>Cancelar</em>. Mira qué hay en la cola del hilo principal y cuánto lleva esperando el toque. El simulador cuenta solo hasta 10 para no hacerte esperar; el aspecto es aproximado.</p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="unoScreen"><div class="appbar"><span class="ttl">PMDM</span></div><div class="canvas" style="flex-direction:column;gap:18px"><button class="droid" id="unoContar" type="button">Contar</button><div class="grande" id="unoTexto">Pulsa Contar</div><button class="droid off" id="unoCancelar" type="button" aria-disabled="true">Cancelar</button></div></div></div>
+            <div class="panel">
+              <div><span class="reloj" id="unoReloj">Hilo principal: libre</span><span class="reloj" id="unoEspera">Toque esperando: —</span></div>
+              <p style="margin:10px 0 4px;font-size:13.5px;color:var(--muted)">Cola del hilo principal:</p>
+              <div class="cola" id="unoCola"></div>
+              <div class="btns"><button class="btn ghost" id="unoReiniciar" type="button">Reiniciar</button></div>
+              <div class="why" id="unoWhy">Pulsa Contar en el móvil.</div>
+              <ul class="log" id="unoLog" aria-label="Registro del simulador de un solo hilo"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box clave"><span class="box-label">ANR: la aplicación no responde</span><p>Si el hilo principal tarda más de <strong>5 segundos</strong> en atender un toque, Android muestra el aviso «<em>PMDM</em> no responde», con dos botones: cerrar la aplicación o esperar. Se llama ANR (<em>Application Not Responding</em>). De aquí sale la primera regla del tema: <strong>no bloquees el hilo principal</strong>.</p></div>
+      <p>Fíjate en que el aviso sale por el toque que espera, no por el bucle: si no tocas nada, la aplicación sigue congelada pero sin aviso. Y aunque el usuario no toque, una pantalla que no cambia en cien segundos parece rota.</p>
+      <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">En el <code>onClick()</code> de un botón escribes <code>Thread.sleep(3000)</code> y después <code>texto.setText("Hecho")</code>. ¿Qué ve el usuario durante esos tres segundos?</p><div class="opciones"><button class="opt" type="button">La aplicación se cierra con una excepción al tercer segundo.</button><button class="opt" type="button" data-ok>La pantalla congelada: no cambia y los toques no responden.</button><button class="opt" type="button">El texto «Hecho» desde el primer momento, sin esperar.</button><button class="opt" type="button">El aviso «no responde», aunque no haya tocado nada.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>El <code>sleep()</code> duerme al hilo principal: no dibuja ni atiende toques hasta que acaba. «Hecho» aparece al final. El aviso ANR necesita un toque esperando más de 5 segundos, y aquí son 3.</div></div>
+
+    </section>
+    <section class="chapter" id="s3">
+      <div class="chapter-head"><span class="chapter-num">3</span><h2>Un hilo secundario</h2></div>
+      <p>La solución es la que conoces de PSP: hacer la tarea lenta en <strong>otro hilo</strong>, uno secundario, y dejar al principal libre para dibujar y atender toques.</p>
+      <h3 id="s3-1"><span class="sn">3.1</span>Lo que ya sabes de PSP</h3>
+      <p>Un hilo se crea con un objeto <code>Thread</code> al que se le pasa un <code>Runnable</code> con el trabajo en su método <code>run()</code>, y se arranca con <code>start()</code>. En Android se escribe igual:</p>
+      <div class="code"><div class="code-bar">Un hilo secundario, como en PSP</div>
+<pre><code class="lang-java">hilo = new Thread(new Runnable() {
+    @Override
+    public void run() {
+        // Lo que se escribe aquí se ejecuta en el hilo secundario
+    }
+});
+hilo.start();</code></pre></div>
+      <p><code>new Runnable() { … }</code> es una <strong>clase anónima</strong>: una clase sin nombre que se declara y se crea en el mismo sitio, igual que los listeners de los botones. <code>sleep()</code> dentro de <code>run()</code> duerme al hilo secundario, no al principal.</p>
+      <h3 id="s3-2"><span class="sn">3.2</span>La regla de las vistas</h3>
+      <p>La segunda versión del contador mueve el bucle a un hilo secundario, pero deja el <code>setText()</code> dentro:</p>
+      <div class="code"><div class="code-bar">MainActivity.java · versión 2 (TODO 4 y 8)</div>
+<pre><code class="lang-java">hilo = new Thread(new Runnable() {
+    @Override
+    public void run() {
+        for (int i = 0; i &lt;= 100; i++) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                return;
+            }
+            textoProgreso.setText(i + &quot;%&quot;);
+        }
+    }
+});
+hilo.start();</code></pre></div>
+      <p>Al cabo de un segundo la aplicación se cierra, y en el Logcat aparece:</p>
+      <div class="code"><div class="code-bar">Logcat</div>
+<pre><code class="lang-text">android.view.ViewRootImpl$CalledFromWrongThreadException:
+Only the original thread that created a view hierarchy can touch its views.</code></pre></div>
+      <p>Traducido: solo el hilo que creó las vistas puede tocarlas. Ese hilo es el principal.</p>
+      <div class="box clave"><span class="box-label">Las dos reglas</span><p>1. <strong>No bloquees el hilo principal</strong>: nada que tarde dentro de <code>onCreate()</code>, <code>onClick()</code> y compañía.<br>2. <strong>No toques las vistas desde otro hilo</strong>: <code>setText()</code>, <code>setEnabled()</code>, <code>setVisibility()</code>… solo desde el principal.</p></div>
+      <div class="box conocer"><span class="box-label">Por qué existe la segunda regla</span><p>Las vistas de Android no están preparadas para que dos hilos las cambien a la vez: no usan <code>synchronized</code> ni nada parecido, porque sería más lento. Es la condición de carrera que viste en PSP. En lugar de sincronizar, Android hace que solo un hilo, el principal, pueda tocarlas, y lo comprueba: si lo intenta otro, lanza la excepción.</p></div>
+      <div class="comp" data-tipo="vf"><div class="comp-head">Comprueba · Verdadero o falso</div><div style="margin-top:10px"><div class="fila" data-r="v"><span>El hilo principal es el que ejecuta <code>onCreate()</code> y los <code>onClick()</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>Un <code>sleep()</code> dentro del <code>run()</code> de un hilo secundario congela la pantalla.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="v"><span>Si un hilo secundario llama a <code>setText()</code>, la aplicación se cierra con <code>CalledFromWrongThreadException</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div><div class="fila" data-r="f"><span>Un hilo secundario puede cambiar una vista si es él quien la ha creado con <code>findViewById()</code>.</span><span class="vf"><button type="button" data-v="v">V</button><button type="button" data-v="f">F</button></span></div></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>El principal ejecuta todos los métodos de la actividad, también <code>findViewById()</code>, y es el dueño de las vistas. <code>sleep()</code> duerme solo al hilo que lo ejecuta, así que en uno secundario la pantalla sigue respondiendo.</div></div>
+      <h3 id="s3-3"><span class="sn">3.3</span>runOnUiThread(): un encargo para el hilo principal</h3>
+      <p>Falta juntar las dos reglas: la espera en un hilo secundario, el cambio de texto en el principal. Para eso, el hilo secundario no toca la vista: le <strong>deja un encargo</strong> al hilo principal en su cola, y el principal lo ejecuta cuando le toca.</p>
+      <div class="box clave"><span class="box-label">runOnUiThread(Runnable)</span><p>Método de la actividad que pone un <code>Runnable</code> en la cola del hilo principal. El principal ejecutará su <code>run()</code> en cuanto atienda ese encargo. El hilo que lo llama no espera: sigue con lo suyo.</p></div>
+      <div class="box conocer"><span class="box-label">El cocinero y el camarero</span><p>Volviendo al bar: ahora hay un cocinero (el hilo secundario) que hace el guiso en la cocina. Cuando un plato está listo, no sale él a la sala: lo deja en la ventanilla. El camarero (el hilo principal) lo recoge en cuanto puede, entre mesa y mesa, y lo sirve. Nadie se queda sin atender.</p></div>
+      <figure>
+<svg viewBox="0 0 720 290" role="img" aria-label="Dos carriles. El hilo secundario duerme un segundo, llama a runOnUiThread y vuelve a dormir. Cada llamada deja un encargo setText en la cola del hilo principal, que lo ejecuta mientras el secundario ya está durmiendo otra vez."><defs><marker id="hc2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#56655D"/></marker></defs><rect x="0" y="20" width="720" height="80" rx="12" fill="#E7F0FD"/><rect x="0" y="150" width="720" height="80" rx="12" fill="#E2F4EA"/><text x="14" y="58" font-size="13" fill="#174EA6" font-weight="700">Hilo</text><text x="14" y="76" font-size="13" fill="#174EA6" font-weight="700">secundario</text><rect x="140" y="40" width="150" height="40" rx="10" fill="#fff" stroke="#1A73E8" stroke-width="1.6"/><text x="215" y="65" text-anchor="middle" font-size="12" fill="#174EA6" style="font-family:'JetBrains Mono', Consolas, monospace">sleep(1000)</text><rect x="330" y="40" width="150" height="40" rx="10" fill="#fff" stroke="#1A73E8" stroke-width="1.6"/><text x="405" y="65" text-anchor="middle" font-size="12" fill="#174EA6" style="font-family:'JetBrains Mono', Consolas, monospace">sleep(1000)</text><rect x="520" y="40" width="150" height="40" rx="10" fill="#fff" stroke="#1A73E8" stroke-width="1.6"/><text x="595" y="65" text-anchor="middle" font-size="12" fill="#174EA6" style="font-family:'JetBrains Mono', Consolas, monospace">sleep(1000)</text><circle cx="310" cy="60" r="6" fill="#1A73E8"/><circle cx="500" cy="60" r="6" fill="#1A73E8"/><line x1="310" y1="68" x2="310" y2="166" stroke="#56655D" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#hc2)"/><line x1="500" y1="68" x2="500" y2="166" stroke="#56655D" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#hc2)"/><text x="317" y="128" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">runOnUiThread(…)</text><text x="507" y="128" font-size="11" fill="#56655D" style="font-family:'JetBrains Mono', Consolas, monospace">runOnUiThread(…)</text><text x="14" y="188" font-size="13" fill="#0A5C33" font-weight="700">Hilo</text><text x="14" y="206" font-size="13" fill="#0A5C33" font-weight="700">principal</text><text x="215" y="195" text-anchor="middle" font-size="12" fill="#56655D" font-style="italic">libre: dibuja y atiende toques</text><rect x="312" y="172" width="120" height="36" rx="18" fill="#0E8A4B"/><text x="372" y="195" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">setText(0%)</text><rect x="502" y="172" width="120" height="36" rx="18" fill="#0E8A4B"/><text x="562" y="195" text-anchor="middle" font-size="11.5" fill="#fff" style="font-family:'JetBrains Mono', Consolas, monospace">setText(1%)</text><text x="360" y="262" text-anchor="middle" font-size="12.5" fill="#17211C">El secundario deja el encargo y vuelve a dormir sin esperar.</text><text x="360" y="282" text-anchor="middle" font-size="12.5" fill="#0A5C33" font-weight="700">La espera ocurre fuera del hilo principal, y la vista solo la toca el principal.</text></svg>
+<figcaption>La versión 3 en el tiempo. El hilo secundario espera; el principal solo ejecuta los encargos, que son instantáneos.</figcaption>
+</figure>
+      <div class="code"><div class="code-bar">MainActivity.java · versión 3 (TODO 9-13)</div>
+<pre><code class="lang-java">hilo = new Thread(new Runnable() {
+    @Override
+    public void run() {
+        for (int i = 0; i &lt;= 100; i++) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                return;
+            }
+
+            final int porcentaje = i;
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    textoProgreso.setText(porcentaje + &quot;%&quot;);
+                }
+            });
+        }
+        // Al terminar, restaurarBotones() también con runOnUiThread()
+    }
+});
+hilo.start();</code></pre></div>
+      <p>Hay dos <code>Runnable</code> y cada uno se ejecuta en un hilo distinto: el de <code>new Thread(…)</code>, en el secundario; el de <code>runOnUiThread(…)</code>, en el principal.</p>
+      <div class="sim" id="simDos">
+        <div class="sim-head"><b>Dos hilos, una pantalla</b><span>las versiones 2 y 3</span></div>
+        <div class="sim-body">
+          <p>Elige una versión y pulsa <em>Contar</em>. En la 3, prueba también <em>Cancelar</em>. Los carriles dicen qué hace cada hilo en cada momento. Cuenta hasta 10; el aspecto es aproximado.</p>
+          <p>Versión: <span class="sel" id="dosVersion"><button type="button" aria-pressed="false" data-v="2">2 · el hilo cambia el texto</button><button type="button" aria-pressed="true" data-v="3">3 · runOnUiThread()</button></span></p>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="dosScreen"><div class="appbar"><span class="ttl">PMDM</span></div><div class="canvas" style="flex-direction:column;gap:18px"><button class="droid" id="dosContar" type="button">Contar</button><div class="grande" id="dosTexto">Pulsa Contar</div><button class="droid off" id="dosCancelar" type="button" aria-disabled="true">Cancelar</button></div></div></div>
+            <div class="panel">
+              <div class="carriles">
+                <div class="carril princ"><b>Hilo principal</b><span class="hace" id="dosPrinc">libre</span></div>
+                <div class="carril secu" id="dosSecuCarril"><b>Hilo secundario</b><span class="hace" id="dosSecu">no existe</span></div>
+              </div>
+              <p style="margin:10px 0 4px;font-size:13.5px;color:var(--muted)">Cola del hilo principal:</p>
+              <div class="cola" id="dosCola"></div>
+              <div class="btns"><button class="btn ghost" id="dosReiniciar" type="button">Reiniciar</button></div>
+              <div class="why" id="dosWhy">Elige la versión y pulsa Contar.</div>
+              <ul class="log" id="dosLog" aria-label="Registro del simulador de dos hilos"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="box conocer"><span class="box-label">Otra forma: post()</span><p>Cada vista tiene un método <code>post(Runnable)</code> que hace lo mismo: <code>textoProgreso.post(new Runnable() { … })</code> deja el encargo en la cola del hilo principal. Es útil cuando no tienes a mano la actividad.</p></div>
+      <h3 id="s3-4"><span class="sn">3.4</span>El valor que viaja en el encargo</h3>
+      <p>Dentro del <code>Runnable</code> del encargo no se puede usar <code>i</code> directamente. Si lo intentas, no compila:</p>
+      <div class="code"><div class="code-bar">Error de compilación</div>
+<pre><code class="lang-text">error: local variables referenced from an inner class must be final or effectively final</code></pre></div>
+      <p>Una clase anónima solo puede usar variables locales que no cambien después: <code>final</code>, o que en la práctica no cambien. <code>i</code> cambia en cada vuelta del bucle. Por eso el código copia el valor en una variable nueva en cada vuelta, <code>final int porcentaje = i</code>, y el encargo usa la copia.</p>
+      <p>Lo que no se hace es esquivar el error con un <strong>atributo</strong>, porque los atributos sí se pueden usar desde una clase anónima:</p>
+      <div class="code mal"><div class="code-bar">Así NO se hace · solo para ver el problema</div>
+<pre><code class="lang-java">private int contador;   // atributo de la actividad
+
+for (contador = 0; contador &lt;= 100; contador++) {
+    // … sleep(1000) …
+    runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+            textoProgreso.setText(contador + &quot;%&quot;);
+        }
+    });
+}</code></pre></div>
+      <p>Compila, pero el encargo no se lleva el valor: lee el atributo cuando el hilo principal lo ejecuta, y para entonces el hilo secundario ya ha hecho <code>contador++</code>. Probado en el emulador: la pantalla enseña 1 %, 2 %, 3 %… y termina en <strong>101 %</strong>. Es otra vez una variable compartida por dos hilos, como en PSP.</p>
+      <figure>
+<svg viewBox="0 0 720 250" role="img" aria-label="Comparación. Con el atributo contador, el hilo secundario encarga mostrar contador, suma uno y el principal muestra 1 por ciento. Con una copia final, el encargo se lleva el valor 0 y el principal muestra 0 por ciento."><rect x="0" y="10" width="345" height="230" rx="14" fill="#FDF1DD"/><text x="172" y="40" text-anchor="middle" font-size="14" fill="#B26A00" font-weight="700">Con el atributo contador</text><text x="18" y="78" font-size="12" fill="#17211C"><tspan fill="#174EA6" font-weight="700">secundario:</tspan> contador vale 0</text><text x="18" y="108" font-size="12" fill="#17211C"><tspan fill="#174EA6" font-weight="700">secundario:</tspan> encarga «muestra contador»</text><text x="18" y="138" font-size="12" fill="#17211C"><tspan fill="#174EA6" font-weight="700">secundario:</tspan> contador++, ahora vale 1</text><text x="18" y="168" font-size="12" fill="#17211C"><tspan fill="#0A5C33" font-weight="700">principal:</tspan> lee contador y muestra 1 %</text><text x="172" y="212" text-anchor="middle" font-size="12" fill="#B26A00" font-weight="700">El encargo lee el valor tarde: va uno por delante.</text><rect x="375" y="10" width="345" height="230" rx="14" fill="#E2F4EA"/><text x="547" y="40" text-anchor="middle" font-size="14" fill="#0A5C33" font-weight="700">Con una copia final</text><text x="393" y="78" font-size="12" fill="#17211C"><tspan fill="#174EA6" font-weight="700">secundario:</tspan> i vale 0</text><text x="393" y="108" font-size="12" fill="#17211C"><tspan fill="#174EA6" font-weight="700">secundario:</tspan> porcentaje = i, vale 0</text><text x="393" y="138" font-size="12" fill="#17211C"><tspan fill="#174EA6" font-weight="700">secundario:</tspan> encarga y hace i++</text><text x="393" y="168" font-size="12" fill="#17211C"><tspan fill="#0A5C33" font-weight="700">principal:</tspan> muestra porcentaje: 0 %</text><text x="547" y="212" text-anchor="middle" font-size="12" fill="#0A5C33" font-weight="700">La copia no cambia: se ve el valor de esa vuelta.</text></svg>
+<figcaption>El encargo se ejecuta un poco después de dejarlo. Con el atributo lee el valor ya cambiado; con la copia, el de su vuelta.</figcaption>
+</figure>
+      <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">Con el código de «Así NO se hace», el bucle va de <code>contador = 0</code> a <code>contador &lt;= 3</code>. ¿Qué números van apareciendo en la pantalla?</p><div class="opciones"><button class="opt" type="button" data-ok>1 %, 2 %, 3 % y 4 %, uno cada segundo.</button><button class="opt" type="button">0 %, 1 %, 2 % y 3 %, uno cada segundo.</button><button class="opt" type="button">Ninguno, porque no compila sin el final.</button><button class="opt" type="button">0 % todo el rato, porque se copia al empezar.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>Cada encargo lee el atributo cuando el hilo principal lo ejecuta, y para entonces el secundario ya ha sumado uno. Por eso va uno por delante y acaba en un valor que el bucle nunca quiso mostrar. Con un atributo compila: lo que no compila es usar la variable local <code>i</code>.</div></div>
+
+    </section>
+    <section class="chapter" id="s4">
+      <div class="chapter-head"><span class="chapter-num">4</span><h2>Parar el hilo</h2></div>
+      <h3 id="s4-1"><span class="sn">4.1</span>Cancelar</h3>
+      <p>Un hilo no se puede detener desde fuera a la fuerza. Lo que se hace es <strong>avisarle</strong> con <code>interrupt()</code> y que él termine. Si el hilo está dentro de <code>sleep()</code>, el aviso lo despierta con una <code>InterruptedException</code>, y el <code>catch</code> sale de <code>run()</code> con <code>return</code>.</p>
+      <div class="code"><div class="code-bar">MainActivity.java · TODO 6 y 10</div>
+<pre><code class="lang-java">// En el onClick() de Cancelar (hilo principal)
+if (hilo != null &amp;&amp; hilo.isAlive()) {
+    hilo.interrupt();
+}
+
+// En el run() del hilo secundario
+try {
+    Thread.sleep(1000);
+} catch (InterruptedException e) {
+    return;    // termina el hilo
+}</code></pre></div>
+      <p>La comprobación <code>hilo != null</code> evita un <code>NullPointerException</code> si se pulsa Cancelar antes de haber creado ningún hilo, e <code>isAlive()</code> dice si el hilo sigue en marcha.</p>
+      <div class="comp" data-tipo="empareja"><div class="comp-head">Comprueba · Ordena</div><p class="q">Ordena lo que pasa desde que pulsas <em>Cancelar</em> hasta que el hilo termina.</p><div class="fila"><span><code>sleep()</code> lanza <code>InterruptedException</code> en el hilo secundario.</span><select data-r="3" aria-label="sleep() lanza InterruptedException en el hilo secundario."><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="fila"><span>El hilo principal ejecuta el <code>onClick()</code> de Cancelar.</span><select data-r="1" aria-label="El hilo principal ejecuta el onClick() de Cancelar."><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="fila"><span>El <code>catch</code> hace <code>return</code> y el hilo sale de <code>run()</code>.</span><select data-r="4" aria-label="El catch hace return y el hilo sale de run()."><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="fila"><span>Se llama a <code>hilo.interrupt()</code>.</span><select data-r="2" aria-label="Se llama a hilo.interrupt()."><option value="">Elige…</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>El toque lo atiende el principal, que llama a <code>interrupt()</code>. Eso despierta al secundario dentro de <code>sleep()</code> con la excepción, y el <code>catch</code> lo hace terminar.</div></div>
+      <h3 id="s4-2"><span class="sn">4.2</span>Cuando la pantalla se destruye</h3>
+      <p>Al girar el móvil, Android destruye la actividad y crea otra nueva, que empieza de cero. El hilo secundario no pertenece a la actividad: si nadie lo para, sigue contando y dejando encargos para unas vistas que ya no se ven. Por eso la rama lo interrumpe en <code>onDestroy()</code>, el método del ciclo de vida que se ejecuta justo antes de que la actividad desaparezca.</p>
+      <div class="code"><div class="code-bar">MainActivity.java · TODO 14</div>
+<pre><code class="lang-java">@Override
+protected void onDestroy() {
+    super.onDestroy();
+    if (hilo != null) {
+        hilo.interrupt();
+    }
+}</code></pre></div>
+      <div class="sim" id="simGiro">
+        <div class="sim-head"><b>Gira el móvil mientras cuenta</b><span>con y sin onDestroy()</span></div>
+        <div class="sim-body">
+          <p>Pulsa <em>Contar</em> y gira el móvil antes de que termine. Después quita la marca de <code>onDestroy()</code> y repite. Cada vez que giras, Android crea una pantalla nueva; las numeramos para distinguirlas.</p>
+          <div class="checks linea"><label><input type="checkbox" id="giroDestroy" checked> <span><code>onDestroy()</code> interrumpe el hilo (TODO 14)</span></label></div>
+          <div class="sim-row">
+            <div class="phone"><div class="phone-bar"></div><div class="screen" id="giroScreen"><div class="appbar"><span class="ttl">PMDM</span></div><div class="canvas" style="flex-direction:column;gap:18px"><button class="droid" id="giroContar" type="button">Contar</button><div class="grande" id="giroTexto">Pulsa Contar</div><button class="droid off" id="giroCancelar" type="button" aria-disabled="true">Cancelar</button></div></div></div>
+            <div class="panel">
+              <div><span class="reloj" id="giroPantalla">Pantalla 1</span><span class="reloj" id="giroVivos">Hilos secundarios vivos: 0</span></div>
+              <div class="btns"><button class="btn" id="giroGirar" type="button">Girar el móvil</button><button class="btn ghost" id="giroReiniciar" type="button">Reiniciar</button></div>
+              <div class="why" id="giroWhy">Pulsa Contar en el móvil.</div>
+              <ul class="log" id="giroLog" aria-label="Registro del simulador de giro"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p>Con <code>onDestroy()</code> no queda ningún hilo trabajando para nada, pero la cuenta se pierde: la pantalla nueva vuelve a «Pulsa Contar». Conservar el trabajo en marcha al girar es un problema que resuelven herramientas que no son de este tema.</p>
+      <div class="comp" data-tipo="elige"><div class="comp-head">Comprueba · Elige</div><p class="q">Quitas el <code>onDestroy()</code> de la rama, pulsas <em>Contar</em> y giras el móvil a los 3 segundos. ¿Qué pasa?</p><div class="opciones"><button class="opt" type="button">La aplicación se cierra con <code>CalledFromWrongThreadException</code>.</button><button class="opt" type="button">El hilo se para solo, porque su actividad se ha destruido.</button><button class="opt" type="button">La pantalla nueva sigue la cuenta por donde iba, por el 3 %.</button><button class="opt" type="button" data-ok>El hilo viejo sigue contando para una pantalla oculta.</button></div><div class="comp-bar"><button class="btn comp-ok" type="button">Comprobar</button><button class="btn ghost comp-reset" type="button">Otra vez</button><span class="comp-res" aria-live="polite"></span></div><div class="comp-exp" hidden>El hilo no sabe nada de la actividad: sigue dejando encargos para las vistas de la pantalla destruida, que nadie ve. La nueva empieza en «Pulsa Contar». No hay excepción, porque los encargos los ejecuta el hilo principal.</div></div>
+
+    </section>
+    <section class="chapter" id="s5">
+      <div class="chapter-head"><span class="chapter-num">5</span><h2>El código paso a paso</h2></div>
+      <p>Abre la ventana <em>TODO</em> (<em>View → Tool Windows → TODO</em>): los comentarios van del 1 al 14 en <code>MainActivity.java</code>. Lo que ya has visto en los apartados anteriores aquí solo se sitúa en el código.</p>
+      <h3 id="s5-1"><span class="sn">TODO 1-2</span>El atributo y los botones</h3>
+      <p>El hilo se guarda en un atributo, <code>hilo</code>, porque hace falta en tres sitios: donde se crea, en el botón Cancelar y en <code>onDestroy()</code>. Al pulsar Contar se desactiva Contar y se activa Cancelar con <code>setEnabled()</code>, que se ejecuta en el hilo principal porque está en el <code>onClick()</code>.</p>
+      <h3 id="s5-2"><span class="sn">TODO 3-5</span>Las tres versiones</h3>
+      <p>En el <code>onClick()</code> de Contar hay tres llamadas y solo una sin comentar. Para probar otra versión, comenta la que está activa y quita el comentario de la que quieres ver.</p>
+      <div class="table-wrap"><table>
+<thead><tr><th>TODO</th><th>Llamada</th><th>Qué pasa</th></tr></thead>
+<tbody>
+<tr><td>3 y 7</td><td><code>contarEnHiloPrincipal()</code></td><td>Se congela; con un toque, a los 5 s, aviso «no responde» (apartado 2.2).</td></tr>
+<tr><td>4 y 8</td><td><code>contarConHiloQueTocaLaVista()</code></td><td>Se cierra con <code>CalledFromWrongThreadException</code> (apartado 3.2).</td></tr>
+<tr><td>5 y 9-13</td><td><code>contarConRunOnUiThread()</code></td><td>Funciona: la versión de la rama (apartado 3.3).</td></tr>
+</tbody>
+</table></div>
+      <h3 id="s5-3"><span class="sn">TODO 6</span>Cancelar</h3>
+      <p><code>interrupt()</code> con las dos comprobaciones del apartado 4.1, y después <code>restaurarBotones()</code>, que deja Contar activo y Cancelar desactivado.</p>
+      <h3 id="s5-4"><span class="sn">TODO 9-13</span>La versión que funciona</h3>
+      <p>El hilo con su <code>Runnable</code> anónimo (9), la salida del <code>catch</code> al interrumpirlo (10), la copia <code>final</code> del valor (11) y los dos encargos con <code>runOnUiThread()</code>: el del texto en cada vuelta (12) y el de los botones al terminar (13). Los botones también son vistas, así que se cambian desde el principal.</p>
+      <h3 id="s5-5"><span class="sn">TODO 14</span>onDestroy()</h3>
+      <p>Interrumpe el hilo al destruirse la actividad (apartado 4.2).</p>
+      <div class="box conocer"><span class="box-label">Para saber más</span><p>En aplicaciones grandes no se crea un <code>Thread</code> nuevo cada vez que se pulsa un botón: se reutiliza un grupo de hilos ya creados con un <code>ExecutorService</code> de <code>java.util.concurrent</code>, que es lo que recomienda hoy la documentación de Android para Java. La idea es la misma de esta rama: el trabajo lento fuera del hilo principal, y la vista, solo desde él.</p></div>
+
+    </section>
+    <section class="chapter" id="s6">
+      <div class="chapter-head"><span class="chapter-num">6</span><h2>Pruébalo</h2></div>
+<ol class="steps"><li>Ejecuta la aplicación (<strong>Run</strong>) y pulsa <strong>Contar</strong>. Cada segundo sube un punto, y mientras tanto Cancelar responde al momento.</li><li>Pulsa <strong>Cancelar</strong>. El texto se queda en el último valor y los botones vuelven a su estado inicial.</li><li>Pulsa Contar y gira el emulador. La pantalla vuelve a «Pulsa Contar»: la actividad es nueva y el hilo de la vieja se ha parado en <code>onDestroy()</code>.</li><li>Comenta la llamada del TODO 5 y quita el comentario de la del TODO 4. Ejecuta y pulsa Contar: al segundo, la aplicación se cierra. En el <em>Logcat</em>, filtra por <code>FATAL</code> y busca <code>CalledFromWrongThreadException</code>.</li><li>Ahora deja activa solo la del TODO 3. Pulsa Contar: ni siquiera los botones cambian de aspecto, porque el hilo principal no llega a dibujarlos.</li><li>Con la versión 1 contando, toca Cancelar y espera. A los 5 segundos aparece «PMDM no responde» («<em>isn't responding</em>» si el emulador está en inglés). Pulsa cerrar la aplicación.</li><li>Vuelve a dejar activa la llamada del TODO 5 antes de seguir.</li></ol>
+    </section>
+    <section class="chapter" id="s7">
+      <div class="chapter-head"><span class="chapter-num">7</span><h2>Errores comunes</h2></div>
+      <div class="table-wrap"><table>
+<thead><tr><th>Lo que pasa</th><th>Por qué</th></tr></thead>
+<tbody>
+<tr><td>La pantalla se congela y sale «no responde»</td><td>Hay algo lento (un <code>sleep()</code>, una descarga) en el hilo principal: en <code>onCreate()</code>, en un <code>onClick()</code>…</td></tr>
+<tr><td>La aplicación se cierra con <code>CalledFromWrongThreadException</code></td><td>Un hilo secundario ha cambiado una vista. Ese cambio tiene que ir dentro de <code>runOnUiThread()</code>.</td></tr>
+<tr><td><code>local variables referenced from an inner class must be final or effectively final</code></td><td>El <code>Runnable</code> usa una variable local que cambia, como <code>i</code>. Cópiala en una variable <code>final</code>.</td></tr>
+<tr><td>Los números van uno por delante y acaba en 101 %</td><td>El encargo lee un atributo que el hilo secundario sigue cambiando. Usa una copia <code>final</code> (apartado 3.4).</td></tr>
+<tr><td>No pasa nada al pulsar Contar</td><td>Se ha creado el <code>Thread</code> pero falta <code>start()</code>.</td></tr>
+<tr><td>Todo va en el hilo principal aunque has creado un hilo</td><td>Se ha llamado a <code>hilo.run()</code> en lugar de <code>hilo.start()</code>: <code>run()</code> ejecuta el código en el hilo que lo llama.</td></tr>
+<tr><td><code>NullPointerException</code> al pulsar Cancelar</td><td>Falta comprobar <code>hilo != null</code>: no se ha creado ningún hilo todavía.</td></tr>
+<tr><td>Cancelar no para la cuenta</td><td>El <code>catch</code> de <code>InterruptedException</code> no sale de <code>run()</code>: solo escribe el error y el bucle sigue.</td></tr>
+</tbody>
+</table></div>
+
+    </section>
+    <section class="chapter" id="s8">
+      <div class="chapter-head"><span class="chapter-num">8</span><h2>Para practicar</h2></div>
+<p>Hazlo en tu propia rama para no modificar la del tema: <code>git switch -c mio/UD_3_3</code>.</p>
+      <ol class="steps">
+        <li>Convierte el contador en una cuenta atrás de 10 a 0 que, al llegar a 0, muestre «¡Tiempo!».</li>
+        <li>Al terminar la cuenta, muestra un <code>Toast</code> con «Terminado». Piensa desde qué hilo tienes que llamarlo.</li>
+        <li>Añade una barra de progreso horizontal (<code>ProgressBar</code> con <code>style="?android:attr/progressBarStyleHorizontal"</code> y <code>android:max="100"</code>) y actualízala con <code>setProgress()</code> a la vez que el texto.</li>
+        <li>Cambia <code>runOnUiThread()</code> por <code>textoProgreso.post()</code> y comprueba que se comporta igual.</li>
+        <li>Pon dos contadores en la misma pantalla, cada uno con su texto, sus botones y su hilo, uno que avance cada segundo y otro cada medio segundo.</li>
+      </ol>
+    </section>
+
+  <p data-autoria style="margin:2.4rem 0 0.4rem;padding-top:0.9rem;border-top:1px solid currentColor;font-size:12px;line-height:1.5;letter-spacing:0.02em;font-weight:400;opacity:0.45;text-align:center;">© 2026 José Carlos Alfaro López · IES Francisco Ayala</p></main>
+</div>
+<script src="js/pmdm.js"></script>
+<script>
+(function(){
+"use strict";
+
+function $(id){ return document.getElementById(id); }
+function registro(id){
+  var ul = $(id);
+  function add(texto, clase){ var li = document.createElement("li"); li.textContent = texto; if(clase) li.className = clase; ul.appendChild(li); ul.scrollTop = ul.scrollHeight; }
+  return { met: function(t){ add(t, "met"); }, acc: function(t){ add(t, "acc"); }, nota: function(t){ add(t, "nota"); }, limpiar: function(){ ul.innerHTML = ""; } };
+}
+function pulsacionLarga(boton, alLargo, alCorto){
+  var temporizador = null, disparado = false;
+  boton.addEventListener("pointerdown", function(){ disparado = false; temporizador = setTimeout(function(){ disparado = true; alLargo(); }, 500); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(function(evento){ boton.addEventListener(evento, function(){ clearTimeout(temporizador); }); });
+  boton.addEventListener("click", function(){ if(!disparado && alCorto) alCorto(); });
+  boton.addEventListener("contextmenu", function(ev){ ev.preventDefault(); });
+}
+
+
+document.querySelectorAll(".comp").forEach(function(caja){
+  var tipo = caja.getAttribute("data-tipo");
+  var resultado = caja.querySelector(".comp-res");
+  var explicacion = caja.querySelector(".comp-exp");
+  caja.querySelectorAll(".opt").forEach(function(opcion){
+    opcion.addEventListener("click", function(){
+      caja.querySelectorAll(".opt").forEach(function(otra){ otra.classList.remove("sel", "bien", "mal"); });
+      opcion.classList.add("sel");
+    });
+  });
+  caja.querySelectorAll(".vf").forEach(function(grupo){
+    grupo.querySelectorAll("button").forEach(function(boton){
+      boton.addEventListener("click", function(){
+        grupo.querySelectorAll("button").forEach(function(otro){ otro.classList.remove("sel"); });
+        boton.classList.add("sel");
+        grupo.closest(".fila").classList.remove("bien", "mal");
+      });
+    });
+  });
+  caja.querySelectorAll("select").forEach(function(lista){
+    lista.addEventListener("change", function(){ lista.classList.remove("bien", "mal"); });
+  });
+  caja.querySelector(".comp-ok").addEventListener("click", function(){
+    var total = 0, aciertos = 0, faltan = 0;
+    caja.querySelectorAll(".bien, .mal").forEach(function(marcada){ marcada.classList.remove("bien", "mal"); });
+    if(tipo === "elige"){
+      total = 1;
+      var elegida = caja.querySelector(".opt.sel");
+      if(!elegida){ faltan = 1; }
+      else { var correcta = elegida.hasAttribute("data-ok"); elegida.classList.add(correcta ? "bien" : "mal"); if(correcta) aciertos = 1; }
+    } else if(tipo === "vf"){
+      caja.querySelectorAll(".fila").forEach(function(fila){
+        total++;
+        var marcado = fila.querySelector(".vf button.sel");
+        if(!marcado){ faltan++; return; }
+        var correcta = marcado.getAttribute("data-v") === fila.getAttribute("data-r");
+        fila.classList.add(correcta ? "bien" : "mal");
+        if(correcta) aciertos++;
+      });
+    } else {
+      caja.querySelectorAll("select").forEach(function(lista){
+        total++;
+        if(!lista.value){ faltan++; return; }
+        var correcta = lista.value === lista.getAttribute("data-r");
+        lista.classList.add(correcta ? "bien" : "mal");
+        if(correcta) aciertos++;
+      });
+    }
+    if(faltan){ resultado.className = "comp-res ko"; resultado.textContent = "Contesta todo antes de comprobar."; return; }
+    explicacion.hidden = false;
+    if(aciertos === total){ resultado.className = "comp-res ok"; resultado.textContent = "¡Correcto!"; }
+    else { resultado.className = "comp-res ko"; resultado.textContent = aciertos + " de " + total + " bien. Revisa lo marcado en rojo."; }
+  });
+  caja.querySelector(".comp-reset").addEventListener("click", function(){
+    caja.querySelectorAll(".sel, .bien, .mal").forEach(function(marcada){ marcada.classList.remove("sel", "bien", "mal"); });
+    caja.querySelectorAll("select").forEach(function(lista){ lista.value = ""; });
+    resultado.textContent = ""; resultado.className = "comp-res";
+    explicacion.hidden = true;
+  });
+});
+
+
+
+function selector(id, alCambiar){
+  var botones = $(id).querySelectorAll("button");
+  botones.forEach(function(boton){
+    boton.addEventListener("click", function(){
+      botones.forEach(function(otro){ otro.setAttribute("aria-pressed", otro === boton ? "true" : "false"); });
+      alCambiar(boton);
+    });
+  });
+}
+
+function anota(ul, texto, clase){ var li = document.createElement("li"); li.textContent = texto; if(clase) li.className = clase; ul.appendChild(li); ul.scrollTop = ul.scrollHeight; }
+function ficha(cola, texto, clase){ var s = document.createElement("span"); s.className = "ficha" + (clase ? " " + clase : ""); s.textContent = texto; cola.appendChild(s); return s; }
+function boton(el, activo){ el.classList.toggle("off", !activo); el.setAttribute("aria-disabled", activo ? "false" : "true"); }
+function activo(el){ return !el.classList.contains("off"); }
+function apagar(pantalla, texto){ var d = document.createElement("div"); d.className = "apagada"; d.textContent = texto; pantalla.appendChild(d); }
+function encender(pantalla){ pantalla.querySelectorAll(".apagada, .scrimx").forEach(function(n){ n.remove(); }); }
+
+/* ---------- Simulador 1: un solo hilo ---------- */
+(function(){
+  var pantalla = $("unoScreen"), contar = $("unoContar"), cancelar = $("unoCancelar"), texto = $("unoTexto");
+  var cola = $("unoCola"), log = $("unoLog"), why = $("unoWhy"), reloj = $("unoReloj"), espera = $("unoEspera");
+  var ocupado = false, cerrada = false, segundos = 0, temporizador = null, vigilante = null, toqueDesde = null, aviso = false;
+  var FIN = 10;
+  function reiniciar(){
+    clearInterval(temporizador); clearInterval(vigilante); ocupado = false; cerrada = false; segundos = 0; toqueDesde = null; aviso = false;
+    encender(pantalla); cola.innerHTML = ""; log.innerHTML = ""; texto.textContent = "Pulsa Contar"; boton(contar, true); boton(cancelar, false);
+    reloj.textContent = "Hilo principal: libre"; reloj.classList.remove("alerta"); espera.textContent = "Toque esperando: —"; espera.classList.remove("alerta");
+    why.textContent = "Pulsa Contar en el móvil.";
+  }
+  function vigilar(){
+    if(toqueDesde === null){ espera.textContent = "Toque esperando: —"; espera.classList.remove("alerta"); return; }
+    var s = (Date.now() - toqueDesde) / 1000;
+    espera.textContent = "Toque esperando: " + s.toFixed(1).replace(".", ",") + " s";
+    espera.classList.toggle("alerta", s >= 4);
+    if(s >= 5 && !aviso){ mostrarAviso(); }
+  }
+  function mostrarAviso(){
+    aviso = true;
+    var capa = document.createElement("div"); capa.className = "scrimx";
+    capa.innerHTML = '<div class="dialog"><b>PMDM no responde</b><p>La aplicación lleva 5 segundos sin atender un toque.</p><div class="acts"><button type="button" data-a="cerrar">Cerrar aplicación</button><button type="button" data-a="esperar">Esperar</button></div></div>';
+    pantalla.appendChild(capa);
+    anota(log, "Android: un toque lleva 5 s sin respuesta → aviso «no responde»", "err");
+    why.textContent = "Android ha esperado 5 segundos a que el hilo principal atendiera tu toque. Es el aviso «no responde» (ANR). Puedes cerrar la aplicación o esperar.";
+    capa.querySelector('[data-a="esperar"]').addEventListener("click", function(ev){ ev.stopPropagation(); capa.remove(); aviso = false; toqueDesde = Date.now(); anota(log, "Usuario: Esperar. Android vuelve a contar 5 s", "nota"); });
+    capa.querySelector('[data-a="cerrar"]').addEventListener("click", function(ev){ ev.stopPropagation(); clearInterval(temporizador); clearInterval(vigilante); ocupado = false; cerrada = true; toqueDesde = null; capa.remove(); apagar(pantalla, "Android ha cerrado la aplicación. Pulsa Reiniciar."); anota(log, "Usuario: Cerrar aplicación. Android la cierra", "err"); reloj.textContent = "Hilo principal: no existe"; why.textContent = "La cuenta se ha perdido: la aplicación entera se ha cerrado."; vigilar(); });
+  }
+  function terminar(){
+    clearInterval(temporizador); ocupado = false;
+    anota(log, "Hilo principal · restaurarBotones() (se verá al dibujar)", "acc");
+    reloj.textContent = "Hilo principal: libre"; reloj.classList.remove("alerta");
+    var pendientes = Array.prototype.slice.call(cola.children);
+    var paso = 0;
+    function siguiente(){
+      if(paso >= pendientes.length){ toqueDesde = null; vigilar(); clearInterval(vigilante); why.textContent = "Al quedar libre, el hilo principal atiende la cola en orden: dibuja y se ve directamente el " + FIN + " %, sin los números de en medio. Los toques se atienden tarde."; return; }
+      var f = pendientes[paso++];
+      if(f.classList.contains("toque")){ anota(log, "Hilo principal · atiende el " + f.textContent + ", " + "con la cuenta ya terminada", "met"); }
+      else { texto.textContent = FIN + "%"; boton(contar, true); boton(cancelar, false); anota(log, "Hilo principal · dibuja la pantalla: aparece «" + FIN + "%»", "met"); }
+      f.remove(); setTimeout(siguiente, 450);
+    }
+    setTimeout(siguiente, 300);
+  }
+  function tocar(nombre){
+    if(cerrada || aviso) return;
+    if(!ocupado) return false;
+    ficha(cola, "toque en " + nombre, "toque");
+    if(toqueDesde === null) toqueDesde = Date.now();
+    anota(log, "Toque en " + nombre + ": espera en la cola", "nota");
+    why.textContent = "El toque no se atiende: el hilo principal está dormido dentro de sleep(). Fíjate en el reloj del toque.";
+    return true;
+  }
+  contar.addEventListener("click", function(){
+    if(tocar("Contar") !== false || cerrada || aviso) return;
+    if(!activo(contar)) return;
+    ocupado = true; segundos = 0; log.innerHTML = "";
+    anota(log, "Hilo principal · onClick() de Contar", "met");
+    anota(log, "Hilo principal · setEnabled() en los dos botones (se verá al dibujar)", "acc");
+    ficha(cola, "dibujar");
+    reloj.textContent = "Hilo principal: dormido en sleep()"; reloj.classList.add("alerta");
+    why.textContent = "El hilo principal está dentro del bucle: duerme un segundo, cambia el texto, duerme otro… Los botones no han cambiado en pantalla porque dibujar es otro encargo de la cola.";
+    vigilante = setInterval(vigilar, 200);
+    temporizador = setInterval(function(){
+      anota(log, "Hilo principal · sleep(1000) termina; setText(\"" + segundos + "%\") (se verá al dibujar)", "acc");
+      segundos++;
+      if(segundos > FIN){ terminar(); }
+    }, 1000);
+  });
+  cancelar.addEventListener("click", function(){ if(tocar("Cancelar") !== false || cerrada || aviso) return; });
+  $("unoReiniciar").addEventListener("click", reiniciar);
+  reiniciar();
+})();
+
+/* ---------- Simulador 2: dos hilos ---------- */
+(function(){
+  var pantalla = $("dosScreen"), contar = $("dosContar"), cancelar = $("dosCancelar"), texto = $("dosTexto");
+  var princ = $("dosPrinc"), secu = $("dosSecu"), carrilSecu = $("dosSecuCarril"), cola = $("dosCola"), log = $("dosLog"), why = $("dosWhy");
+  var version = "3", temporizador = null, i = 0, vivo = false, cerrada = false, FIN = 10;
+  selector("dosVersion", function(b){ version = b.getAttribute("data-v"); reiniciar(); });
+  function hace(el, t, dormido){ el.textContent = t; if(el === secu) carrilSecu.classList.toggle("dormido", !!dormido); }
+  function reiniciar(){
+    clearTimeout(temporizador); vivo = false; cerrada = false; i = 0; encender(pantalla); cola.innerHTML = ""; log.innerHTML = "";
+    texto.textContent = "Pulsa Contar"; boton(contar, true); boton(cancelar, false);
+    hace(princ, "libre"); hace(secu, "no existe"); why.textContent = "Pulsa Contar en el móvil.";
+  }
+  function alPrincipal(tarea, etiqueta, despues){
+    var f = ficha(cola, etiqueta);
+    setTimeout(function(){ if(cerrada) return; f.remove(); hace(princ, "ejecuta " + etiqueta); anota(log, "Hilo principal · " + etiqueta, "met"); tarea();
+      setTimeout(function(){ if(!cerrada) hace(princ, "libre: dibuja y atiende toques"); if(despues) despues(); }, 350); }, 350);
+  }
+  function vuelta(){
+    if(!vivo) return;
+    hace(secu, "sleep(1000)", true);
+    temporizador = setTimeout(function(){
+      if(!vivo) return;
+      if(version === "2"){
+        hace(secu, "textoProgreso.setText(\"" + i + "%\")");
+        anota(log, "Hilo secundario · setText(\"" + i + "%\")", "sec");
+        anota(log, "CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.", "err");
+        vivo = false; cerrada = true; hace(princ, "no existe"); hace(secu, "no existe"); cola.innerHTML = "";
+        apagar(pantalla, "La aplicación se ha cerrado. Pulsa Reiniciar.");
+        why.textContent = "Un hilo secundario ha intentado cambiar una vista y Android ha cerrado la aplicación con esa excepción. Es la versión 2 de la rama.";
+        return;
+      }
+      var valor = i;
+      hace(secu, "porcentaje = " + valor + "; runOnUiThread(…)");
+      anota(log, "Hilo secundario · runOnUiThread(): encarga setText(\"" + valor + "%\")", "sec");
+      alPrincipal(function(){ texto.textContent = valor + "%"; }, "setText(\"" + valor + "%\")");
+      i++;
+      if(i > FIN){
+        vivo = false;
+        anota(log, "Hilo secundario · encarga restaurarBotones() y sale de run()", "sec");
+        alPrincipal(function(){ boton(contar, true); boton(cancelar, false); }, "restaurarBotones()", function(){ why.textContent = "Ha terminado. El texto lo ha cambiado siempre el hilo principal; el secundario solo ha esperado y ha dejado encargos."; });
+        hace(secu, "terminado", true);
+        return;
+      }
+      setTimeout(vuelta, 150);
+    }, 1000);
+  }
+  contar.addEventListener("click", function(){
+    if(cerrada || vivo || !activo(contar)) return;
+    log.innerHTML = ""; i = 0;
+    anota(log, "Hilo principal · onClick() de Contar", "met");
+    anota(log, "Hilo principal · setEnabled() en los dos botones; hilo.start()", "acc");
+    boton(contar, false); boton(cancelar, true); hace(princ, "libre: dibuja y atiende toques");
+    vivo = true; vuelta();
+    why.textContent = version === "2" ? "El hilo secundario duerme un segundo y después cambia el texto él mismo…" : "Mientras el secundario duerme, el principal está libre: puedes pulsar Cancelar y responde al momento.";
+  });
+  cancelar.addEventListener("click", function(){
+    if(cerrada || !activo(cancelar)) return;
+    anota(log, "Hilo principal · onClick() de Cancelar: hilo.interrupt()", "met");
+    boton(contar, true); boton(cancelar, false);
+    if(vivo){
+      clearTimeout(temporizador); vivo = false;
+      anota(log, "Hilo secundario · sleep() lanza InterruptedException → return", "sec");
+      hace(secu, "terminado", true);
+      why.textContent = "interrupt() ha despertado al hilo secundario con una InterruptedException; el catch sale de run() y el hilo termina. El texto se queda en el último valor.";
+    }
+  });
+  $("dosReiniciar").addEventListener("click", reiniciar);
+  reiniciar();
+})();
+
+/* ---------- Simulador 3: girar ---------- */
+(function(){
+  var pantalla = $("giroScreen"), contar = $("giroContar"), cancelar = $("giroCancelar"), texto = $("giroTexto");
+  var log = $("giroLog"), why = $("giroWhy"), etiquetaPantalla = $("giroPantalla"), vivos = $("giroVivos"), conDestroy = $("giroDestroy");
+  var numero = 1, hilos = [], siguienteId = 1, temporizador = null, FIN = 10;
+  function contarVivos(){ var n = hilos.filter(function(h){ return h.vivo; }).length; vivos.textContent = "Hilos secundarios vivos: " + n; vivos.classList.toggle("alerta", n > 1 || hilos.some(function(h){ return h.vivo && h.pantalla !== numero; })); return n; }
+  function nuevaPantalla(){ texto.textContent = "Pulsa Contar"; boton(contar, true); boton(cancelar, false); etiquetaPantalla.textContent = "Pantalla " + numero; }
+  function reiniciar(){ clearInterval(temporizador); temporizador = null; hilos = []; numero = 1; siguienteId = 1; log.innerHTML = ""; nuevaPantalla(); contarVivos(); why.textContent = "Pulsa Contar en el móvil."; }
+  function tic(){
+    hilos.forEach(function(h){
+      if(!h.vivo) return;
+      if(h.i > FIN){ h.vivo = false; anota(log, "Hilo " + h.id + " · termina la cuenta", "sec"); if(h.pantalla === numero){ boton(contar, true); boton(cancelar, false); } return; }
+      if(h.pantalla === numero){ texto.textContent = h.i + "%"; anota(log, "Hilo " + h.id + " · setText(\"" + h.i + "%\") en la pantalla " + h.pantalla, "sec"); }
+      else { anota(log, "Hilo " + h.id + " · setText(\"" + h.i + "%\") en la pantalla " + h.pantalla + ", que ya no se ve", "acc"); }
+      h.i++;
+    });
+    if(contarVivos() === 0){ clearInterval(temporizador); temporizador = null; }
+  }
+  contar.addEventListener("click", function(){
+    if(!activo(contar)) return;
+    var h = { id: siguienteId++, pantalla: numero, i: 0, vivo: true }; hilos.push(h);
+    anota(log, "Pantalla " + numero + " · onClick() de Contar: arranca el hilo " + h.id, "met");
+    boton(contar, false); boton(cancelar, true); contarVivos();
+    if(!temporizador) temporizador = setInterval(tic, 1000);
+    why.textContent = "Ahora gira el móvil antes de que llegue al " + FIN + " %.";
+  });
+  cancelar.addEventListener("click", function(){
+    if(!activo(cancelar)) return;
+    hilos.forEach(function(h){ if(h.vivo && h.pantalla === numero){ h.vivo = false; anota(log, "Pantalla " + numero + " · Cancelar: el hilo " + h.id + " termina", "met"); } });
+    boton(contar, true); boton(cancelar, false); contarVivos();
+  });
+  $("giroGirar").addEventListener("click", function(){
+    var vieja = numero;
+    anota(log, "Android · onDestroy() de la pantalla " + vieja, "met");
+    var parados = 0;
+    if(conDestroy.checked){ hilos.forEach(function(h){ if(h.vivo && h.pantalla === vieja){ h.vivo = false; parados++; anota(log, "Hilo " + h.id + " · InterruptedException → termina", "sec"); } }); }
+    numero++;
+    anota(log, "Android · onCreate() de la pantalla " + numero + ": empieza de cero", "met");
+    pantalla.style.transition = "transform .35s"; pantalla.style.transform = "rotate(-90deg) scale(.7)";
+    setTimeout(function(){ pantalla.style.transform = ""; }, 380);
+    nuevaPantalla(); var n = contarVivos();
+    if(conDestroy.checked){ why.textContent = parados ? "La pantalla nueva empieza de cero y el hilo de la vieja se ha parado en onDestroy(). La cuenta se ha perdido, pero no queda ningún hilo trabajando para nada." : "La pantalla nueva empieza de cero."; }
+    else { why.textContent = n ? "El hilo de la pantalla vieja sigue contando para una pantalla que ya no se ve. Si pulsas Contar en la nueva, habrá dos hilos a la vez." : "La pantalla nueva empieza de cero."; }
+  });
+  $("giroReiniciar").addEventListener("click", reiniciar);
+  reiniciar();
+})();
+
+})();
+</script>
+</body>
+</html>
