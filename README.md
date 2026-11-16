@@ -1,52 +1,44 @@
-# PMDM · Curso 2026-27
+# UD 3.5 · Peticiones REST
 
-**Programación Multimedia y Dispositivos Móviles · 2º DAM**
+Una lista con los nombres de 100 pokémon que la aplicación pide a un servicio de internet,
+**PokeAPI** (`https://pokeapi.co`). Verás cómo se hace una **petición HTTP** desde Android
+con `HttpURLConnection`, por qué tiene que ir en un **hilo secundario** (aquí, con la
+`AsyncTask` de la rama 3.4), cómo se lee la respuesta en formato **JSON** y cómo se pasan
+los datos a la lista.
 
-Este repositorio es el proyecto Android de todo el módulo. Cada **rama** es un
-tema, con sus apuntes en HTML y las explicaciones en los comentarios `TODO` del
-código. Esta rama, `main`, es la base del proyecto.
+Necesitas conexión a internet en el emulador o en el móvil. Al compilar sale el aviso
+`uses or overrides a deprecated API`. Es por `AsyncTask`, y no es un error.
 
-![Android Studio](recursos/img/ventana_android_studio.svg)
+## Qué repasar antes
 
-## 1. Clonar el proyecto
-
-Solo se hace una vez, al principio del curso:
-
-1. Copia la dirección de este repositorio: botón verde **Code** de esta página → pestaña *HTTPS*.
-2. En la pantalla de bienvenida de Android Studio pulsa **Clone Repository**
-   (con un proyecto abierto: *File → New → Project from Version Control*),
-   pega la dirección y elige una carpeta.
-3. Espera a que termine la sincronización de Gradle. Si te pide instalar una
-   plataforma del SDK, acepta.
-
-## 2. Abrir los apuntes
-
-Los apuntes están en la carpeta `recursos/html/` del proyecto y se abren **en el
-navegador desde tu copia local**. En GitHub solo verías su código.
-
-- **En Android Studio:** botón derecho sobre el fichero → *Open In → Browser*.
-- **En el explorador de Windows:** doble clic sobre el fichero.
-
-## 3. Índice
-
-| Apuntes | Fichero | Contenido |
-|---|---|---|
-| 📌 **Cómo usar este repositorio** | [`recursos/html/como_usar.html`](recursos/html/como_usar.html) | Traer cada tema nuevo, estudiar una rama y normas para no tener conflictos con Git. |
-| 🧭 **Guía de Android Studio** | [`recursos/html/guia_android_studio.html`](recursos/html/guia_android_studio.html) | Partes del entorno, estructura del proyecto, ficheros clave, Gradle, ejecutar, Logcat, depurador y ciclo de vida. |
-| 📘 **UD1 · Introducción a Android** | [`recursos/html/UD01_Introduccion_Android.html`](recursos/html/UD01_Introduccion_Android.html) | Dispositivos móviles, tecnologías, arquitectura de Android, primer proyecto, despliegue y ciclo de vida. |
-
-Estos tres apuntes están en todas las ramas. Cada rama añade los suyos, que
-encontrarás en el `README.md` de esa rama.
-
-## 4. Versiones del proyecto
-
-| | |
+| Dónde | Por qué ahora |
 |---|---|
-| Lenguaje | Java, con diseño de pantallas en XML |
-| Android mínimo (`minSdk`) | 28 (Android 9) |
-| Compilación (`compileSdk`) | 37 (Android 17) |
-| Comportamiento (`targetSdk`) | 36 (Android 16) |
-| Gradle / plugin de Android | 9.6 / 9.4 |
+| **Rama 3.4 · AsyncTask** | La petición se hace con una tarea asíncrona: `doInBackground()` y `onPostExecute()`. |
+| **Rama 2.2 · Spinner** | La lista usa un `ArrayAdapter`, el mismo adaptador del Spinner. |
+| **UD2 · Mensajes al usuario → Toast** | Los avisos cuando algo falla. |
 
-No hace falta instalar nada aparte de Android Studio: Gradle y el SDK necesario
-se descargan solos al abrir el proyecto.
+## Dónde está en el código
+
+| TODO | Fichero | Qué explica |
+|---|---|---|
+| 1 | `AndroidManifest.xml` | El permiso para usar internet |
+| 2-3 | `io/HttpConnectPokemon.java` | La URL base y el endpoint |
+| 4-4.4 | `io/HttpConnectPokemon.java` | La petición GET: abrir la conexión, comprobar el código 200, leer la respuesta y cerrar |
+| 5 | `io/HttpConnectPokemon.java` | La petición POST (no se usa: PokeAPI solo permite consultar) |
+| 6-7 | `MainActivity.java` | La lista con su adaptador y lanzar la petición |
+| 8 | `MainActivity.java` | Por qué hace falta un hilo secundario y los tres tipos de la tarea |
+| 9 | `MainActivity.java` | `doInBackground()`: la petición |
+| 10-13 | `MainActivity.java` | `onPostExecute()`: leer el JSON, avisar al adaptador y los errores |
+
+La ventana **TODO** de Android Studio (*View → Tool Windows → TODO*) los lista
+todos: un clic en uno te lleva a su línea.
+
+## Apuntes comunes
+
+| Apuntes | Fichero |
+|---|---|
+| 📌 **Cómo usar este repositorio** | [`recursos/html/como_usar.html`](recursos/html/como_usar.html) |
+| 🧭 **Guía de Android Studio** | [`recursos/html/guia_android_studio.html`](recursos/html/guia_android_studio.html) |
+
+Ábrelos en el navegador desde tu copia del proyecto: en Android Studio, botón
+derecho sobre el fichero → *Open In → Browser* (en GitHub solo se ve su código).
