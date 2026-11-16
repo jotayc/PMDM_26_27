@@ -58,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO 8. Esperar la respuesta del servidor puede tardar, así que la petición se tiene que hacer
-    //  en un hilo secundario. Si se hace en el principal, Android no lo permite y la aplicación
-    //  se cierra con NetworkOnMainThreadException.
+    //  en un hilo secundario. Si se hace en el principal, Android no lo permite: lanza
+    //  NetworkOnMainThreadException. En este proyecto la recoge el catch de getRequest(), así que
+    //  la aplicación no se cierra, pero no llega ninguna respuesta.
     //  Tipos: <String, Void, String> → recibe Strings (tipo de petición y endpoint), no publica
     //  progreso y devuelve un String (la respuesta del servidor).
     private class ConnectionTask extends AsyncTask<String, Void, String> {
