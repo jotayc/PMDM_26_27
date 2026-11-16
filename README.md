@@ -9,6 +9,18 @@ los datos a la lista.
 Necesitas conexión a internet en el emulador o en el móvil. Al compilar sale el aviso
 `uses or overrides a deprecated API`. Es por `AsyncTask`, y no es un error.
 
+## 📘 Apuntes
+
+| Apuntes | Fichero | Para qué |
+|---|---|---|
+| 📘 **UD 3.5 · Peticiones REST** | [`recursos/html/UD_3_5_REST.html`](recursos/html/UD_3_5_REST.html) | Cliente y servidor, la URL, métodos y códigos de respuesta, JSON y cómo leerlo en Java, el permiso, el hilo secundario y `HttpURLConnection`, y cómo se hace hoy. Con tres simuladores y comprobaciones. |
+| 📗 **UD2 · La interfaz de usuario** | [`recursos/html/UD02_Interfaz_Usuario.html`](recursos/html/UD02_Interfaz_Usuario.html) | Para consultar lo que ya has visto. |
+
+Ábrelos en el navegador desde tu copia del proyecto: en Android Studio, botón
+derecho sobre el fichero → *Open In → Browser* (en GitHub solo se ve su código).
+Dentro de cada uno, arriba del índice lateral, tienes los enlaces al resto de
+apuntes.
+
 ## Qué repasar antes
 
 | Dónde | Por qué ahora |
@@ -39,6 +51,3 @@ todos: un clic en uno te lleva a su línea.
 |---|---|
 | 📌 **Cómo usar este repositorio** | [`recursos/html/como_usar.html`](recursos/html/como_usar.html) |
 | 🧭 **Guía de Android Studio** | [`recursos/html/guia_android_studio.html`](recursos/html/guia_android_studio.html) |
-
-Ábrelos en el navegador desde tu copia del proyecto: en Android Studio, botón
-derecho sobre el fichero → *Open In → Browser* (en GitHub solo se ve su código).
