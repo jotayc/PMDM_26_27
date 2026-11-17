@@ -7,7 +7,7 @@ con `HttpURLConnection`, por qué tiene que ir en un **hilo secundario** (aquí,
 los datos a la lista.
 
 Necesitas conexión a internet en el emulador o en el móvil. Al compilar sale el aviso
-`uses or overrides a deprecated API`. Es por `AsyncTask`, y no es un error.
+`Some input files use or override a deprecated API`. Es por `AsyncTask`, y no es un error.
 
 ## 📘 Apuntes
 
@@ -38,9 +38,10 @@ apuntes.
 | 4-4.4 | `io/HttpConnectPokemon.java` | La petición GET: abrir la conexión, comprobar el código 200, leer la respuesta y cerrar |
 | 5 | `io/HttpConnectPokemon.java` | La petición POST (no se usa: PokeAPI solo permite consultar) |
 | 6-7 | `MainActivity.java` | La lista con su adaptador y lanzar la petición |
-| 8 | `MainActivity.java` | Por qué hace falta un hilo secundario y los tres tipos de la tarea |
-| 9 | `MainActivity.java` | `doInBackground()`: la petición |
-| 10-13 | `MainActivity.java` | `onPostExecute()`: leer el JSON, avisar al adaptador y los errores |
+| 8 | `io/ConnectionTask.java` | Por qué hace falta un hilo secundario y los tres tipos de la tarea |
+| 9 | `io/ConnectionTask.java` | El constructor: lo que la tarea recibe de la actividad |
+| 10 | `io/ConnectionTask.java` | `doInBackground()`: la petición |
+| 11-14 | `io/ConnectionTask.java` | `onPostExecute()`: leer el JSON, avisar al adaptador y los errores |
 
 La ventana **TODO** de Android Studio (*View → Tool Windows → TODO*) los lista
 todos: un clic en uno te lleva a su línea.
